@@ -1,15 +1,26 @@
 import Reveal from './Reveal';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function Hero() {
-  const [offset, setOffset] = useState(0);
+  const bgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (isReducedMotion) return;
+
+    let rafId: number;
     const handleScroll = () => {
-      setOffset(window.scrollY);
+      rafId = requestAnimationFrame(() => {
+        if (bgRef.current) {
+          bgRef.current.style.transform = `translateY(${window.scrollY * 0.4}px)`;
+        }
+      });
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      cancelAnimationFrame(rafId);
+    };
   }, []);
 
   return (
@@ -17,8 +28,8 @@ export default function Hero() {
       
       {/* Background Image with Parallax & Ken Burns */}
       <div 
+        ref={bgRef}
         className="absolute inset-0 z-0 bg-[#0A0818]"
-        style={{ transform: `translateY(${offset * 0.4}px)` }}
       >
         <img 
           src="assets/images/hero.png" 

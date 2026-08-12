@@ -132,7 +132,8 @@ export default function BeforeAfter() {
               min="0" max="100" 
               value={sliderValue} 
               onChange={(e) => setSliderValue(Number(e.target.value))}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize comparison-slider-input z-30" 
+              aria-label="Compare raw and polished video"
+              className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize comparison-slider-input z-30 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-red focus-visible:opacity-100 transition-opacity" 
             />
           </div>
         </Reveal>

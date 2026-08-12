@@ -119,7 +119,7 @@ export default function Roadmap() {
               <Reveal delay={0}>
                 <div className="relative rounded-[2rem] overflow-hidden shadow-2xl group min-h-[600px] flex flex-col justify-end">
                   {/* Cinematic Background */}
-                  <img src="/assets/images/level1.png" alt="The Editing Bay" className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+                  <img src="/assets/images/level1.png" alt="The Editing Bay" loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/40 to-[#0A0818]"></div>
                   
                   {/* Top Badge */}
@@ -178,7 +178,7 @@ export default function Roadmap() {
               <Reveal delay={100}>
                 <div className="relative rounded-[2rem] overflow-hidden shadow-2xl group min-h-[500px] flex flex-col justify-end opacity-90 transition-opacity hover:opacity-100">
                   {/* Cinematic Background */}
-                  <img src="/assets/images/level2.png" alt="Podcast Lounge" className="absolute inset-0 w-full h-full object-cover grayscale-[30%] transition-transform duration-1000 group-hover:scale-105" />
+                  <img src="/assets/images/level2.png" alt="Podcast Lounge" loading="lazy" className="absolute inset-0 w-full h-full object-cover grayscale-[30%] transition-transform duration-1000 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/40 to-[#0A0818]"></div>
                   
                   {/* Top Badge */}
@@ -214,7 +214,7 @@ export default function Roadmap() {
               <Reveal delay={100}>
                 <div className="relative rounded-[2rem] overflow-hidden shadow-2xl group min-h-[500px] flex flex-col justify-end opacity-70 transition-opacity hover:opacity-100 border border-white/5">
                   {/* Cinematic Background */}
-                  <img src="/assets/images/level3.png" alt="Full Studio" className="absolute inset-0 w-full h-full object-cover grayscale-[70%] transition-transform duration-1000 group-hover:scale-105" />
+                  <img src="/assets/images/level3.png" alt="Full Studio" loading="lazy" className="absolute inset-0 w-full h-full object-cover grayscale-[70%] transition-transform duration-1000 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/40 to-[#0A0818]"></div>
                   
                   {/* Top Badge */}

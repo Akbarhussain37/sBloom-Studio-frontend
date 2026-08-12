@@ -5,22 +5,22 @@ export default function Vibe() {
     {
       title: "Flawless Acoustics",
       desc: "Professional sound-dampening panels and isolated construction mean zero echo and pristine audio capture on every take.",
-      img: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&q=80" // Studio desk/gear
+      img: "/assets/images/level1.png" // Studio desk/gear
     },
     {
       title: "Dust-Free Environment",
       desc: "Advanced HVAC filtration protects your expensive lenses and sensors. Change lenses without fear of environmental contamination.",
-      img: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80" // High tech clean/white environment
+      img: "/assets/images/level2.png" // High tech clean/white environment
     },
     {
       title: "Gigabit Fiber Network",
       desc: "Offload massive 4K raw files in minutes, not hours. Dedicated, unthrottled high-speed connectivity wired directly into the bays.",
-      img: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=80" // Server racks/cables
+      img: "/assets/images/level3.png" // Server racks/cables
     },
     {
       title: "Overhead Rigging",
       desc: "Stop tripping over C-stands. Our ceilings are equipped with professional pipe grids for mounting key lights perfectly out of frame.",
-      img: "https://images.unsplash.com/photo-1595675024853-0f3ec9098ac7?auto=format&fit=crop&q=80" // Studio lighting
+      img: "/assets/images/hero.png" // Studio lighting
     }
   ];
 
@@ -59,6 +59,7 @@ export default function Vibe() {
                   <img 
                     src={feature.img} 
                     alt={feature.title}
+                    loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
                   />
                 </div>

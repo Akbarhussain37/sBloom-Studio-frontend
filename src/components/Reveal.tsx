@@ -4,13 +4,20 @@ import type { ReactNode } from 'react';
 interface RevealProps {
   children: ReactNode;
   delay?: number;
+  className?: string;
 }
 
-export default function Reveal({ children, delay = 0 }: RevealProps) {
+export default function Reveal({ children, delay = 0, className = '' }: RevealProps) {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (isReducedMotion) {
+      setIsVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -39,7 +46,7 @@ export default function Reveal({ children, delay = 0 }: RevealProps) {
       style={{ transitionDelay: `${delay}ms` }}
       className={`transition-all duration-700 ease-out transform ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-      }`}
+      } ${className}`}
     >
       {children}
     </div>

@@ -30,9 +30,9 @@ export default function Audience() {
     {
       id: "04",
       title: "Young Creators",
-      desc: "The Kids Zone: We provide parents with the tools to amplify their child's potential. Upload raw footage, get a highly polished video quickly.",
-      img: "/assets/images/hero.png", // using an existing image for now
-      buttonText: "Explore Kids Zone",
+      desc: "Young Creators: We provide parents with the tools to amplify their child's potential. Upload raw footage, get a highly polished video quickly.",
+      img: "/assets/images/hero.png",
+      buttonText: "Explore Young Creators",
       link: "/kids-zone"
     }
   ];
@@ -59,11 +59,11 @@ export default function Audience() {
             {audiences.map((aud, index) => {
               const isActive = activeCard === index;
               return (
-                <div 
+                <button 
                   key={index}
                   onMouseEnter={() => setActiveCard(index)}
                   onClick={() => setActiveCard(index)}
-                  className={`flex flex-col h-[500px] md:h-[600px] bg-[#0E0B1F] border border-white/5 rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 hover:border-white/10 ${isActive ? 'shadow-[0_0_40px_rgba(240,40,101,0.1)]' : ''}`}
+                  className={`flex flex-col h-[500px] md:h-[600px] w-full text-left bg-[#0E0B1F] border border-white/5 rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-red hover:border-white/10 ${isActive ? 'shadow-[0_0_40px_rgba(240,40,101,0.1)]' : ''}`}
                 >
                   {/* Top Content */}
                   <div className="p-8 md:p-10 flex flex-col z-10 relative bg-[#0E0B1F]">
@@ -81,10 +81,10 @@ export default function Audience() {
                           {aud.buttonText}
                         </Link>
                       ) : (
-                        <button className="inline-flex items-center gap-3 px-6 py-2.5 bg-gradient-to-r from-[#005E85] to-[#0089C4] text-white text-sm font-semibold rounded-full shadow-lg transition-transform hover:scale-105">
+                        <div className="inline-flex items-center gap-3 px-6 py-2.5 bg-gradient-to-r from-[#005E85] to-[#0089C4] text-white text-sm font-semibold rounded-full shadow-lg transition-transform hover:scale-105 pointer-events-none">
                           <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
                           {aud.buttonText}
-                        </button>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -97,10 +97,11 @@ export default function Audience() {
                     <img 
                       src={aud.img} 
                       alt={aud.title} 
+                      loading="lazy"
                       className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-in-out ${isActive ? 'opacity-90 scale-100 object-top' : 'opacity-50 scale-105 object-center grayscale-[30%]'}`}
                     />
                   </div>
-                </div>
+                </button>
               );
             })}
           </div>

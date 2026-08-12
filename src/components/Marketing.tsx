@@ -6,13 +6,9 @@ export default function Marketing() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatus('Thanks! Your spot has been reserved. We will contact you soon.');
+    setStatus('Thanks! Your reservation request has been received. We will contact you soon.');
     (e.target as HTMLFormElement).reset();
     setTimeout(() => setStatus(null), 5000);
-  };
-
-  const handleVideoClick = () => {
-    alert('BTS Video Player will open here in the final version!');
   };
 
   return (

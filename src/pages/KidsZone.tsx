@@ -4,7 +4,7 @@ export default function KidsZone() {
   return (
     <main className="bg-slate-50 min-h-screen pt-24 pb-32">
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-6 md:px-12 max-w-[1400px] mx-auto overflow-hidden">
+      <section id="hero" className="relative pt-24 pb-12 px-6 md:px-12 max-w-[1400px] mx-auto overflow-hidden">
         {/* Vibrant Neon Glowing Backgrounds */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           <div className="absolute top-[10%] left-[20%] w-[500px] h-[500px] bg-[#FF5E00]/20 rounded-full blur-[150px] animate-pulse" style={{ animationDuration: '4s' }} />
@@ -15,59 +15,54 @@ export default function KidsZone() {
         {/* Floating Social Media UI Elements */}
         <div className="absolute inset-0 z-10 pointer-events-none hidden md:block">
           {/* Floating Heart */}
-          <div className="absolute top-[20%] left-[15%] animate-bounce bg-white/80 backdrop-blur-md border border-slate-200 p-4 rounded-2xl shadow-lg" style={{ animationDuration: '6s' }}>
-            <svg className="w-8 h-8 text-[#FFD500]" fill="currentColor" viewBox="0 0 24 24">
+          <div className="absolute top-[15%] left-[3%] animate-bounce bg-white border-4 border-slate-900 p-4 rounded-2xl shadow-[6px_6px_0px_#1e293b] rotate-[-6deg]" style={{ animationDuration: '6s' }}>
+            <svg className="w-8 h-8 text-[#DE1B54]" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
             </svg>
-            <div className="text-slate-800 text-xs font-bold mt-2 text-center">14.2K</div>
+            <div className="text-slate-900 text-sm font-black mt-2 text-center">14.2K</div>
           </div>
           
           {/* Floating Play Button */}
-          <div className="absolute top-[30%] right-[15%] animate-bounce bg-white/80 backdrop-blur-md border border-slate-200 p-4 rounded-2xl shadow-lg" style={{ animationDuration: '5s', animationDelay: '0.5s' }}>
+          <div className="absolute top-[25%] right-[3%] animate-bounce bg-white border-4 border-slate-900 p-4 rounded-2xl shadow-[6px_6px_0px_#1e293b] rotate-[8deg]" style={{ animationDuration: '5s', animationDelay: '0.5s' }}>
             <svg className="w-8 h-8 text-[#00A3FF]" fill="currentColor" viewBox="0 0 24 24">
               <path d="M8 5v14l11-7z" />
             </svg>
-            <div className="text-slate-800 text-xs font-bold mt-2 text-center">1.2M</div>
+            <div className="text-slate-900 text-sm font-black mt-2 text-center">1.2M</div>
           </div>
 
           {/* Floating Comment */}
-          <div className="absolute bottom-[20%] left-[20%] animate-bounce bg-white/80 backdrop-blur-md border border-slate-200 p-4 rounded-2xl shadow-lg" style={{ animationDuration: '7s', animationDelay: '1s' }}>
+          <div className="absolute bottom-[15%] left-[8%] animate-bounce bg-white border-4 border-slate-900 p-4 rounded-2xl shadow-[6px_6px_0px_#1e293b] rotate-[-4deg]" style={{ animationDuration: '7s', animationDelay: '1s' }}>
             <svg className="w-8 h-8 text-[#FF5E00]" fill="currentColor" viewBox="0 0 24 24">
               <path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"/>
             </svg>
-            <div className="text-slate-800 text-xs font-bold mt-2 text-center">4,092</div>
+            <div className="text-slate-900 text-sm font-black mt-2 text-center">4,092</div>
           </div>
         </div>
 
-        <div className="relative z-20 flex flex-col items-center text-center">
-          <Reveal>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 mb-8 shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-[#00A3FF] animate-pulse" />
-              <span className="text-sm font-medium text-slate-700 tracking-wide uppercase">Creator Spotlight</span>
-            </div>
-          </Reveal>
+        <div className="relative z-20 flex flex-col items-center text-center mt-10">
+
 
           <Reveal delay={100}>
-            <h1 className="text-5xl md:text-7xl lg:text-[6.5rem] font-heading font-extrabold text-slate-900 leading-[1.05] tracking-tight mb-8">
-              Amplify Your <br className="hidden md:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF5E00] via-[#FFD500] to-[#00A3FF]">Child's Potential</span>
+            <h1 className="text-4xl md:text-6xl lg:text-[5rem] font-heading font-black text-slate-900 leading-[1.1] tracking-tight mb-6" style={{ textShadow: '6px 6px 0px #FFD500' }}>
+              FROM RAW FOOTAGE <br className="hidden md:block" />
+              <span className="text-[#FF5E00]" style={{ textShadow: '6px 6px 0px #1e293b' }}>TO MASTERPIECE</span>
             </h1>
           </Reveal>
 
           <Reveal delay={200}>
-            <p className="text-xl md:text-2xl text-slate-600 leading-relaxed font-light max-w-3xl mx-auto mb-12">
-              Parents often lack the proper tools to present their children's skills effectively. We bridge this gap. You provide the raw talent, and we deliver a highly polished, professional video.
+            <p className="text-base md:text-xl text-slate-700 leading-relaxed font-bold max-w-xl mx-auto mb-10 bg-white/50 backdrop-blur-sm p-4 rounded-2xl border-4 border-transparent">
+              You provide the raw talent. We deliver a <span className="text-[#00A3FF] font-black underline decoration-4 underline-offset-4">highly polished</span>, professional video.
             </p>
           </Reveal>
 
           <Reveal delay={300}>
             <button 
-              className="group relative inline-flex items-center justify-center gap-4 px-10 py-5 bg-gradient-to-r from-[#FF5E00] to-[#FFD500] text-white text-lg font-bold rounded-full overflow-hidden transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+              className="group relative inline-flex items-center justify-center gap-4 px-12 py-6 bg-[#FF5E00] text-white text-xl font-black rounded-full overflow-hidden transition-all duration-300 border-4 border-slate-900 shadow-[8px_8px_0px_#1e293b] hover:shadow-[4px_4px_0px_#1e293b] hover:translate-y-1 hover:translate-x-1"
             >
-              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-              <span className="relative z-10">Upload Raw Footage</span>
-              <svg className="w-6 h-6 relative z-10 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              <div className="absolute inset-0 bg-[#DE1B54] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+              <span className="relative z-10 uppercase tracking-wide">See How It Works</span>
+              <svg className="w-8 h-8 relative z-10 group-hover:translate-y-[-4px] transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
               </svg>
             </button>
           </Reveal>
@@ -151,7 +146,7 @@ export default function KidsZone() {
       </section>
 
       {/* The Value Section (Storytelling Flow) */}
-      <section className="py-24 px-6 md:px-12 max-w-[1200px] mx-auto">
+      <section id="journey" className="py-24 px-6 md:px-12 max-w-[1200px] mx-auto">
         <Reveal>
           <div className="text-center mb-24">
             <h2 className="text-4xl md:text-5xl font-heading font-bold text-slate-900 mb-6">
@@ -258,7 +253,7 @@ export default function KidsZone() {
       </section>
 
       {/* The Video Superpowers Section */}
-      <section className="py-24 px-6 md:px-12 max-w-[1400px] mx-auto relative z-10 overflow-hidden">
+      <section id="superpowers" className="py-24 px-6 md:px-12 max-w-[1400px] mx-auto relative z-10 overflow-hidden">
         {/* Playful Background Elements */}
         <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
           <div className="absolute top-10 left-10 w-32 h-32 bg-[#FFD500] rounded-full blur-3xl" />
@@ -340,7 +335,7 @@ export default function KidsZone() {
 
 
       {/* The Offer & Commitment Section (SaaS Split Redesign) */}
-      <section className="py-24 px-6 md:px-12 max-w-[1200px] mx-auto">
+      <section id="pricing" className="py-24 px-6 md:px-12 max-w-[1200px] mx-auto">
         <Reveal>
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 border border-slate-200 mb-6 shadow-sm text-[#FF5E00] font-bold text-sm">
