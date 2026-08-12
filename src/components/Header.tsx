@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { FiUser, FiMenu, FiX } from 'react-icons/fi';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { FiUser, FiMenu, FiX, FiLogOut } from 'react-icons/fi';
+import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, profile } = useAuth();
+  
   const isKidsZone = location.pathname === '/kids-zone';
   const isContactPage = location.pathname === '/contact';
   const isLightHeader = isKidsZone || isContactPage;
@@ -17,6 +22,11 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate('/');
+  };
 
   const textColor = isLightHeader ? 'text-slate-900' : 'text-white';
   const underlineColor = isKidsZone ? 'bg-[#FF5E00]' : 'bg-brand-red';
@@ -52,10 +62,26 @@ export default function Header() {
           <NavLink to="/">Creators</NavLink>
           <NavLink to="/kids-zone">Young Creators</NavLink>
           <span className="cursor-not-allowed opacity-50 ml-4 font-bold flex items-center">Healthcare</span>
-          <NavLink to="/login" className="ml-4">
-            <FiUser className="text-lg" />
-            Login
-          </NavLink>
+          
+          {user ? (
+            <div className="flex items-center gap-4 ml-4">
+              <span className={`font-bold ${textColor}`}>
+                {profile?.full_name?.split(' ')[0] || 'User'}
+              </span>
+              <button 
+                onClick={handleLogout}
+                className={`flex items-center gap-1.5 text-sm ${isLightHeader ? 'text-slate-500 hover:text-brand-red' : 'text-white/70 hover:text-white'} transition-colors`}
+              >
+                <FiLogOut /> Logout
+              </button>
+            </div>
+          ) : (
+            <NavLink to="/login" className="ml-4">
+              <FiUser className="text-lg" />
+              Login
+            </NavLink>
+          )}
+
           <Link to="/contact" className={`${location.pathname === '/contact' ? (isKidsZone ? 'bg-slate-100 border-[#FF5E00] text-[#FF5E00]' : 'bg-slate-100 border-brand-red text-brand-red') : (isLightHeader ? 'bg-white border-[#E2E8F0] text-[#1E293B] hover:bg-slate-50' : 'bg-white/10 border-white/20 text-white hover:bg-white/20')} border font-semibold py-2 px-6 rounded-full transition-all whitespace-nowrap`}>
             Contact Us
           </Link>
@@ -84,9 +110,28 @@ export default function Header() {
         <Link to="/" className="hover:text-brand-red transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Creators</Link>
         <Link to="/kids-zone" className="hover:text-brand-red transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Young Creators</Link>
         <span className="opacity-50 cursor-not-allowed">Healthcare</span>
-        <Link to="/login" className="flex items-center gap-2 hover:text-brand-red transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
-          <FiUser /> Login
-        </Link>
+        
+        {user ? (
+          <>
+            <div className="text-brand-red text-2xl mb-2">
+              Hi, {profile?.full_name?.split(' ')[0] || 'User'}
+            </div>
+            <button 
+              onClick={() => {
+                handleLogout();
+                setIsMobileMenuOpen(false);
+              }}
+              className="flex items-center gap-2 text-white/70 hover:text-brand-red transition-colors"
+            >
+              <FiLogOut /> Logout
+            </button>
+          </>
+        ) : (
+          <Link to="/login" className="flex items-center gap-2 hover:text-brand-red transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+            <FiUser /> Login
+          </Link>
+        )}
+
         <Link to="/contact" className="border border-white/20 px-8 py-3 rounded-full hover:bg-white/10 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
           Contact Us
         </Link>

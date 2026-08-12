@@ -5,12 +5,11 @@ import LandingPage from './pages/LandingPage';
 import KidsZone from './pages/KidsZone';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Onboarding from './pages/Onboarding';
 import Contact from './components/Contact';
 
 function App() {
   const location = useLocation();
-  const isAuthPage = ['/login', '/register', '/onboarding'].includes(location.pathname);
+  const isAuthPage = ['/login', '/register'].includes(location.pathname);
 
   return (
     <div className="bg-white min-h-screen font-body text-gray-900 selection:bg-brand-red selection:text-white">
@@ -21,7 +20,6 @@ function App() {
         <Route path="/kids-zone" element={<KidsZone />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
 
@@ -31,3 +29,4 @@ function App() {
 }
 
 export default App;
+

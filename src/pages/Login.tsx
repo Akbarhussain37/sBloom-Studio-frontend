@@ -1,10 +1,55 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiArrowLeft, FiMail, FiLock, FiArrowRight } from 'react-icons/fi';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
+import { LoadingSpinner } from '../components/ui/LoadingSpinner';
+import { ErrorAlert } from '../components/ui/ErrorAlert';
 
 export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user, profile } = useAuth();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user && profile) {
+      const from = (location.state as any)?.from?.pathname;
+      if (from) {
+        navigate(from, { replace: true });
+      } else {
+        navigate(profile.role === 'kid' ? '/kids-zone' : '/', { replace: true });
+      }
+    }
+  }, [user, profile, navigate, location]);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    try {
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (signInError) throw signInError;
+      
+      // The useEffect above will handle the redirect once the auth context updates
+    } catch (err: any) {
+      console.error('Login error:', err.message);
+      setError(err.message || 'Failed to sign in. Please check your credentials.');
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#F7F9FC] font-body flex flex-col relative">
@@ -42,7 +87,9 @@ export default function Login() {
             </p>
           </div>
 
-          <form className="space-y-6" action="#" method="POST" onSubmit={(e) => e.preventDefault()}>
+          {error && <ErrorAlert message={error} />}
+
+          <form className="space-y-6" onSubmit={handleLogin}>
             {/* Email Field */}
             <div>
               <label htmlFor="email" className="block text-sm font-bold text-slate-800 mb-2">
@@ -58,8 +105,11 @@ export default function Login() {
                   type="email"
                   autoComplete="email"
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red sm:text-sm transition-all"
                   placeholder="name@gmail.com"
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -79,8 +129,11 @@ export default function Login() {
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="current-password"
                   required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red sm:text-sm transition-all font-mono"
                   placeholder="••••••••••••"
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -93,6 +146,7 @@ export default function Login() {
                   name="remember-me"
                   type="checkbox"
                   className="h-4 w-4 text-brand-red focus:ring-brand-red border-slate-300 rounded cursor-pointer"
+                  disabled={loading}
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-slate-500 cursor-pointer">
                   Remember me
@@ -104,6 +158,7 @@ export default function Login() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="font-semibold text-brand-red hover:text-[#DE1B54]"
+                  disabled={loading}
                 >
                   {showPassword ? 'Hide Password' : 'Show Password'}
                 </button>
@@ -114,9 +169,14 @@ export default function Login() {
             <div>
               <button
                 type="submit"
-                className="w-full flex justify-center items-center gap-2 py-4 px-4 border border-transparent rounded-xl shadow-sm text-base font-bold text-white bg-brand-red hover:bg-[#F02865] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-red transition-colors"
+                disabled={loading}
+                className="w-full flex justify-center items-center gap-2 py-4 px-4 border border-transparent rounded-xl shadow-sm text-base font-bold text-white bg-brand-red hover:bg-[#F02865] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-red transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                Sign In to Studio Desk <FiArrowRight className="text-lg" />
+                {loading ? (
+                  <LoadingSpinner className="text-white w-6 h-6 border-white" />
+                ) : (
+                  <>Sign In to Studio Desk <FiArrowRight className="text-lg" /></>
+                )}
               </button>
             </div>
             

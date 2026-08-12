@@ -1,14 +1,46 @@
 import { useState } from 'react';
 import Reveal from './Reveal';
+import { createBooking } from '../lib/api';
+import { useAuth } from '../contexts/AuthContext';
+import { LoadingSpinner } from './ui/LoadingSpinner';
 
 export default function Marketing() {
   const [status, setStatus] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [projectType, setProjectType] = useState('');
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const { user } = useAuth();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatus('Thanks! Your reservation request has been received. We will contact you soon.');
-    (e.target as HTMLFormElement).reset();
-    setTimeout(() => setStatus(null), 5000);
+    setStatus(null);
+    setError(null);
+    setLoading(true);
+
+    try {
+      await createBooking({
+        full_name: name,
+        email,
+        project_type: projectType,
+        source: 'creators_page',
+        user_id: user?.id || null,
+      });
+
+      setStatus('Thanks! Your reservation request has been received. We will contact you soon.');
+      setName('');
+      setEmail('');
+      setProjectType('');
+      setTimeout(() => setStatus(null), 5000);
+    } catch (err: any) {
+      console.error('Booking submission error:', err.message);
+      setError(err.message || 'Failed to submit reservation. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -60,6 +92,9 @@ export default function Marketing() {
                     type="text" 
                     id="name" 
                     required 
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    disabled={loading}
                     placeholder="Enter your name" 
                     className="w-full bg-black/20 border border-white/10 rounded-xl text-white text-lg px-5 py-4 placeholder-white/30 focus:outline-none focus:border-brand-red focus:bg-black/40 transition-all"
                   />
@@ -71,6 +106,9 @@ export default function Marketing() {
                     type="email" 
                     id="email" 
                     required 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={loading}
                     placeholder="Enter your email" 
                     className="w-full bg-black/20 border border-white/10 rounded-xl text-white text-lg px-5 py-4 placeholder-white/30 focus:outline-none focus:border-brand-red focus:bg-black/40 transition-all"
                   />
@@ -82,7 +120,9 @@ export default function Marketing() {
                     <select 
                       id="projectType" 
                       required 
-                      defaultValue=""
+                      value={projectType}
+                      onChange={(e) => setProjectType(e.target.value)}
+                      disabled={loading}
                       className="w-full bg-black/20 border border-white/10 rounded-xl text-white text-lg px-5 py-4 focus:outline-none focus:border-brand-red focus:bg-black/40 transition-all appearance-none cursor-pointer"
                     >
                       <option value="" disabled className="bg-navy text-gray-400">Select an option...</option>
@@ -101,13 +141,21 @@ export default function Marketing() {
                 <div className="mt-6 text-center">
                   <button 
                     type="submit" 
-                    className="w-full bg-brand-red hover:bg-[#c9184c] text-white font-bold py-5 px-10 rounded-xl uppercase tracking-[0.15em] text-xs transition-all duration-300 shadow-[0_0_20px_rgba(222,27,84,0.3)] hover:shadow-[0_0_30px_rgba(222,27,84,0.5)] hover:-translate-y-1"
+                    disabled={loading}
+                    className="w-full flex justify-center items-center bg-brand-red hover:bg-[#c9184c] text-white font-bold py-5 px-10 rounded-xl uppercase tracking-[0.15em] text-xs transition-all duration-300 shadow-[0_0_20px_rgba(222,27,84,0.3)] hover:shadow-[0_0_30px_rgba(222,27,84,0.5)] hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed"
                   >
-                    Submit Application
+                    {loading ? (
+                      <LoadingSpinner className="w-5 h-5 border-white" />
+                    ) : (
+                      'Submit Application'
+                    )}
                   </button>
                   
                   {status && (
-                    <p className="text-brand-red text-sm mt-4 font-medium tracking-wide animate-pulse">{status}</p>
+                    <p className="text-green-400 text-sm mt-4 font-medium tracking-wide animate-pulse">{status}</p>
+                  )}
+                  {error && (
+                    <p className="text-brand-red text-sm mt-4 font-medium tracking-wide animate-pulse">{error}</p>
                   )}
                 </div>
               </form>
