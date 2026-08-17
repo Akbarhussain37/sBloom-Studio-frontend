@@ -102,14 +102,16 @@ export default function Register() {
 
         const { error: profileError } = await supabase
           .from('profile_studio')
-          .insert([payload]);
+          // @ts-ignore
+          .insert([payload as any]);
           
         if (profileError) {
           console.error("Profile creation notice:", profileError);
           // Let's attempt an update just in case the trigger already inserted the row
           const { error: updateError } = await supabase
             .from('profile_studio')
-            .update(payload)
+            // @ts-ignore
+            .update(payload as any)
             .eq('id', data.user.id);
             
           if (updateError) {
