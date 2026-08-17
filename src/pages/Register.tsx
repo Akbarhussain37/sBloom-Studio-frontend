@@ -12,7 +12,7 @@ import { ErrorAlert } from '../components/ui/ErrorAlert';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Register() {
-  const [role, setRole] = useState<'creator' | 'kid'>('creator');
+  const [role, setRole] = useState<'creator' | 'kid' | 'doctor'>('creator');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -41,7 +41,11 @@ export default function Register() {
   // If already logged in, redirect them
   useEffect(() => {
     if (user && profile) {
-      navigate(profile.role === 'kid' ? '/kids-zone' : '/', { replace: true });
+      if (profile.role === 'admin') {
+        navigate('/admin', { replace: true });
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
     }
   }, [user, profile, navigate]);
 
@@ -120,8 +124,12 @@ export default function Register() {
         }
       }
 
-      // Instead of going to /onboarding, we go straight to their dashboard/home!
-      navigate(role === 'kid' ? '/kids-zone' : '/', { replace: true });
+      // Go straight to their dashboard!
+      if (role === 'admin') {
+        navigate('/admin', { replace: true });
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
       
     } catch (err: any) {
       console.error('Registration error:', err.message);
@@ -173,7 +181,7 @@ export default function Register() {
             
             {/* Role Selection Toggle */}
             <div className="flex justify-center mb-8">
-              <div className="bg-[#F7F9FC] p-1 rounded-xl flex w-full max-w-sm border border-slate-200">
+              <div className="bg-[#F7F9FC] p-1 rounded-xl flex w-full max-w-lg border border-slate-200">
                 <button
                   type="button"
                   disabled={loading}
@@ -185,6 +193,18 @@ export default function Register() {
                   }`}
                 >
                   Creator
+                </button>
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={() => setRole('doctor')}
+                  className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${
+                    role === 'doctor'
+                      ? 'bg-white text-brand-red shadow-sm'
+                      : 'text-slate-500 hover:text-slate-700'
+                  }`}
+                >
+                  Doctor
                 </button>
                 <button
                   type="button"
@@ -301,8 +321,8 @@ export default function Register() {
               </div>
             </div>
 
-            {/* Profile Info Section (Creator) */}
-            {role === 'creator' && (
+            {/* Profile Info Section (Creator / Doctor) */}
+            {(role === 'creator' || role === 'doctor') && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
                 <h3 className="text-lg font-bold text-slate-800 border-b pb-2 pt-4">Profile Details</h3>
                 

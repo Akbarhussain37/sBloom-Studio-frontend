@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import Reveal from '../Reveal';
 import { FiArrowRight, FiPlay, FiShield, FiTrendingUp } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
