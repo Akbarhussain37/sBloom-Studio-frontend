@@ -1,3 +1,11 @@
+/**
+ * DATABASE TYPES REGENERATION REQUIRED BEFORE ADMIN/DOCTOR IMPLEMENTATION
+ * 
+ * Note: This file contains partial manually expanded types for Phase A. 
+ * The profile_studio.role type currently only supports 'creator' | 'kid'.
+ * Do NOT hand-author admin/doctor types from legacy main.
+ * Regenerate the complete file from the live schema when required.
+ */
 export type Json =
   | string
   | number

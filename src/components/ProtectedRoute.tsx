@@ -29,11 +29,7 @@ export const ProtectedRoute = ({
   if (allowedRoles && allowedRoles.length > 0) {
     // If profile hasn't loaded yet but user has (should be rare due to AuthContext logic, but safe fallback)
     if (!profile) {
-      return (
-        <div className="min-h-screen flex items-center justify-center">
-          <LoadingSpinner className="w-12 h-12" />
-        </div>
-      );
+      return <Navigate to="/" replace />;
     }
 
     if (!allowedRoles.includes(profile.role)) {
