@@ -79,7 +79,7 @@ export default function Register() {
         // Prepare profile payload
         const payload: any = {
           id: data.user.id,
-          email: email,
+          email: data.user.email ?? email,
           full_name: name,
           role: role,
           onboarding_completed: true,
