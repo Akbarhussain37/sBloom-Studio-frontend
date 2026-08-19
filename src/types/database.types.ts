@@ -14,7 +14,7 @@ export interface Database {
           id: string
           full_name: string
           email: string
-          role: 'creator' | 'kid'
+          role: 'creator' | 'kid' | 'doctor' | 'admin'
           portfolio_url: string | null
           bio: string | null
           primary_software: string | null
@@ -22,6 +22,7 @@ export interface Database {
           kid_age: number | null
           interest: string | null
           onboarding_completed: boolean
+          free_edits_remaining: number | null
           created_at: string
           updated_at: string
         }
@@ -29,7 +30,7 @@ export interface Database {
           id: string
           full_name: string
           email: string
-          role: 'creator' | 'kid'
+          role: 'creator' | 'kid' | 'doctor' | 'admin'
           portfolio_url?: string | null
           bio?: string | null
           primary_software?: string | null
@@ -37,6 +38,7 @@ export interface Database {
           kid_age?: number | null
           interest?: string | null
           onboarding_completed?: boolean
+          free_edits_remaining?: number | null
           created_at?: string
           updated_at?: string
         }
@@ -44,7 +46,7 @@ export interface Database {
           id?: string
           full_name?: string
           email?: string
-          role?: 'creator' | 'kid'
+          role?: 'creator' | 'kid' | 'doctor' | 'admin'
           portfolio_url?: string | null
           bio?: string | null
           primary_software?: string | null
@@ -52,6 +54,7 @@ export interface Database {
           kid_age?: number | null
           interest?: string | null
           onboarding_completed?: boolean
+          free_edits_remaining?: number | null
           created_at?: string
           updated_at?: string
         }
@@ -131,6 +134,114 @@ export interface Database {
           created_at?: string
         }
       }
+      projects_studio: {
+        Row: {
+          id: string
+          user_id: string
+          name: string
+          description: string | null
+          status: 'DRAFT' | 'UPLOADED' | 'SUBMITTED' | 'IN_REVIEW' | 'EDITING' | 'READY_FOR_REVIEW' | 'CHANGES_REQUESTED' | 'COMPLETED'
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          name: string
+          description?: string | null
+          status?: 'DRAFT' | 'UPLOADED' | 'SUBMITTED' | 'IN_REVIEW' | 'EDITING' | 'READY_FOR_REVIEW' | 'CHANGES_REQUESTED' | 'COMPLETED'
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          name?: string
+          description?: string | null
+          status?: 'DRAFT' | 'UPLOADED' | 'SUBMITTED' | 'IN_REVIEW' | 'EDITING' | 'READY_FOR_REVIEW' | 'CHANGES_REQUESTED' | 'COMPLETED'
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      media_assets_studio: {
+        Row: {
+          id: string
+          project_id: string | null
+          user_id: string
+          file_name: string
+          file_type: string
+          file_size: number
+          storage_path: string
+          thumbnail_path: string | null
+          duration: number | null
+          status: 'DRAFT' | 'UPLOADED' | 'SUBMITTED' | 'IN_REVIEW' | 'EDITING' | 'READY_FOR_REVIEW' | 'CHANGES_REQUESTED' | 'COMPLETED'
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          project_id?: string | null
+          user_id: string
+          file_name: string
+          file_type: string
+          file_size: number
+          storage_path: string
+          thumbnail_path?: string | null
+          duration?: number | null
+          status?: 'DRAFT' | 'UPLOADED' | 'SUBMITTED' | 'IN_REVIEW' | 'EDITING' | 'READY_FOR_REVIEW' | 'CHANGES_REQUESTED' | 'COMPLETED'
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          project_id?: string | null
+          user_id?: string
+          file_name?: string
+          file_type?: string
+          file_size?: number
+          storage_path?: string
+          thumbnail_path?: string | null
+          duration?: number | null
+          status?: 'DRAFT' | 'UPLOADED' | 'SUBMITTED' | 'IN_REVIEW' | 'EDITING' | 'READY_FOR_REVIEW' | 'CHANGES_REQUESTED' | 'COMPLETED'
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      production_jobs_studio: {
+        Row: {
+          id: string
+          media_asset_id: string
+          user_id: string
+          status: 'DRAFT' | 'UPLOADED' | 'SUBMITTED' | 'IN_REVIEW' | 'EDITING' | 'READY_FOR_REVIEW' | 'CHANGES_REQUESTED' | 'COMPLETED'
+          notes: string | null
+          submitted_at: string
+          completed_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          media_asset_id: string
+          user_id: string
+          status?: 'DRAFT' | 'UPLOADED' | 'SUBMITTED' | 'IN_REVIEW' | 'EDITING' | 'READY_FOR_REVIEW' | 'CHANGES_REQUESTED' | 'COMPLETED'
+          notes?: string | null
+          submitted_at?: string
+          completed_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          media_asset_id?: string
+          user_id?: string
+          status?: 'DRAFT' | 'UPLOADED' | 'SUBMITTED' | 'IN_REVIEW' | 'EDITING' | 'READY_FOR_REVIEW' | 'CHANGES_REQUESTED' | 'COMPLETED'
+          notes?: string | null
+          submitted_at?: string
+          completed_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never
@@ -139,7 +250,7 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      production_status: 'DRAFT' | 'UPLOADED' | 'SUBMITTED' | 'IN_REVIEW' | 'EDITING' | 'READY_FOR_REVIEW' | 'CHANGES_REQUESTED' | 'COMPLETED'
     }
     CompositeTypes: {
       [_ in never]: never

@@ -13,7 +13,8 @@ export default function Header() {
   
   const isKidsZone = location.pathname === '/kids-zone';
   const isContactPage = location.pathname === '/contact';
-  const isLightHeader = isKidsZone || isContactPage;
+  const isHealthcare = location.pathname === '/healthcare';
+  const isLightHeader = isKidsZone || isContactPage || isHealthcare;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,7 +62,7 @@ export default function Header() {
         <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm xl:text-base font-medium">
           <NavLink to="/">Creators</NavLink>
           <NavLink to="/kids-zone">Young Creators</NavLink>
-          <span className="cursor-not-allowed opacity-50 ml-4 font-bold flex items-center">Healthcare</span>
+          <NavLink to="/healthcare">Healthcare</NavLink>
           
           {user ? (
             <div className="flex items-center gap-4 ml-4">
@@ -85,9 +86,7 @@ export default function Header() {
           <Link to="/contact" className={`${location.pathname === '/contact' ? (isKidsZone ? 'bg-slate-100 border-[#FF5E00] text-[#FF5E00]' : 'bg-slate-100 border-brand-red text-brand-red') : (isLightHeader ? 'bg-white border-[#E2E8F0] text-[#1E293B] hover:bg-slate-50' : 'bg-white/10 border-white/20 text-white hover:bg-white/20')} border font-semibold py-2 px-6 rounded-full transition-all whitespace-nowrap`}>
             Contact Us
           </Link>
-          <a href="/#marketing" className={`${isKidsZone ? 'bg-gradient-to-r from-[#FF5E00] to-[#FFD500] hover:scale-105 shadow-md' : 'bg-brand-red hover:bg-[#F02865] shadow-[0_0_15px_rgba(222,27,84,0.3)] hover:shadow-[0_0_20px_rgba(222,27,84,0.4)]'} text-white font-semibold py-2 px-6 rounded-lg transition-all whitespace-nowrap`}>
-            Book Slot
-          </a>
+
         </nav>
 
         {/* Mobile Menu Toggle */}
@@ -109,7 +108,7 @@ export default function Header() {
       >
         <Link to="/" className="hover:text-brand-red transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Creators</Link>
         <Link to="/kids-zone" className="hover:text-brand-red transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Young Creators</Link>
-        <span className="opacity-50 cursor-not-allowed">Healthcare</span>
+        <Link to="/healthcare" className="hover:text-brand-red transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Healthcare</Link>
         
         {user ? (
           <>
@@ -135,9 +134,7 @@ export default function Header() {
         <Link to="/contact" className="border border-white/20 px-8 py-3 rounded-full hover:bg-white/10 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
           Contact Us
         </Link>
-        <a href="/#marketing" className="bg-brand-red hover:bg-[#F02865] px-8 py-3 rounded-lg shadow-lg shadow-brand-red/30 transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
-          Book Slot
-        </a>
+
       </div>
     </header>
   );

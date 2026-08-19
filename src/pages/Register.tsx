@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  FiArrowLeft, FiMail, FiLock, FiUser, FiUserPlus, 
-  FiPhone, FiMapPin, FiInstagram, 
+import {
+  FiArrowLeft, FiMail, FiLock, FiUser, FiUserPlus,
+  FiPhone, FiMapPin, FiInstagram,
   FiActivity, FiSmile, FiHeart
 } from 'react-icons/fi';
 import { supabase } from '../lib/supabase';
@@ -12,7 +12,7 @@ import { ErrorAlert } from '../components/ui/ErrorAlert';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Register() {
-  const [role, setRole] = useState<'creator' | 'kid'>('creator');
+  const [role, setRole] = useState<'creator' | 'kid' | 'doctor'>('creator');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,7 +28,7 @@ export default function Register() {
   const [gender, setGender] = useState('');
   const [portfolio, setPortfolio] = useState('');
   const [category, setCategory] = useState('lifestyle');
-  
+
   // Kid fields
   const [parentPhone, setParentPhone] = useState('');
   const [kidAge, setKidAge] = useState('');
@@ -41,7 +41,11 @@ export default function Register() {
   // If already logged in, redirect them
   useEffect(() => {
     if (user && profile) {
-      navigate(profile.role === 'kid' ? '/kids-zone' : '/', { replace: true });
+      if (profile.role === 'admin') {
+        navigate('/admin', { replace: true });
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
     }
   }, [user, profile, navigate]);
 
@@ -53,7 +57,7 @@ export default function Register() {
       setError('Passwords do not match');
       return;
     }
-    
+
     if (password.length < 6) {
       setError('Password must be at least 6 characters');
       return;
@@ -74,7 +78,7 @@ export default function Register() {
       });
 
       if (signUpError) throw signUpError;
-      
+
       if (data.user) {
         // Prepare profile payload
         const payload: any = {
@@ -102,17 +106,29 @@ export default function Register() {
 
         const { error: profileError } = await supabase
           .from('profile_studio')
-          .insert([payload] as any);
-          
+          .insert([payload]);
+
         if (profileError) {
-          console.error("Profile creation failed:", profileError);
-          throw new Error(profileError.message || "Failed to create user profile");
+          console.error("Profile creation notice:", profileError);
+          // Let's attempt an update just in case the trigger already inserted the row
+          const { error: updateError } = await supabase
+            .from('profile_studio')
+            .update(payload)
+            .eq('id', data.user.id);
+
+          if (updateError) {
+            console.error("Profile update fallback failed:", updateError);
+          }
         }
       }
 
-      // Instead of going to /onboarding, we go straight to their dashboard/home!
-      navigate(role === 'kid' ? '/kids-zone' : '/', { replace: true });
-      
+      // Go straight to their dashboard!
+      if (role === 'admin') {
+        navigate('/admin', { replace: true });
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
+
     } catch (err: any) {
       console.error('Registration error:', err.message);
       setError(err.message || 'Failed to register account.');
@@ -125,8 +141,8 @@ export default function Register() {
     <div className="min-h-screen bg-[#F7F9FC] font-body flex flex-col relative py-20">
       {/* Top Navigation */}
       <div className="w-full px-6 md:px-12 py-6 flex justify-between items-center absolute top-0 left-0">
-        <Link 
-          to="/" 
+        <Link
+          to="/"
           className="flex items-center gap-2 text-brand-red font-bold text-sm tracking-wide hover:opacity-80 transition-opacity uppercase"
         >
           <FiArrowLeft className="text-lg" />
@@ -139,7 +155,7 @@ export default function Register() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 mt-10">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -160,31 +176,40 @@ export default function Register() {
           {error && <ErrorAlert message={error} />}
 
           <form className="space-y-6" onSubmit={handleRegister}>
-            
+
             {/* Role Selection Toggle */}
             <div className="flex justify-center mb-8">
-              <div className="bg-[#F7F9FC] p-1 rounded-xl flex w-full max-w-sm border border-slate-200">
+              <div className="bg-[#F7F9FC] p-1 rounded-xl flex w-full max-w-lg border border-slate-200">
                 <button
                   type="button"
                   disabled={loading}
                   onClick={() => setRole('creator')}
-                  className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${
-                    role === 'creator'
+                  className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${role === 'creator'
                       ? 'bg-white text-brand-red shadow-sm'
                       : 'text-slate-500 hover:text-slate-700'
-                  }`}
+                    }`}
                 >
                   Creator
                 </button>
                 <button
                   type="button"
                   disabled={loading}
-                  onClick={() => setRole('kid')}
-                  className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${
-                    role === 'kid'
+                  onClick={() => setRole('doctor')}
+                  className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${role === 'doctor'
                       ? 'bg-white text-brand-red shadow-sm'
                       : 'text-slate-500 hover:text-slate-700'
-                  }`}
+                    }`}
+                >
+                  Doctor
+                </button>
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={() => setRole('kid')}
+                  className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${role === 'kid'
+                      ? 'bg-white text-brand-red shadow-sm'
+                      : 'text-slate-500 hover:text-slate-700'
+                    }`}
                 >
                   Parent / Kid
                 </button>
@@ -193,7 +218,7 @@ export default function Register() {
 
             {/* Basic Info Section */}
             <h3 className="text-lg font-bold text-slate-800 border-b pb-2">Account Details</h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Full Name */}
               <div>
@@ -291,11 +316,11 @@ export default function Register() {
               </div>
             </div>
 
-            {/* Profile Info Section (Creator) */}
-            {role === 'creator' && (
+            {/* Profile Info Section (Creator / Doctor) */}
+            {(role === 'creator' || role === 'doctor') && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
                 <h3 className="text-lg font-bold text-slate-800 border-b pb-2 pt-4">Profile Details</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="phone" className="block text-sm font-bold text-slate-800 mb-2">
@@ -318,7 +343,7 @@ export default function Register() {
                       />
                     </div>
                   </div>
-                  
+
                   <div>
                     <label htmlFor="location" className="block text-sm font-bold text-slate-800 mb-2">
                       Location (City, Country)
@@ -364,7 +389,7 @@ export default function Register() {
                       />
                     </div>
                   </div>
-                  
+
                   <div>
                     <label htmlFor="gender" className="block text-sm font-bold text-slate-800 mb-2">
                       Gender <span className="text-slate-400 font-normal">(Optional)</span>
@@ -447,7 +472,7 @@ export default function Register() {
             {role === 'kid' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
                 <h3 className="text-lg font-bold text-slate-800 border-b pb-2 pt-4">Parent & Child Details</h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="parent-phone" className="block text-sm font-bold text-slate-800 mb-2">
@@ -470,7 +495,7 @@ export default function Register() {
                       />
                     </div>
                   </div>
-                  
+
                   <div>
                     <label htmlFor="location" className="block text-sm font-bold text-slate-800 mb-2">
                       Location (City, Country)
@@ -517,7 +542,7 @@ export default function Register() {
                       />
                     </div>
                   </div>
-                  
+
                   <div>
                     <label htmlFor="kid-gender" className="block text-sm font-bold text-slate-800 mb-2">
                       Kid's Gender <span className="text-slate-400 font-normal">(Optional)</span>
@@ -543,7 +568,7 @@ export default function Register() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="md:col-span-2">
                     <label htmlFor="interests" className="block text-sm font-bold text-slate-800 mb-2">
@@ -614,7 +639,7 @@ export default function Register() {
                 )}
               </button>
             </div>
-            
+
             <p className="mt-6 text-center text-sm text-slate-500">
               Already have an account?{' '}
               <Link to="/login" className="font-semibold text-brand-red hover:text-[#DE1B54]">
