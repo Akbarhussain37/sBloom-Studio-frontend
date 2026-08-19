@@ -17,15 +17,6 @@
     0% { transform: scale(1.05) translate(0, 0); }
     100% { transform: scale(1.15) translate(-1%, 1%); }
   }
-
-  --animate-float: float 6s ease-in-out infinite;
-  --animate-float-delayed: float 6s ease-in-out infinite;
-  --animate-delay-float-delayed: 3s;
-  
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
 }
 
 @layer base {
