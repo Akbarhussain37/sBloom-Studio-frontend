@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { FiVideo, FiClock, FiCheckCircle, FiPlus, FiFolder } from 'react-icons/fi';
+import { FiVideo, FiClock, FiCheckCircle, FiPlus, FiFolder, FiArrowRight } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import StatsCard from '../../components/dashboard/StatsCard';
 import { getMediaAssets, getProjects } from '../../lib/creatorService';
@@ -10,6 +11,7 @@ type MediaAsset = Database['public']['Tables']['media_assets_studio']['Row'];
 
 export default function DashboardOverview() {
   const { profile } = useAuth();
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalVideos: 0,
     inProduction: 0,
@@ -67,9 +69,10 @@ export default function DashboardOverview() {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
-          <button className={`px-6 py-3 bg-white/50 backdrop-blur-sm rounded-xl font-bold flex items-center justify-center gap-2 shadow-sm opacity-50 cursor-not-allowed
+          <button 
+            onClick={() => navigate('/dashboard/projects')}
+            className={`px-6 py-3 bg-white/90 hover:bg-white text-brand-red rounded-xl font-bold flex items-center justify-center gap-2 shadow-sm transition-all
             ${profile?.role === 'kid' ? 'text-[#FF5E00]' : 'text-brand-red'}`}
-            disabled
           >
             <FiFolder className="text-lg" /> Create Project
           </button>
@@ -110,8 +113,16 @@ export default function DashboardOverview() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Recent Projects */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-2">
             <h3 className="text-xl font-bold font-heading text-slate-900">Recent Projects</h3>
+            {recentProjects.length > 0 && (
+              <button 
+                onClick={() => navigate('/dashboard/projects')}
+                className="text-sm font-semibold text-brand-red hover:text-[#F02865] flex items-center gap-1 transition-colors"
+              >
+                View All <FiArrowRight />
+              </button>
+            )}
           </div>
           
           {loading ? (

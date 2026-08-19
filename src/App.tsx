@@ -10,6 +10,7 @@ import Contact from './components/Contact';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import CreatorDashboardLayout from './components/dashboard/CreatorDashboardLayout';
 import DashboardOverview from './pages/dashboard/DashboardOverview';
+import Projects from './pages/dashboard/Projects';
 
 function App() {
   const location = useLocation();
@@ -39,6 +40,7 @@ function App() {
           }
         >
           <Route index element={<DashboardOverview />} />
+          <Route path="projects" element={<Projects />} />
         </Route>
       </Routes>
 

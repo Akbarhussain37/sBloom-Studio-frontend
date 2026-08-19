@@ -167,6 +167,7 @@ export interface Database {
           created_at?: string
           updated_at?: string
         }
+        Relationships: []
       }
       media_assets_studio: {
         Row: {

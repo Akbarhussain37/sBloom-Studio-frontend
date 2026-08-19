@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FiHome, 
+  FiFolder,
   FiUser, 
   FiLogOut,
   FiX
@@ -58,6 +59,9 @@ export default function DashboardSidebar({ isOpen, onClose }: SidebarProps) {
           <nav className="space-y-1">
             <NavLink to="/dashboard" end className={navItemClass}>
               <FiHome className="text-lg" /> Overview
+            </NavLink>
+            <NavLink to="/dashboard/projects" className={navItemClass}>
+              <FiFolder className="text-lg" /> Projects
             </NavLink>
           </nav>
         </div>

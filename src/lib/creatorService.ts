@@ -15,6 +15,37 @@ export async function getProjects() {
   return data as Project[];
 }
 
+export async function createProject(name: string, description?: string) {
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  
+  if (authError || !user) {
+    throw new Error('Not authenticated');
+  }
+
+  const payload: Database['public']['Tables']['projects_studio']['Insert'] = {
+    user_id: user.id,
+    name: name.trim(),
+    status: 'DRAFT'
+  };
+
+  if (description && description.trim()) {
+    payload.description = description.trim();
+  }
+
+  const query = supabase
+    .from('projects_studio')
+    .insert([payload as never])
+    .select()
+    .single();
+  const { data, error } = await query;
+
+  if (error) {
+    throw error;
+  }
+
+  return data as Project;
+}
+
 // MEDIA ASSETS
 export async function getMediaAssets(projectId?: string) {
   let query = supabase
