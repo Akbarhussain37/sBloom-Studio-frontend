@@ -25,7 +25,7 @@ export default function Login() {
       if (from) {
         navigate(from, { replace: true });
       } else {
-        navigate(profile.role === 'kid' ? '/kids-zone' : '/', { replace: true });
+        navigate(profile.role === 'kid' ? '/kids-zone' : '/dashboard', { replace: true });
       }
     }
   }, [user, profile, navigate, location]);

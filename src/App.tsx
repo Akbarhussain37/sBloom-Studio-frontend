@@ -7,11 +7,15 @@ import HealthcarePage from './pages/HealthcarePage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Contact from './components/Contact';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import CreatorDashboardLayout from './components/dashboard/CreatorDashboardLayout';
+import DashboardOverview from './pages/dashboard/DashboardOverview';
 
 function App() {
   const location = useLocation();
   const isAuthPage = ['/login', '/register'].includes(location.pathname);
-  const hideHeaderFooter = isAuthPage;
+  const isDashboardPage = location.pathname.startsWith('/dashboard');
+  const hideHeaderFooter = isAuthPage || isDashboardPage;
 
   return (
     <div className="bg-white min-h-screen font-body text-gray-900 selection:bg-brand-red selection:text-white">
@@ -25,6 +29,17 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/contact" element={<Contact />} />
 
+        {/* PROTECTED CREATOR DASHBOARD */}
+        <Route 
+          path="/dashboard" 
+          element={
+            <ProtectedRoute allowedRoles={['creator']}>
+              <CreatorDashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<DashboardOverview />} />
+        </Route>
       </Routes>
 
       {!hideHeaderFooter && <Footer />}

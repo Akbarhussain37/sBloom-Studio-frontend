@@ -36,12 +36,12 @@ export default function Register() {
   const [interest, setInterest] = useState('vlogging');
 
   const navigate = useNavigate();
-  const { user, profile } = useAuth();
+  const { user, profile, refreshProfile } = useAuth();
 
   // If already logged in, redirect them
   useEffect(() => {
     if (user && profile) {
-      navigate(profile.role === 'kid' ? '/kids-zone' : '/', { replace: true });
+      navigate(profile.role === 'kid' ? '/kids-zone' : '/dashboard', { replace: true });
     }
   }, [user, profile, navigate]);
 
@@ -108,10 +108,13 @@ export default function Register() {
           console.error("Profile creation failed:", profileError);
           throw new Error(profileError.message || "Failed to create user profile");
         }
+
+        // Fetch the fresh profile before navigating to ensure ProtectedRoute has it immediately
+        await refreshProfile(data.user.id);
       }
 
       // Instead of going to /onboarding, we go straight to their dashboard/home!
-      navigate(role === 'kid' ? '/kids-zone' : '/', { replace: true });
+      navigate(role === 'kid' ? '/kids-zone' : '/dashboard', { replace: true });
       
     } catch (err: any) {
       console.error('Registration error:', err.message);

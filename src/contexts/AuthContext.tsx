@@ -11,7 +11,7 @@ interface AuthContextType {
   user: User | null;
   profile: Profile | null;
   loading: boolean;
-  refreshProfile: () => Promise<void>;
+  refreshProfile: (userId?: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -42,9 +42,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const refreshProfile = async () => {
-    if (user) {
-      await fetchProfile(user.id);
+  const refreshProfile = async (userId?: string) => {
+    const idToFetch = userId || user?.id;
+    if (idToFetch) {
+      await fetchProfile(idToFetch);
     }
   };
 

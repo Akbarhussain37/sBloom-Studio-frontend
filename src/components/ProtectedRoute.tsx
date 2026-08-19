@@ -3,8 +3,14 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { LoadingSpinner } from './ui/LoadingSpinner';
 
-export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAuth();
+export const ProtectedRoute = ({ 
+  children, 
+  allowedRoles 
+}: { 
+  children: React.ReactNode;
+  allowedRoles?: string[];
+}) => {
+  const { user, profile, loading } = useAuth();
   const location = useLocation();
 
   if (loading) {
@@ -16,11 +22,27 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (!user) {
-    // Redirect them to the /login page, but save the current location they were
-    // trying to go to when they were redirected. This allows us to send them
-    // along to that page after they login, which is a nicer user experience
-    // than dropping them off on the home page.
     return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  // If role protection is needed, check profile role
+  if (allowedRoles && allowedRoles.length > 0) {
+    // If profile hasn't loaded yet but user has (should be rare due to AuthContext logic, but safe fallback)
+    if (!profile) {
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <LoadingSpinner className="w-12 h-12" />
+        </div>
+      );
+    }
+
+    if (!allowedRoles.includes(profile.role)) {
+      // Redirect to correct public experience based on their actual role
+      if (profile.role === 'kid') {
+        return <Navigate to="/kids-zone" replace />;
+      }
+      return <Navigate to="/" replace />;
+    }
   }
 
   return <>{children}</>;
