@@ -4,6 +4,8 @@ import {
   FiHome, 
   FiFolder,
   FiFilm,
+  FiClock,
+  FiCheckCircle,
   FiUser, 
   FiLogOut,
   FiX
@@ -66,6 +68,12 @@ export default function DashboardSidebar({ isOpen, onClose }: SidebarProps) {
             </NavLink>
             <NavLink to="/dashboard/media" className={navItemClass}>
               <FiFilm className="text-lg" /> Media Library
+            </NavLink>
+            <NavLink to="/dashboard/review" className={navItemClass}>
+              <FiClock className="text-lg" /> Review & Feedback
+            </NavLink>
+            <NavLink to="/dashboard/completed" className={navItemClass}>
+              <FiCheckCircle className="text-lg" /> Completed Content
             </NavLink>
           </nav>
         </div>
