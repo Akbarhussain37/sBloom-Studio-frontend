@@ -25,9 +25,12 @@ export interface ProductionSubmissionResponse {
 
 export class ApiError extends Error {
   status: number;
-  constructor(status: number, message: string) {
-    super(message);
+  code: string;
+
+  constructor(status: number, code: string) {
+    super(code);
     this.status = status;
+    this.code = code;
     this.name = 'ApiError';
   }
 }
@@ -59,16 +62,25 @@ export async function submitProduction(
       body: JSON.stringify(data)
     });
   } catch {
-    throw new ApiError(503, 'A network error occurred. Please try again.');
+    throw new ApiError(503, 'NETWORK_ERROR');
   }
 
   if (!response.ok) {
-    throw new ApiError(response.status, 'An error occurred during submission.');
+    let errorCode = 'API_REQUEST_FAILED';
+    try {
+      const errorData = await response.json();
+      if (errorData && errorData.error && typeof errorData.error.code === 'string') {
+        errorCode = errorData.error.code;
+      }
+    } catch {
+      // Parsing failed, use fallback code
+    }
+    throw new ApiError(response.status, errorCode);
   }
 
   try {
     return await response.json();
   } catch {
-    throw new ApiError(500, 'An unexpected response was received from the server.');
+    throw new ApiError(500, 'INVALID_API_RESPONSE');
   }
 }

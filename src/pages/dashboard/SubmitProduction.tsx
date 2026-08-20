@@ -50,8 +50,8 @@ export default function SubmitProduction() {
       if (data && data.length > 0) {
         setProjectId(data[0].id);
       }
-    } catch (err: any) {
-      setProjectsError(err.message || 'Failed to load projects');
+    } catch {
+      setProjectsError('We couldn\'t load your projects right now. Please try again.');
     } finally {
       setLoadingProjects(false);
     }
@@ -82,6 +82,13 @@ export default function SubmitProduction() {
     return null;
   };
 
+  const showFormError = (message: string) => {
+    setFormError(message);
+    requestAnimationFrame(() => {
+      errorRef.current?.focus();
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) return;
@@ -89,7 +96,7 @@ export default function SubmitProduction() {
     setFormError('');
     const validationError = validateForm();
     if (validationError) {
-      setFormError(validationError);
+      showFormError(validationError);
       return;
     }
 
@@ -99,7 +106,7 @@ export default function SubmitProduction() {
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
       if (sessionError || !session?.access_token) {
-        throw new ApiError(401, 'Your session has expired. Please sign in again.');
+        throw new ApiError(401, 'UNAUTHORIZED');
       }
 
       const requestData: ProductionSubmissionRequest = {
@@ -122,32 +129,39 @@ export default function SubmitProduction() {
       }, 0);
     } catch (err: any) {
       if (err instanceof ApiError) {
-        switch (err.status) {
-          case 400:
-            setFormError('Please verify your form inputs and attestation.');
+        switch (err.code) {
+          case 'VALIDATION_ERROR':
+            showFormError('Please verify your form inputs.');
             break;
-          case 401:
-            setFormError('Your session has expired. Please sign in again.');
+          case 'SOURCE_ACCESS_ATTESTATION_REQUIRED':
+            showFormError('Please confirm that the production team has access to the shared files.');
             break;
-          case 403:
-            setFormError('You do not have permission to submit content for this project.');
+          case 'UNAUTHORIZED':
+            showFormError('Your session has expired. Please sign in again.');
             break;
-          case 404:
-            setFormError('This project is no longer available. Refresh your projects.');
+          case 'CREATOR_REQUIRED':
+            showFormError('You do not have permission to submit content for this project.');
             break;
+          case 'PROJECT_NOT_FOUND':
+            showFormError('This project is no longer available. Refresh your projects.');
+            break;
+          case 'NETWORK_ERROR':
+            showFormError('A network error occurred. Please try again.');
+            break;
+          case 'API_CONFIGURATION_ERROR':
+            showFormError('We couldn\'t submit your content right now. Please try again later.');
+            break;
+          case 'INVALID_API_RESPONSE':
+          case 'INTERNAL_ERROR':
+          case 'API_REQUEST_FAILED':
           default:
-            setFormError('We couldn\'t submit your content right now. Please try again.');
+            showFormError('We couldn\'t submit your content right now. Please try again.');
         }
       } else {
-        setFormError('We couldn\'t submit your content right now. Please try again.');
+        showFormError('We couldn\'t submit your content right now. Please try again.');
       }
     } finally {
       setIsSubmitting(false);
-      if (formError || validationError) {
-        setTimeout(() => {
-          errorRef.current?.focus();
-        }, 0);
-      }
     }
   };
 
