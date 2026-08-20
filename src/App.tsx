@@ -11,6 +11,7 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import CreatorDashboardLayout from './components/dashboard/CreatorDashboardLayout';
 import DashboardOverview from './pages/dashboard/DashboardOverview';
 import Projects from './pages/dashboard/Projects';
+import MediaLibrary from './pages/dashboard/MediaLibrary';
 
 function App() {
   const location = useLocation();
@@ -41,6 +42,7 @@ function App() {
         >
           <Route index element={<DashboardOverview />} />
           <Route path="projects" element={<Projects />} />
+          <Route path="media" element={<MediaLibrary />} />
         </Route>
       </Routes>
 

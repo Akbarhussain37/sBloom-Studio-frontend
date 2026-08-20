@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FiHome, 
   FiFolder,
+  FiFilm,
   FiUser, 
   FiLogOut,
   FiX
@@ -62,6 +63,9 @@ export default function DashboardSidebar({ isOpen, onClose }: SidebarProps) {
             </NavLink>
             <NavLink to="/dashboard/projects" className={navItemClass}>
               <FiFolder className="text-lg" /> Projects
+            </NavLink>
+            <NavLink to="/dashboard/media" className={navItemClass}>
+              <FiFilm className="text-lg" /> Media Library
             </NavLink>
           </nav>
         </div>

@@ -1,7 +1,7 @@
 import { FiEdit2, FiCheckCircle, FiClock, FiAlertCircle, FiUpload, FiPlay } from 'react-icons/fi';
-import type { Database } from '../../types/database.types';
 
-type ProductionStatus = Database['public']['Tables']['projects_studio']['Row']['status'];
+
+type ProductionStatus = 'DRAFT' | 'UPLOADED' | 'SUBMITTED' | 'IN_REVIEW' | 'EDITING' | 'READY_FOR_REVIEW' | 'CHANGES_REQUESTED' | 'COMPLETED';
 
 interface BadgeProps {
   status: ProductionStatus;

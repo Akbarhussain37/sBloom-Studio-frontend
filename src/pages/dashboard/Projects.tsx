@@ -9,6 +9,7 @@ type Project = Database['public']['Tables']['projects_studio']['Row'];
 export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   
   // Form State
@@ -19,11 +20,13 @@ export default function Projects() {
 
   const loadProjects = async () => {
     setLoading(true);
+    setLoadError(false);
     try {
       const data = await getProjects();
       setProjects(data);
     } catch (error) {
       console.error('Error loading projects:', error);
+      setLoadError(true);
     } finally {
       setLoading(false);
     }
@@ -148,6 +151,16 @@ export default function Projects() {
           {[1, 2, 3].map(i => (
              <div key={i} className="bg-white border border-slate-100 rounded-[1.5rem] p-6 h-48 animate-pulse"></div>
           ))}
+        </div>
+      ) : loadError ? (
+        <div className="py-20 text-center bg-[#F7F9FC] rounded-[2rem] border border-dashed border-red-200">
+          <h4 className="text-lg font-bold text-slate-900 mb-4">Unable to load projects. Please try again.</h4>
+          <button 
+            onClick={loadProjects}
+            className="px-6 py-2.5 bg-white border border-slate-200 text-slate-700 rounded-xl font-bold hover:bg-slate-50 transition-colors shadow-sm inline-flex"
+          >
+            Retry
+          </button>
         </div>
       ) : projects.length === 0 ? (
         <div className="py-20 text-center bg-[#F7F9FC] rounded-[2rem] border border-dashed border-slate-300">

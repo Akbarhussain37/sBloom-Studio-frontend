@@ -156,8 +156,16 @@ export default function DashboardOverview() {
 
         {/* Recent Uploads */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-2">
             <h3 className="text-xl font-bold font-heading text-slate-900">Recent Uploads</h3>
+            {recentUploads.length > 0 && (
+              <button 
+                onClick={() => navigate('/dashboard/media')}
+                className="text-sm font-semibold text-brand-red hover:text-[#F02865] flex items-center gap-1 transition-colors"
+              >
+                View All <FiArrowRight />
+              </button>
+            )}
           </div>
           
           {loading ? (
