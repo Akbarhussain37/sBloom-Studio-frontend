@@ -12,6 +12,7 @@ import CreatorDashboardLayout from './components/dashboard/CreatorDashboardLayou
 import DashboardOverview from './pages/dashboard/DashboardOverview';
 import Projects from './pages/dashboard/Projects';
 import SubmitProduction from './pages/dashboard/SubmitProduction';
+import SubmissionHistory from './pages/dashboard/SubmissionHistory';
 import MediaLibrary from './pages/dashboard/MediaLibrary';
 import ReviewFeedback from './pages/dashboard/ReviewFeedback';
 import CompletedContent from './pages/dashboard/CompletedContent';
@@ -46,6 +47,7 @@ function App() {
           <Route index element={<DashboardOverview />} />
           <Route path="projects" element={<Projects />} />
           <Route path="submit" element={<SubmitProduction />} />
+          <Route path="submissions" element={<SubmissionHistory />} />
           <Route path="media" element={<MediaLibrary />} />
           <Route path="review" element={<ReviewFeedback />} />
           <Route path="completed" element={<CompletedContent />} />

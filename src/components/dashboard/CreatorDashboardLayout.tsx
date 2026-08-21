@@ -29,6 +29,7 @@ export default function CreatorDashboardLayout() {
     if (path.startsWith('/dashboard/media')) return 'Media Library';
     if (path.startsWith('/dashboard/projects')) return 'Projects';
     if (path.startsWith('/dashboard/videos')) return 'Video Details';
+    if (path.startsWith('/dashboard/submissions')) return 'Submission History';
     if (path.startsWith('/dashboard/submit')) return 'Submit Content';
     if (path.startsWith('/dashboard/review')) return 'Review & Feedback';
     if (path.startsWith('/dashboard/completed')) return 'Completed Content';

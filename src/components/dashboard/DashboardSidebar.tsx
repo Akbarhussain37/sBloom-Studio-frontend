@@ -9,7 +9,8 @@ import {
   FiCheckCircle,
   FiUser, 
   FiLogOut,
-  FiX
+  FiX,
+  FiList
 } from 'react-icons/fi';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
@@ -69,6 +70,9 @@ export default function DashboardSidebar({ isOpen, onClose }: SidebarProps) {
             </NavLink>
             <NavLink to="/dashboard/submit" className={navItemClass}>
               <FiSend className="text-lg" /> Submit Content
+            </NavLink>
+            <NavLink to="/dashboard/submissions" className={navItemClass}>
+              <FiList className="text-lg" /> Submission History
             </NavLink>
             <NavLink to="/dashboard/media" className={navItemClass}>
               <FiFilm className="text-lg" /> Media Library
