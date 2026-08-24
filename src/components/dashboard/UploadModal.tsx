@@ -85,7 +85,8 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }: Uploa
           profile?.full_name || 'Unknown User',
           user?.email || profile?.email || '',
           user?.phone || '',
-          ''
+          '',
+          profile?.role
         );
         setFiles(prev => {
           const newFiles = [...prev];

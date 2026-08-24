@@ -140,13 +140,14 @@ export const getProfileImages = async (userId: string) => {
 /**
  * Uploads a document to the backend integration for OneDrive.
  */
-export const uploadDocument = async (file: File, userName?: string, userEmail?: string, userPhone?: string, instructions?: string) => {
+export const uploadDocument = async (file: File, userName?: string, userEmail?: string, userPhone?: string, instructions?: string, userRole?: string) => {
   const formData = new FormData();
   formData.append('file', file);
   if (userName) formData.append('userName', userName);
   if (userEmail) formData.append('userEmail', userEmail);
   if (userPhone) formData.append('userPhone', userPhone);
   if (instructions) formData.append('instructions', instructions);
+  if (userRole) formData.append('userRole', userRole);
 
   const response = await fetch('http://localhost:3000/api/upload-document', {
     method: 'POST',

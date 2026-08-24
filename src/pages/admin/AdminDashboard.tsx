@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
-import { FiArrowLeft, FiSearch, FiVideo, FiMoreVertical, FiCheck, FiClock, FiPlayCircle, FiRefreshCw, FiAlertCircle, FiDownload, FiX, FiLogOut, FiMail, FiPhone, FiMapPin, FiFileText } from 'react-icons/fi';
+import { FiArrowLeft, FiSearch, FiVideo, FiMoreVertical, FiCheck, FiClock, FiPlayCircle, FiRefreshCw, FiAlertCircle, FiDownload, FiX, FiLogOut, FiMail, FiPhone, FiMapPin, FiFileText, FiImage } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // API Configuration
@@ -16,6 +16,11 @@ interface DocumentData {
   url: string;
   status: string;
   created_at: string;
+  user_name?: string;
+  user_email?: string;
+  user_phone?: string;
+  instructions?: string;
+  user_role?: string;
 }
 
 export default function AdminDashboard() {
@@ -25,7 +30,13 @@ export default function AdminDashboard() {
   const [documents, setDocuments] = useState<DocumentData[]>([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [playingVideoId, setPlayingVideoId] = useState<string | null>(null);
+  const [viewingMedia, setViewingMedia] = useState<DocumentData | null>(null);
+
+  const isImage = (filename?: string) => {
+    if (!filename) return false;
+    const ext = filename.split('.').pop()?.toLowerCase();
+    return ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext || '');
+  };
 
   // Redirect non-admins
   useEffect(() => {
@@ -211,7 +222,7 @@ export default function AdminDashboard() {
                   
                   // Create some placeholder data for missing fields
                   const user = doc.user_name || 'Unknown User';
-                  const role = 'creator';
+                  const role = doc.user_role || 'creator';
                   
                   return (
                     <tr key={doc.doc_id} className="hover:bg-slate-50/50 transition-colors">
@@ -221,10 +232,14 @@ export default function AdminDashboard() {
                         {doc.url && (
                           <div className="flex items-center gap-2 mt-3 flex-wrap">
                             <button 
-                              onClick={() => setPlayingVideoId(doc.file_id)}
-                              className="flex items-center gap-1.5 text-brand-red text-xs font-semibold bg-red-50 w-max px-2 py-1 rounded-md border border-red-100 hover:bg-red-100 transition-colors cursor-pointer"
+                              onClick={() => setViewingMedia(doc)}
+                              className={`flex items-center gap-1.5 text-xs font-semibold w-max px-2 py-1 rounded-md border transition-colors cursor-pointer ${
+                                isImage(doc.file_name) 
+                                ? 'text-purple-600 bg-purple-50 border-purple-100 hover:bg-purple-100'
+                                : 'text-brand-red bg-red-50 border-red-100 hover:bg-red-100'
+                              }`}
                             >
-                              <FiPlayCircle /> Play Video
+                              {isImage(doc.file_name) ? <><FiImage /> View Image</> : <><FiPlayCircle /> Play Video</>}
                             </button>
                             <a 
                               href={`${API_BASE_URL}/documents/${doc.file_id}/stream`} 
@@ -309,9 +324,9 @@ export default function AdminDashboard() {
 
       </main>
 
-      {/* Video Player Modal */}
+      {/* Media Viewer Modal */}
       <AnimatePresence>
-        {playingVideoId && (
+        {viewingMedia && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -320,20 +335,28 @@ export default function AdminDashboard() {
           >
             <div className="bg-black rounded-2xl overflow-hidden shadow-2xl max-w-4xl w-full relative border border-slate-800">
               <button 
-                onClick={() => setPlayingVideoId(null)}
+                onClick={() => setViewingMedia(null)}
                 className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-black/70 transition-colors cursor-pointer"
               >
                 <FiX className="text-xl" />
               </button>
               <div className="aspect-video bg-black w-full flex items-center justify-center">
-                <video 
-                  src={`${API_BASE_URL}/documents/${playingVideoId}/stream`}
-                  controls
-                  autoPlay
-                  className="w-full h-full object-contain"
-                >
-                  Your browser does not support the video tag.
-                </video>
+                {isImage(viewingMedia.file_name) ? (
+                  <img 
+                    src={`${API_BASE_URL}/documents/${viewingMedia.file_id}/stream`}
+                    alt={viewingMedia.file_name}
+                    className="w-full h-full object-contain"
+                  />
+                ) : (
+                  <video 
+                    src={`${API_BASE_URL}/documents/${viewingMedia.file_id}/stream`}
+                    controls
+                    autoPlay
+                    className="w-full h-full object-contain"
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                )}
               </div>
             </div>
           </motion.div>

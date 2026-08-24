@@ -49,7 +49,8 @@ export default function UploadJob() {
         profile?.full_name || 'Unknown User',
         user?.email || profile?.email || '',
         user?.phone || '',
-        instructions
+        instructions,
+        profile?.role
       );
       setIsSubmitted(true);
     } catch (err: any) {
