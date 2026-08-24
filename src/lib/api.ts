@@ -136,3 +136,28 @@ export const getProfileImages = async (userId: string) => {
   }
   return data;
 };
+
+/**
+ * Uploads a document to the backend integration for OneDrive.
+ */
+export const uploadDocument = async (file: File, userName?: string, userEmail?: string, userPhone?: string, instructions?: string) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  if (userName) formData.append('userName', userName);
+  if (userEmail) formData.append('userEmail', userEmail);
+  if (userPhone) formData.append('userPhone', userPhone);
+  if (instructions) formData.append('instructions', instructions);
+
+  const response = await fetch('http://localhost:3000/api/upload-document', {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    const errorMessage = errorData.details ? errorData.error + ': ' + errorData.details : errorData.error;
+    throw new Error(errorMessage || 'Failed to upload document');
+  }
+
+  return response.json();
+};

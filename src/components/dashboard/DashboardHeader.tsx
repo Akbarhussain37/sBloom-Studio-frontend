@@ -1,4 +1,5 @@
 import { FiMenu, FiBell, FiSearch, FiUser } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -37,11 +38,11 @@ export default function DashboardHeader({ onMenuClick, title = 'Dashboard' }: He
 
         <div className="h-8 w-px bg-slate-200 mx-2 hidden md:block"></div>
 
-        <div className="flex items-center gap-2 cursor-pointer">
+        <Link to="/dashboard/profile" className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
           <div className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center overflow-hidden">
              <FiUser className="text-slate-400 text-lg" />
           </div>
-        </div>
+        </Link>
       </div>
     </header>
   );

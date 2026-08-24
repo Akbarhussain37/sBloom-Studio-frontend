@@ -22,11 +22,17 @@ export default function Login() {
   useEffect(() => {
     if (user && profile) {
       const from = (location.state as any)?.from?.pathname;
-      if (from) {
-        navigate(from, { replace: true });
-      } else {
-        if (profile.role === 'admin') {
+      
+      if (profile.role === 'admin') {
+        // Force admins to their dashboard if they were trying to access the generic one
+        if (!from || from === '/dashboard' || from === '/') {
           navigate('/admin', { replace: true });
+        } else {
+          navigate(from, { replace: true });
+        }
+      } else {
+        if (from) {
+          navigate(from, { replace: true });
         } else {
           navigate('/dashboard', { replace: true });
         }

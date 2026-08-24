@@ -25,6 +25,11 @@ export default function CreatorDashboardLayout() {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  // Redirect admins to admin dashboard
+  if (profile.role === 'admin') {
+    return <Navigate to="/admin" replace />;
+  }
+
   // Get dynamic title based on path
   const getPageTitle = () => {
     const path = location.pathname;

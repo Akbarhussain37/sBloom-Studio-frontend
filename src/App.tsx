@@ -17,12 +17,14 @@ import VideoDetails from './pages/dashboard/VideoDetails';
 import ScriptAssistant from './pages/dashboard/ScriptAssistant';
 import UploadJob from './pages/dashboard/UploadJob';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import ProfileSettings from './pages/dashboard/ProfileSettings';
 
 function App() {
   const location = useLocation();
   const isAuthPage = ['/login', '/register'].includes(location.pathname);
   const isDashboardPage = location.pathname.startsWith('/dashboard');
-  const hideHeaderFooter = isAuthPage || isDashboardPage;
+  const isAdminPage = location.pathname.startsWith('/admin');
+  const hideHeaderFooter = isAuthPage || isDashboardPage || isAdminPage;
 
   return (
     <div className="bg-white min-h-screen font-body text-gray-900 selection:bg-brand-red selection:text-white">
@@ -46,6 +48,7 @@ function App() {
           <Route path="completed" element={<CompletedContent />} />
           <Route path="script-assistant" element={<ScriptAssistant />} />
           <Route path="upload-job" element={<UploadJob />} />
+          <Route path="profile" element={<ProfileSettings />} />
         </Route>
 
         {/* Admin Routes */}

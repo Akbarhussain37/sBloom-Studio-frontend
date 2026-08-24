@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FiHome, 
@@ -130,7 +130,7 @@ export default function DashboardSidebar({ isOpen, onClose, onOpenUpload }: Side
         </nav>
         
         {profile && (
-          <div className="mt-6 flex items-center gap-3 px-2">
+          <Link to="/dashboard/profile" className="mt-6 flex items-center gap-3 px-2 cursor-pointer hover:bg-slate-100 p-2 rounded-xl transition-colors">
             <div className="w-10 h-10 rounded-full bg-slate-200 border-2 border-white shadow-sm flex items-center justify-center overflow-hidden">
               <FiUser className="text-slate-400 text-xl" />
             </div>
@@ -142,7 +142,7 @@ export default function DashboardSidebar({ isOpen, onClose, onOpenUpload }: Side
                 {profile.role}
               </p>
             </div>
-          </div>
+          </Link>
         )}
       </div>
     </div>

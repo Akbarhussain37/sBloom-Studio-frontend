@@ -2,7 +2,9 @@ import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiUploadCloud, FiFile, FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
 import { uploadMediaFile } from '../../lib/creatorService';
+import { uploadDocument } from '../../lib/api';
 import { LoadingSpinner } from '../ui/LoadingSpinner';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface UploadModalProps {
   isOpen: boolean;
@@ -11,6 +13,7 @@ interface UploadModalProps {
 }
 
 export default function UploadModal({ isOpen, onClose, onUploadComplete }: UploadModalProps) {
+  const { profile, user } = useAuth();
   const [isDragging, setIsDragging] = useState(false);
   const [files, setFiles] = useState<{ file: File; progress: number; status: 'idle' | 'uploading' | 'success' | 'error'; error?: string }[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -77,7 +80,13 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }: Uploa
       });
 
       try {
-        await uploadMediaFile(f.file);
+        await uploadDocument(
+          f.file, 
+          profile?.full_name || 'Unknown User',
+          user?.email || profile?.email || '',
+          user?.phone || '',
+          ''
+        );
         setFiles(prev => {
           const newFiles = [...prev];
           newFiles[f.index].status = 'success';

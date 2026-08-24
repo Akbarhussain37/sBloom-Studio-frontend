@@ -3,13 +3,17 @@ import { motion } from 'framer-motion';
 import { FiUploadCloud, FiFileText, FiCheckCircle, FiInfo } from 'react-icons/fi';
 import { useAuth } from '../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
+import { uploadDocument } from '../../lib/api';
+import { LoadingSpinner } from '../../components/ui/LoadingSpinner';
 
 export default function UploadJob() {
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
   const [file, setFile] = useState<File | null>(null);
   const [instructions, setInstructions] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Mock quota - in reality this would be from the profile DB (free_edits_remaining)
   const freeTriesRemaining = profile?.free_edits_remaining ?? 2;
@@ -32,12 +36,28 @@ export default function UploadJob() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file || !instructions.trim() || freeTriesRemaining <= 0) return;
+    if (!file || !instructions.trim() || freeTriesRemaining <= 0 || isUploading) return;
     
-    // Static mockup behavior
-    setIsSubmitted(true);
+    setIsUploading(true);
+    setError(null);
+    
+    try {
+      await uploadDocument(
+        file, 
+        profile?.full_name || 'Unknown User',
+        user?.email || profile?.email || '',
+        user?.phone || '',
+        instructions
+      );
+      setIsSubmitted(true);
+    } catch (err: any) {
+      console.error('Upload failed:', err);
+      setError(err.message || 'Failed to upload video');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   if (isSubmitted) {
@@ -187,13 +207,18 @@ export default function UploadJob() {
             </p>
           </div>
 
-          <div className="pt-4 border-t border-slate-100 flex justify-end">
+          <div className="pt-4 border-t border-slate-100 flex flex-col items-end gap-2">
+            {error && <p className="text-red-500 text-sm">{error}</p>}
             <button
               type="submit"
-              disabled={!file || !instructions.trim() || freeTriesRemaining <= 0}
+              disabled={!file || !instructions.trim() || freeTriesRemaining <= 0 || isUploading}
               className="px-8 py-3.5 bg-brand-red text-white font-bold rounded-xl hover:bg-[#F02865] transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
-              Submit Job <FiCheckCircle />
+              {isUploading ? (
+                <><LoadingSpinner className="w-5 h-5 text-white border-white" /> Uploading...</>
+              ) : (
+                <>Submit Job <FiCheckCircle /></>
+              )}
             </button>
           </div>
         </form>
