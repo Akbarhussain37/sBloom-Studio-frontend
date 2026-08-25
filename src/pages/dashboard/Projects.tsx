@@ -11,6 +11,15 @@ export default function Projects() {
   const [loading, setLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
   const [newProjectName, setNewProjectName] = useState('');
+  const [activeTab, setActiveTab] = useState<'All' | 'In Progress' | 'In Review' | 'Completed'>('All');
+
+  const filteredProjects = projects.filter(project => {
+    if (activeTab === 'All') return true;
+    if (activeTab === 'In Progress') return ['DRAFT', 'UPLOADED', 'SUBMITTED', 'EDITING', 'CHANGES_REQUESTED'].includes(project.status);
+    if (activeTab === 'In Review') return ['IN_REVIEW', 'READY_FOR_REVIEW'].includes(project.status);
+    if (activeTab === 'Completed') return project.status === 'COMPLETED';
+    return true;
+  });
 
   const loadProjects = async () => {
     setLoading(true);
@@ -83,6 +92,23 @@ export default function Projects() {
         </div>
       )}
 
+      {/* Tabs */}
+      <div className="flex gap-6 border-b border-slate-200 mb-6">
+        {['All', 'In Progress', 'In Review', 'Completed'].map(tab => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab as any)}
+            className={`py-3 text-sm font-bold border-b-2 transition-colors ${
+              activeTab === tab 
+                ? 'border-brand-red text-brand-red' 
+                : 'border-transparent text-slate-500 hover:text-slate-900'
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map(i => (
@@ -94,18 +120,24 @@ export default function Projects() {
           <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center mx-auto mb-4 text-slate-400">
             <FiFolder className="text-2xl" />
           </div>
-          <h4 className="text-lg font-bold text-slate-900 mb-1">No projects yet</h4>
-          <p className="text-slate-500 mb-6 text-sm max-w-sm mx-auto">Create a project to organize your videos and track production progress.</p>
-          <button 
-            onClick={() => setIsCreating(true)}
-            className="px-6 py-3 bg-brand-red text-white rounded-xl font-bold hover:bg-[#F02865] transition-colors flex items-center justify-center gap-2 mx-auto shadow-sm"
-          >
-            <FiPlus className="text-lg" /> Create Project
-          </button>
+          <h4 className="text-lg font-bold text-slate-900 mb-1">No projects found</h4>
+          <p className="text-slate-500 mb-6 text-sm max-w-sm mx-auto">
+            {activeTab === 'All' 
+              ? "Create a project to organize your videos and track production progress." 
+              : `No projects found in the "${activeTab}" status.`}
+          </p>
+          {activeTab === 'All' && (
+            <button 
+              onClick={() => setIsCreating(true)}
+              className="px-6 py-3 bg-brand-red text-white rounded-xl font-bold hover:bg-[#F02865] transition-colors flex items-center justify-center gap-2 mx-auto shadow-sm"
+            >
+              <FiPlus className="text-lg" /> Create Project
+            </button>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map(project => (
+          {filteredProjects.map(project => (
             <div key={project.id} className="bg-white border border-slate-200 rounded-[1.5rem] p-6 hover:shadow-lg hover:border-brand-red/30 transition-all group relative cursor-pointer">
               <div className="flex justify-between items-start mb-6">
                 <div className="w-12 h-12 bg-[#F7F9FC] rounded-xl flex items-center justify-center text-brand-red">

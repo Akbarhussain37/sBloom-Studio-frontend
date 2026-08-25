@@ -13,7 +13,8 @@ import {
   FiX,
   FiMessageSquare,
   FiEdit3,
-  FiShield
+  FiShield,
+  FiPlayCircle
 } from 'react-icons/fi';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
@@ -71,35 +72,23 @@ export default function DashboardSidebar({ isOpen, onClose, onOpenUpload }: Side
             <NavLink to="/dashboard" end className={navItemClass}>
               <FiHome className="text-lg" /> Overview
             </NavLink>
-            <NavLink to="/dashboard/media" className={navItemClass}>
-              <FiFolder className="text-lg" /> Media Library
+            <NavLink to="/dashboard/review" className={navItemClass}>
+              <FiPlayCircle className="text-lg" /> Review Edits
             </NavLink>
             <NavLink to="/dashboard/projects" className={navItemClass}>
               <FiVideo className="text-lg" /> Projects
             </NavLink>
-            <button 
-              className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all text-left"
-              onClick={onOpenUpload}
-            >
-              <FiUploadCloud className="text-lg" /> Upload Media
-            </button>
-            <NavLink to="/dashboard/script-assistant" className={navItemClass}>
-              <FiMessageSquare className="text-lg" /> AI Script Bot
-            </NavLink>
-            <NavLink to="/dashboard/upload-job" className={navItemClass}>
-              <FiEdit3 className="text-lg" /> Request Edit Job
+            <NavLink to="/dashboard/media" className={navItemClass}>
+              <FiFolder className="text-lg" /> Media Library
             </NavLink>
           </nav>
         </div>
 
         <div>
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-2">Production</p>
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-2">Tools</p>
           <nav className="space-y-1">
-            <NavLink to="/dashboard/review" className={navItemClass}>
-              <FiClock className="text-lg" /> Review & Feedback
-            </NavLink>
-            <NavLink to="/dashboard/completed" className={navItemClass}>
-              <FiCheckCircle className="text-lg" /> Completed
+            <NavLink to="/dashboard/script-assistant" className={navItemClass}>
+              <FiMessageSquare className="text-lg" /> AI Script Bot
             </NavLink>
           </nav>
         </div>

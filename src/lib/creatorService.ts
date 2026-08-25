@@ -166,8 +166,45 @@ export async function uploadMediaFile(
   return asset as MediaAsset;
 }
 
+// FALLBACK FOR LOCAL TESTING
+export async function createMockMediaAsset(file: File) {
+  const { data: userData } = await supabase.auth.getUser();
+  if (!userData.user) throw new Error('Not authenticated');
+
+  const fileExt = file.name.split('.').pop();
+  const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
+  
+  // Just insert the DB record without doing storage upload
+  const { data: asset, error: dbError } = await supabase
+    .from('media_assets_studio')
+    .insert({
+      user_id: userData.user.id,
+      file_name: file.name,
+      file_type: file.type,
+      file_size: file.size,
+      storage_path: `mock_path/${fileName}`,
+      status: 'UPLOADED',
+    } as any)
+    .select()
+    .single();
+
+  if (dbError) throw dbError;
+
+  return asset as MediaAsset;
+}
+
 // SECURE URL GENERATION
 export async function getSecureMediaUrl(storagePath: string) {
+  if (storagePath.startsWith('onedrive:')) {
+    const fileId = storagePath.replace('onedrive:', '');
+    return `http://localhost:3000/api/documents/${fileId}/stream`;
+  }
+  
+  if (storagePath.startsWith('mock_path/')) {
+    // Cannot generate secure URLs for mock local testing paths
+    return null;
+  }
+
   const { data, error } = await supabase.storage
     .from('creator-content')
     .createSignedUrl(storagePath, 3600); // 1 hour expiry

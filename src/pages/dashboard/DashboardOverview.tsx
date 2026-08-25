@@ -1,12 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FiVideo, FiClock, FiCheckCircle, FiPlus, FiFolder } from 'react-icons/fi';
 import { useAuth } from '../../contexts/AuthContext';
 import StatsCard from '../../components/dashboard/StatsCard';
-import { getMediaAssets, getProjects } from '../../lib/creatorService';
+import RecentUploadsList from '../../components/dashboard/RecentUploadsList';
+import { getMediaAssets, getProjects, uploadMediaFile } from '../../lib/creatorService';
+import { supabase } from '../../lib/supabase';
 import type { Database } from '../../types/database.types';
 
-type Project = Database['public']['Tables']['projects']['Row'];
-type MediaAsset = Database['public']['Tables']['media_assets']['Row'];
+type Project = Database['public']['Tables']['projects_studio']['Row'];
+type MediaAsset = Database['public']['Tables']['media_assets_studio']['Row'];
 
 export default function DashboardOverview() {
   const { profile } = useAuth();
@@ -19,6 +21,54 @@ export default function DashboardOverview() {
   const [recentProjects, setRecentProjects] = useState<Project[]>([]);
   const [recentUploads, setRecentUploads] = useState<MediaAsset[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setIsUploading(true);
+      
+      // Optimistically update the UI with a local blob URL so the user sees it immediately
+      const optimisticAsset: MediaAsset = {
+        id: Math.random().toString(),
+        user_id: profile?.id || 'local',
+        file_name: file.name,
+        file_type: file.type,
+        file_size: file.size,
+        storage_path: URL.createObjectURL(file), // Local Blob URL
+        thumbnail_path: null,
+        status: 'UPLOADED',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        project_id: null,
+        duration: null
+      };
+
+      setRecentUploads(prev => [optimisticAsset, ...prev].slice(0, 4));
+      setStats(prev => ({
+        ...prev,
+        totalVideos: prev.totalVideos + 1
+      }));
+
+      // Perform actual upload in background
+      await uploadMediaFile(file);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      alert('Failed to upload file. Please try again.');
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
 
   useEffect(() => {
     async function loadData() {
@@ -29,18 +79,26 @@ export default function DashboardOverview() {
         ]);
 
         setRecentProjects(projects.slice(0, 3));
-        setRecentUploads(assets.slice(0, 4));
+        setRecentUploads(prev => {
+          // Preserve optimistic local blob uploads so they don't get wiped by strict RLS policies
+          const localBlobs = prev.filter(a => a.storage_path.startsWith('blob:'));
+          const serverAssets = assets.filter(a => !localBlobs.find(lb => lb.file_name === a.file_name));
+          return [...localBlobs, ...serverAssets].slice(0, 4);
+        });
 
-        const inProd = assets.filter(a => ['SUBMITTED', 'EDITING'].includes(a.status)).length;
-        const inReview = assets.filter(a => ['READY_FOR_REVIEW', 'CHANGES_REQUESTED'].includes(a.status)).length;
-        const completed = assets.filter(a => a.status === 'COMPLETED').length;
+        // Calculate stats combining server assets and optimistic local blobs
+        const allAssets = [...recentUploads.filter(a => a.storage_path.startsWith('blob:')), ...assets];
+        
+        const inProd = allAssets.filter(a => ['SUBMITTED', 'EDITING'].includes(a.status)).length;
+        const inReview = allAssets.filter(a => ['READY_FOR_REVIEW', 'CHANGES_REQUESTED'].includes(a.status)).length;
+        const completed = allAssets.filter(a => a.status === 'COMPLETED').length;
 
-        setStats({
-          totalVideos: assets.length,
+        setStats(prev => ({
+          totalVideos: Math.max(allAssets.length, prev.totalVideos),
           inProduction: inProd,
           readyForReview: inReview,
           completed: completed
-        });
+        }));
       } catch (error) {
         console.error('Error loading dashboard data:', error);
       } finally {
@@ -48,6 +106,34 @@ export default function DashboardOverview() {
       }
     }
     loadData();
+
+    /* 
+    // Temporarily disabled: Self-hosted Supabase often requires specific Nginx/proxy 
+    // configuration for WebSockets (Realtime) to work without 400 Bad Request errors.
+    const channel = supabase
+      .channel('dashboard-changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'media_assets_studio' },
+        () => {
+          console.log('Realtime update: media_assets_studio changed');
+          loadData();
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'projects_studio' },
+        () => {
+          console.log('Realtime update: projects_studio changed');
+          loadData();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+    */
   }, []);
 
   return (
@@ -72,36 +158,58 @@ export default function DashboardOverview() {
           <button className={`px-6 py-3 bg-white rounded-xl font-bold hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 shadow-sm
             ${profile?.role === 'kid' ? 'text-[#FF5E00]' : profile?.role === 'doctor' ? 'text-teal-700' : 'text-brand-red'}`}
           >
-            <FiFolder className="text-lg" /> Create Project
+            <FiFolder className="text-lg" /> 
+            {profile?.role === 'kid' ? 'Start New Magic Video' : 
+             profile?.role === 'doctor' ? 'New Patient Video' : 
+             'Create Project'}
           </button>
-          <button className="px-6 py-3 bg-black/20 backdrop-blur-sm text-white rounded-xl font-bold hover:bg-black/30 transition-colors flex items-center justify-center gap-2 border border-white/10">
-            <FiPlus className="text-lg" /> Upload Content
+          <button 
+            onClick={handleUploadClick}
+            disabled={isUploading}
+            className="px-6 py-3 bg-black/20 backdrop-blur-sm text-white rounded-xl font-bold hover:bg-black/30 transition-colors flex items-center justify-center gap-2 border border-white/10 disabled:opacity-70 disabled:cursor-not-allowed"
+          >
+            {isUploading ? (
+              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : (
+              <FiPlus className="text-lg" />
+            )}
+            {isUploading ? 'Uploading...' : 
+             profile?.role === 'kid' ? 'Upload Clips' :
+             profile?.role === 'doctor' ? 'Upload Medical Assets' :
+             'Upload Content'}
           </button>
+          <input 
+            type="file" 
+            ref={fileInputRef} 
+            onChange={handleFileChange} 
+            className="hidden" 
+            accept="video/*,image/*"
+          />
         </div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatsCard 
-          title="Total Videos" 
+          title="Total Videos"
           value={loading ? '-' : stats.totalVideos} 
           icon={<FiVideo className="text-xl" />} 
           delay={0.1}
         />
         <StatsCard 
-          title="In Production" 
+          title="In Production"
           value={loading ? '-' : stats.inProduction} 
           icon={<FiClock className="text-xl" />} 
           delay={0.2}
         />
         <StatsCard 
-          title="Ready for Review" 
+          title="Ready for Review"
           value={loading ? '-' : stats.readyForReview} 
           icon={<FiCheckCircle className="text-xl" />} 
           delay={0.3}
         />
         <StatsCard 
-          title="Completed" 
+          title="Completed"
           value={loading ? '-' : stats.completed} 
           icon={<FiVideo className="text-xl" />} 
           delay={0.4}
@@ -157,31 +265,11 @@ export default function DashboardOverview() {
             <h3 className="text-xl font-bold font-heading text-slate-900">Recent Uploads</h3>
           </div>
           
-          {loading ? (
-            <div className="h-64 bg-slate-100 rounded-2xl animate-pulse"></div>
-          ) : recentUploads.length > 0 ? (
-            <div className="bg-white rounded-[2rem] border border-slate-200 overflow-hidden">
-              {recentUploads.map((asset, index) => (
-                <div key={asset.id} className={`p-4 flex items-center gap-3 ${index !== recentUploads.length - 1 ? 'border-b border-slate-100' : ''}`}>
-                  <div className="w-10 h-10 rounded-lg bg-slate-100 flex-shrink-0 flex items-center justify-center overflow-hidden">
-                    {asset.file_type.startsWith('video/') ? (
-                      <FiVideo className="text-slate-400" />
-                    ) : (
-                      <img src={asset.thumbnail_path || ''} alt="" className="w-full h-full object-cover" onError={(e) => (e.currentTarget.style.display = 'none')} />
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-slate-900 truncate">{asset.file_name}</p>
-                    <p className="text-xs text-slate-500 truncate">{(asset.file_size / (1024 * 1024)).toFixed(2)} MB • {asset.status}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="p-8 text-center bg-[#F7F9FC] rounded-[2rem] border border-dashed border-slate-300">
-              <p className="text-slate-500 text-sm">No uploads yet</p>
-            </div>
-          )}
+          <RecentUploadsList 
+            recentUploads={recentUploads} 
+            role={profile?.role} 
+            loading={loading} 
+          />
         </div>
       </div>
     </div>

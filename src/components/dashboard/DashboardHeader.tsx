@@ -1,12 +1,13 @@
-import { FiMenu, FiBell, FiSearch, FiUser } from 'react-icons/fi';
+import { FiMenu, FiBell, FiSearch, FiUser, FiUploadCloud, FiEdit3 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
 interface HeaderProps {
   onMenuClick: () => void;
+  onOpenUpload?: () => void;
   title?: string;
 }
 
-export default function DashboardHeader({ onMenuClick, title = 'Dashboard' }: HeaderProps) {
+export default function DashboardHeader({ onMenuClick, onOpenUpload, title = 'Dashboard' }: HeaderProps) {
   return (
     <header className="sticky top-0 z-30 bg-white border-b border-slate-200 h-16 px-4 md:px-8 flex items-center justify-between">
       <div className="flex items-center gap-4">
@@ -22,6 +23,25 @@ export default function DashboardHeader({ onMenuClick, title = 'Dashboard' }: He
       </div>
 
       <div className="flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-3 mr-2">
+          {onOpenUpload && (
+            <button 
+              onClick={onOpenUpload}
+              className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-semibold transition-all"
+            >
+              <FiUploadCloud className="text-lg" />
+              <span>Upload Media</span>
+            </button>
+          )}
+          <Link 
+            to="/dashboard/upload-job"
+            className="flex items-center gap-2 px-4 py-2 bg-brand-red hover:bg-brand-red/90 text-white rounded-xl text-sm font-semibold shadow-sm transition-all"
+          >
+            <FiEdit3 className="text-lg" />
+            <span>Request Edit</span>
+          </Link>
+        </div>
+
         <div className="hidden md:flex items-center relative">
           <FiSearch className="absolute left-3 text-slate-400" />
           <input 

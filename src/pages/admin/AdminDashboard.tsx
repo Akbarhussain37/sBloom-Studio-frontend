@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
-import { FiArrowLeft, FiSearch, FiVideo, FiMoreVertical, FiCheck, FiClock, FiPlayCircle, FiRefreshCw, FiAlertCircle, FiDownload, FiX, FiLogOut, FiMail, FiPhone, FiMapPin, FiFileText, FiImage } from 'react-icons/fi';
+import { uploadDocument } from '../../lib/api';
+import { FiArrowLeft, FiSearch, FiVideo, FiMoreVertical, FiCheck, FiClock, FiPlayCircle, FiRefreshCw, FiAlertCircle, FiDownload, FiX, FiLogOut, FiMail, FiPhone, FiMapPin, FiFileText, FiImage, FiUploadCloud } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // API Configuration
@@ -31,6 +32,8 @@ export default function AdminDashboard() {
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [viewingMedia, setViewingMedia] = useState<DocumentData | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadingDocId, setUploadingDocId] = useState<string | null>(null);
 
   const isImage = (filename?: string) => {
     if (!filename) return false;
@@ -74,17 +77,77 @@ export default function AdminDashboard() {
 
   const handleUpdateStatus = async (docId: string, status: string) => {
     try {
+      // 1. Update local backend
       const response = await fetch(`${API_BASE_URL}/documents/${docId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
       });
-      if (!response.ok) throw new Error('Failed to update status');
+      if (!response.ok) throw new Error('Failed to update status on local backend');
       
-      setDocuments(prev => prev.map(doc => doc.doc_id === docId ? { ...doc, status } : doc));
+      // 2. Sync with Supabase so User Dashboard sees it
+      const doc = documents.find(d => d.doc_id === docId);
+      if (doc) {
+        const supabaseStatus = status === 'Completed' ? 'COMPLETED' : status === 'Review' ? 'READY_FOR_REVIEW' : status.toUpperCase();
+        
+        // Call the backend endpoint that uses the Service Role key to bypass RLS
+        await fetch(`${API_BASE_URL}/sync-supabase-status`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fileName: doc.file_name, status: supabaseStatus })
+        });
+      }
+
+      setDocuments(prev => prev.map(d => d.doc_id === docId ? { ...d, status } : d));
     } catch (err) {
       console.error(err);
       alert('Failed to update status.');
+    }
+  };
+
+  const handleAdminUploadClick = (docId: string) => {
+    setUploadingDocId(docId);
+    fileInputRef.current?.click();
+  };
+
+  const handleAdminFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !uploadingDocId) return;
+    
+    const doc = documents.find(d => d.doc_id === uploadingDocId);
+    if (!doc) return;
+
+    try {
+      // 1. Upload to local Node.js backend (OneDrive)
+      const response = await uploadDocument(file, doc.user_name || 'Admin Edit', doc.user_email);
+      
+      // The response from backend contains the file details in response.data.file_id
+      const newFileId = response.data?.file_id || response.file_id;
+      
+      if (newFileId) {
+        // 2. Update Supabase record's storage_path to point to OneDrive
+        const { data: assets } = await supabase.from('media_assets_studio').select('id').eq('file_name', doc.file_name);
+        if (assets && assets.length > 0) {
+          await supabase.from('media_assets_studio').update({ 
+            status: 'READY_FOR_REVIEW',
+            storage_path: `onedrive:${newFileId}` 
+          }).eq('id', assets[0].id);
+          
+          await supabase.from('production_jobs_studio').update({ status: 'READY_FOR_REVIEW' }).eq('media_asset_id', assets[0].id);
+        }
+        
+        // 3. Also update local backend status for UI
+        await handleUpdateStatus(uploadingDocId, 'Review');
+        alert("Upload complete and sent for review!");
+      } else {
+        throw new Error('Failed to retrieve file ID from OneDrive upload.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Upload failed. Make sure your local backend supports uploadDocument.");
+    } finally {
+      setUploadingDocId(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
@@ -217,7 +280,10 @@ export default function AdminDashboard() {
                     </td>
                   </tr>
                 ) : documents.map((doc, index) => {
-                  const date = doc.created_at ? new Date(doc.created_at).toLocaleDateString() : 'Unknown Date';
+                  const date = doc.created_at ? new Date(doc.created_at).toLocaleString(undefined, { 
+                    year: 'numeric', month: 'numeric', day: 'numeric', 
+                    hour: '2-digit', minute: '2-digit' 
+                  }) : 'Unknown Date';
                   const serialNumber = `JOB-${String(documents.length - index).padStart(3, '0')}`;
                   
                   // Create some placeholder data for missing fields
@@ -295,22 +361,42 @@ export default function AdminDashboard() {
                       </td>
                       
                       <td className="px-6 py-4 align-top text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          {doc.status !== 'Completed' && (
+                        <div className="flex flex-col items-end gap-2">
+                          <div className="flex items-center justify-end gap-2">
+                            {doc.status !== 'Completed' && (
+                              <button 
+                                onClick={() => handleUpdateStatus(doc.doc_id, 'Completed')}
+                                className="px-3 py-1.5 bg-green-50 text-green-600 hover:bg-green-100 rounded-lg text-xs font-bold transition-colors flex items-center gap-1 border border-green-200"
+                                title="Mark as Done"
+                              >
+                                <FiCheck /> Done
+                              </button>
+                            )}
+                            {doc.status !== 'Review' && doc.status !== 'Completed' && (
+                              <button 
+                                onClick={() => handleUpdateStatus(doc.doc_id, 'Review')}
+                                className="px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg text-xs font-bold transition-colors flex items-center gap-1 border border-blue-200"
+                                title="Request Review"
+                              >
+                                <FiPlayCircle /> Review
+                              </button>
+                            )}
                             <button 
-                              onClick={() => handleUpdateStatus(doc.doc_id, 'Completed')}
-                              className="px-3 py-1.5 bg-green-50 text-green-600 hover:bg-green-100 rounded-lg text-xs font-bold transition-colors flex items-center gap-1 border border-green-200"
-                              title="Mark as Done"
+                              onClick={() => handleDelete(doc.doc_id)}
+                              className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100"
+                              title="Delete Job"
                             >
-                              <FiCheck /> Done
+                              <FiX />
                             </button>
-                          )}
-                          <button 
-                            onClick={() => handleDelete(doc.doc_id)}
-                            className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Delete Job"
+                          </div>
+                          <button
+                            onClick={() => handleAdminUploadClick(doc.doc_id)}
+                            disabled={uploadingDocId === doc.doc_id}
+                            className="px-3 py-1.5 bg-slate-900 text-white hover:bg-slate-800 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 shadow-sm disabled:opacity-50"
+                            title="Upload Edited Video"
                           >
-                            <FiX />
+                            {uploadingDocId === doc.doc_id ? <FiRefreshCw className="animate-spin" /> : <FiUploadCloud />} 
+                            {uploadingDocId === doc.doc_id ? 'Uploading...' : 'Upload Edit'}
                           </button>
                         </div>
                       </td>
@@ -321,6 +407,15 @@ export default function AdminDashboard() {
             </table>
           </div>
         </motion.div>
+        
+        {/* Hidden file input for Admin uploads */}
+        <input 
+          type="file" 
+          ref={fileInputRef} 
+          className="hidden" 
+          accept="video/*"
+          onChange={handleAdminFileChange}
+        />
 
       </main>
 
