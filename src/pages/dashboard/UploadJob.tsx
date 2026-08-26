@@ -13,7 +13,7 @@ type MediaAsset = Database['public']['Tables']['media_assets_studio']['Row'];
 
 export default function UploadJob() {
   const { profile, user } = useAuth();
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [instructions, setInstructions] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -23,12 +23,7 @@ export default function UploadJob() {
   const [recentAssets, setRecentAssets] = useState<MediaAsset[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
 
-  // Calculate dynamic quota based on actual uploads
-  const maxFreeTries = 2; // Fixed limit for trial
   const uploadedCount = recentAssets.length;
-  // If the profile DB has a specific value, you can merge logic, 
-  // but here we enforce strictly based on their upload history count.
-  const freeTriesRemaining = Math.max(0, maxFreeTries - uploadedCount);
 
   const loadHistory = async () => {
     setIsLoadingHistory(true);
@@ -59,40 +54,51 @@ export default function UploadJob() {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setFile(e.dataTransfer.files[0]);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const droppedFiles = Array.from(e.dataTransfer.files);
+      setFiles(prev => [...prev, ...droppedFiles]);
     }
+  };
+
+  const handleRemoveFile = (indexToRemove: number) => {
+    setFiles(prev => prev.filter((_, index) => index !== indexToRemove));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file || !instructions.trim() || freeTriesRemaining <= 0 || isUploading) return;
+    if (files.length === 0 || !instructions.trim() || isUploading) return;
     
     setIsUploading(true);
     setError(null);
     
     try {
-      // 1. Upload to local Node.js backend (OneDrive integration)
-      await uploadDocument(
-        file, 
-        profile?.full_name || 'Unknown User',
-        user?.email || profile?.email || '',
-        user?.phone || '',
-        instructions,
-        profile?.role
-      );
+      for (const currentFile of files) {
+        let oneDriveFileId = null;
+        try {
+          // 1. Upload to local Node.js backend (OneDrive integration)
+          const uploadRes = await uploadDocument(
+            currentFile, 
+            profile?.full_name || 'Unknown User',
+            user?.email || profile?.email || '',
+            user?.phone || '',
+            instructions,
+            profile?.role
+          );
+          oneDriveFileId = uploadRes?.data?.file_id;
+        } catch (oneDriveErr) {
+          console.warn('OneDrive upload failed, continuing to Supabase/mock fallback...', oneDriveErr);
+        }
 
-      // 2. Attempt to upload to Supabase Storage and create a production job
-      // We wrap this in a separate try-catch so that if the remote server rejects 
-      // the large file (413 error), it doesn't fail the entire local submission.
-      try {
-        const asset = await uploadMediaFile(file);
-        await submitForProduction(asset.id, instructions);
-      } catch (supabaseErr) {
-        console.warn('Supabase upload failed, using fallback DB insertion...', supabaseErr);
-        // Fallback: Just create the DB records so stats and UI work locally
-        const mockAsset = await createMockMediaAsset(file);
-        await submitForProduction(mockAsset.id, instructions);
+        // 2. Attempt to upload to Supabase Storage and create a production job
+        try {
+          const asset = await uploadMediaFile(currentFile);
+          await submitForProduction(asset.id, instructions);
+        } catch (supabaseErr) {
+          console.warn('Supabase upload failed, using fallback DB insertion...', supabaseErr);
+          // Fallback: Just create the DB records so stats and UI work locally, using OneDrive ID if available
+          const mockAsset = await createMockMediaAsset(currentFile, oneDriveFileId || undefined);
+          await submitForProduction(mockAsset.id, instructions);
+        }
       }
       
       setIsSubmitted(true);
@@ -100,7 +106,7 @@ export default function UploadJob() {
       loadHistory();
     } catch (err: any) {
       console.error('Upload failed:', err);
-      setError(err.message || 'Failed to upload video');
+      setError(err.message || 'Failed to upload files');
     } finally {
       setIsUploading(false);
     }
@@ -125,7 +131,7 @@ export default function UploadJob() {
             <button 
               onClick={() => {
                 setIsSubmitted(false);
-                setFile(null);
+                setFiles([]);
                 setInstructions('');
               }}
               className="px-6 py-3 border border-slate-200 text-slate-700 rounded-xl font-bold hover:bg-slate-50 transition-colors"
@@ -151,7 +157,7 @@ export default function UploadJob() {
           Request Edit Job
         </h1>
         <p className="text-slate-500">
-          Upload your raw footage and tell us exactly how you want it edited.
+          Upload your raw footage or images and tell us exactly how you want it edited.
         </p>
       </div>
 
@@ -160,35 +166,14 @@ export default function UploadJob() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden"
       >
-        {/* Quota Banner */}
-        <div className="bg-slate-50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <FiInfo className="text-brand-red" />
-            <span className="text-sm font-semibold text-slate-700">
-              Free Trial Quota ({uploadedCount} / {maxFreeTries} Used)
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            {freeTriesRemaining > 0 ? (
-              <span className="flex h-3 w-3 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-red opacity-20"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-brand-red"></span>
-              </span>
-            ) : null}
-            <span className={`text-sm font-bold ${freeTriesRemaining > 0 ? 'text-slate-900' : 'text-red-500'}`}>
-              {freeTriesRemaining > 0 
-                ? `${freeTriesRemaining} Free Tries Remaining` 
-                : 'No Free Tries Left'}
-            </span>
-          </div>
-        </div>
+
 
         <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-8">
           
           {/* Upload Zone */}
           <div>
             <label className="block text-sm font-bold text-slate-800 mb-3">
-              Raw Footage <span className="text-brand-red">*</span>
+              Raw Footage or Images <span className="text-brand-red">*</span>
             </label>
             <div 
               onDragOver={handleDragOver}
@@ -197,38 +182,68 @@ export default function UploadJob() {
               className={`border-2 border-dashed rounded-2xl p-10 text-center transition-all ${
                 isDragging 
                   ? 'border-brand-red bg-red-50/50' 
-                  : file ? 'border-green-200 bg-green-50/30' : 'border-slate-200 hover:bg-slate-50 hover:border-slate-300'
+                  : files.length > 0 ? 'border-green-200 bg-green-50/30' : 'border-slate-200 hover:bg-slate-50 hover:border-slate-300'
               }`}
             >
-              {file ? (
-                <div className="flex flex-col items-center">
+              {files.length > 0 ? (
+                <div className="flex flex-col items-center w-full">
                   <div className="w-16 h-16 bg-white rounded-xl shadow-sm border border-green-100 flex items-center justify-center mb-4 text-green-500">
                     <FiCheckCircle className="text-2xl" />
                   </div>
-                  <p className="text-sm font-bold text-slate-900">{file.name}</p>
-                  <p className="text-xs text-slate-500 mt-1">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
-                  <button 
-                    type="button" 
-                    onClick={() => setFile(null)}
-                    className="mt-4 text-xs font-bold text-brand-red hover:underline"
-                  >
-                    Remove File
-                  </button>
+                  <h4 className="text-md font-bold text-slate-900 mb-4">{files.length} file(s) selected</h4>
+                  
+                  <div className="w-full max-w-md space-y-2 mb-6 max-h-40 overflow-y-auto pr-2 custom-scrollbar">
+                    {files.map((f, index) => (
+                      <div key={index} className="flex items-center justify-between bg-white p-3 rounded-xl border border-slate-200">
+                        <div className="truncate mr-4 text-left">
+                          <p className="text-sm font-bold text-slate-900 truncate">{f.name}</p>
+                          <p className="text-xs text-slate-500">{(f.size / (1024 * 1024)).toFixed(2)} MB</p>
+                        </div>
+                        <button 
+                          type="button" 
+                          onClick={(e) => { e.preventDefault(); handleRemoveFile(index); }}
+                          className="text-xs font-bold text-brand-red hover:underline shrink-0"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+
+                  <label className="px-5 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm font-bold rounded-xl cursor-pointer hover:bg-slate-50 shadow-sm transition-all">
+                    Add More Files
+                    <input 
+                      type="file" 
+                      accept="video/*,image/*" 
+                      multiple
+                      className="hidden" 
+                      onChange={(e) => {
+                        if (e.target.files) {
+                          setFiles(prev => [...prev, ...Array.from(e.target.files!)]);
+                        }
+                      }}
+                    />
+                  </label>
                 </div>
               ) : (
                 <div className="flex flex-col items-center">
                   <div className="w-16 h-16 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center mb-4 text-slate-400">
                     <FiUploadCloud className="text-2xl" />
                   </div>
-                  <p className="text-sm font-bold text-slate-900 mb-1">Drag and drop your video here</p>
-                  <p className="text-xs text-slate-500 mb-4">Supports MP4, MOV up to 500MB</p>
+                  <p className="text-sm font-bold text-slate-900 mb-1">Drag and drop your video or image here</p>
+                  <p className="text-xs text-slate-500 mb-4">Supports MP4, MOV, JPG, PNG up to 500MB</p>
                   <label className="px-5 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm font-bold rounded-xl cursor-pointer hover:bg-slate-50 shadow-sm transition-all">
                     Browse Files
                     <input 
                       type="file" 
-                      accept="video/*" 
+                      accept="video/*,image/*" 
+                      multiple
                       className="hidden" 
-                      onChange={(e) => e.target.files && setFile(e.target.files[0])}
+                      onChange={(e) => {
+                        if (e.target.files) {
+                          setFiles(Array.from(e.target.files));
+                        }
+                      }}
                     />
                   </label>
                 </div>
@@ -263,7 +278,7 @@ export default function UploadJob() {
             {error && <p className="text-red-500 text-sm">{error}</p>}
             <button
               type="submit"
-              disabled={!file || !instructions.trim() || freeTriesRemaining <= 0 || isUploading}
+              disabled={files.length === 0 || !instructions.trim() || isUploading}
               className="px-8 py-3.5 bg-brand-red text-white font-bold rounded-xl hover:bg-[#F02865] transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               {isUploading ? (

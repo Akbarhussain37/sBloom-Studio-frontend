@@ -30,9 +30,8 @@ export const updateProfile = async (userId: string, updates: ProfileUpdate) => {
     .from('profile_studio')
     // @ts-ignore
     .update(updates)
-    .eq('id', userId)
-    .select()
-    .single();
+    .eq('id', userId);
+    
   const { data, error } = await query;
 
   if (error) {

@@ -167,13 +167,15 @@ export async function uploadMediaFile(
 }
 
 // FALLBACK FOR LOCAL TESTING
-export async function createMockMediaAsset(file: File) {
+export async function createMockMediaAsset(file: File, oneDriveFileId?: string) {
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) throw new Error('Not authenticated');
 
   const fileExt = file.name.split('.').pop();
   const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
   
+  const storagePath = oneDriveFileId ? `onedrive:${oneDriveFileId}` : `mock_path/${fileName}`;
+
   // Just insert the DB record without doing storage upload
   const { data: asset, error: dbError } = await supabase
     .from('media_assets_studio')
@@ -182,7 +184,7 @@ export async function createMockMediaAsset(file: File) {
       file_name: file.name,
       file_type: file.type,
       file_size: file.size,
-      storage_path: `mock_path/${fileName}`,
+      storage_path: storagePath,
       status: 'UPLOADED',
     } as any)
     .select()
@@ -191,6 +193,31 @@ export async function createMockMediaAsset(file: File) {
   if (dbError) throw dbError;
 
   return asset as MediaAsset;
+}
+
+// DOWNLOAD HELPER
+export async function downloadMediaAsset(storagePath: string, fileName: string) {
+  try {
+    const url = await getSecureMediaUrl(storagePath);
+    if (!url) throw new Error('Could not resolve a download URL for this asset.');
+
+    // Fetch as blob so the browser always saves instead of navigating
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Download request failed: ${response.statusText}`);
+
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = blobUrl;
+    anchor.download = fileName;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+    URL.revokeObjectURL(blobUrl);
+  } catch (error) {
+    console.error('Download failed:', error);
+    throw error;
+  }
 }
 
 // SECURE URL GENERATION
@@ -205,10 +232,15 @@ export async function getSecureMediaUrl(storagePath: string) {
     return null;
   }
 
-  const { data, error } = await supabase.storage
-    .from('creator-content')
-    .createSignedUrl(storagePath, 3600); // 1 hour expiry
-
-  if (error) throw error;
-  return data.signedUrl;
+  try {
+    const response = await fetch(`http://localhost:3000/api/signed-url?path=${encodeURIComponent(storagePath)}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch signed URL from backend');
+    }
+    const data = await response.json();
+    return data.signedUrl;
+  } catch (error) {
+    console.error('Error getting signed URL via backend:', error);
+    throw error;
+  }
 }

@@ -24,15 +24,6 @@ export default function DashboardHeader({ onMenuClick, onOpenUpload, title = 'Da
 
       <div className="flex items-center gap-4">
         <div className="hidden md:flex items-center gap-3 mr-2">
-          {onOpenUpload && (
-            <button 
-              onClick={onOpenUpload}
-              className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-semibold transition-all"
-            >
-              <FiUploadCloud className="text-lg" />
-              <span>Upload Media</span>
-            </button>
-          )}
           <Link 
             to="/dashboard/upload-job"
             className="flex items-center gap-2 px-4 py-2 bg-brand-red hover:bg-brand-red/90 text-white rounded-xl text-sm font-semibold shadow-sm transition-all"

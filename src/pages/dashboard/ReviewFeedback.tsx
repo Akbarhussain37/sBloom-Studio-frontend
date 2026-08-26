@@ -3,27 +3,42 @@ import { useNavigate } from 'react-router-dom';
 import { FiCheckCircle } from 'react-icons/fi';
 import RecentUploadsList from '../../components/dashboard/RecentUploadsList';
 import { getMediaAssets } from '../../lib/creatorService';
+import { useAuth } from '../../contexts/AuthContext';
 import type { Database } from '../../types/database.types';
 
 type MediaAsset = Database['public']['Tables']['media_assets_studio']['Row'];
 
 export default function ReviewFeedback() {
+  const { profile } = useAuth();
   const [assets, setAssets] = useState<MediaAsset[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
+    let isMounted = true;
+    
     async function loadAssets() {
       try {
         const data = await getMediaAssets();
-        setAssets(data.filter(a => ['READY_FOR_REVIEW', 'COMPLETED'].includes(a.status)));
+        if (isMounted) {
+          setAssets(data.filter(a => ['READY_FOR_REVIEW', 'COMPLETED'].includes(a.status)));
+        }
       } catch (error) {
         console.error('Error loading review assets:', error);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     }
+    
     loadAssets();
+    
+    // Dynamically sync changes every 5 seconds
+    const interval = setInterval(loadAssets, 5000);
+    
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   return (
@@ -40,6 +55,7 @@ export default function ReviewFeedback() {
 
       <RecentUploadsList 
         recentUploads={assets} 
+        role={profile?.role}
         loading={loading}
       />
       

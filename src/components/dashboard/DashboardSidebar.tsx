@@ -75,9 +75,6 @@ export default function DashboardSidebar({ isOpen, onClose, onOpenUpload }: Side
             <NavLink to="/dashboard/review" className={navItemClass}>
               <FiPlayCircle className="text-lg" /> Review Edits
             </NavLink>
-            <NavLink to="/dashboard/projects" className={navItemClass}>
-              <FiVideo className="text-lg" /> Projects
-            </NavLink>
             <NavLink to="/dashboard/media" className={navItemClass}>
               <FiFolder className="text-lg" /> Media Library
             </NavLink>

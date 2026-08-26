@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FiVideo, FiClock, FiCheckCircle, FiPlus, FiFolder } from 'react-icons/fi';
 import { useAuth } from '../../contexts/AuthContext';
 import StatsCard from '../../components/dashboard/StatsCard';
@@ -21,53 +22,10 @@ export default function DashboardOverview() {
   const [recentProjects, setRecentProjects] = useState<Project[]>([]);
   const [recentUploads, setRecentUploads] = useState<MediaAsset[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isUploading, setIsUploading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   const handleUploadClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      setIsUploading(true);
-      
-      // Optimistically update the UI with a local blob URL so the user sees it immediately
-      const optimisticAsset: MediaAsset = {
-        id: Math.random().toString(),
-        user_id: profile?.id || 'local',
-        file_name: file.name,
-        file_type: file.type,
-        file_size: file.size,
-        storage_path: URL.createObjectURL(file), // Local Blob URL
-        thumbnail_path: null,
-        status: 'UPLOADED',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        project_id: null,
-        duration: null
-      };
-
-      setRecentUploads(prev => [optimisticAsset, ...prev].slice(0, 4));
-      setStats(prev => ({
-        ...prev,
-        totalVideos: prev.totalVideos + 1
-      }));
-
-      // Perform actual upload in background
-      await uploadMediaFile(file);
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      alert('Failed to upload file. Please try again.');
-    } finally {
-      setIsUploading(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    }
+    navigate('/dashboard/upload-job');
   };
 
   useEffect(() => {
@@ -107,33 +65,10 @@ export default function DashboardOverview() {
     }
     loadData();
 
-    /* 
-    // Temporarily disabled: Self-hosted Supabase often requires specific Nginx/proxy 
-    // configuration for WebSockets (Realtime) to work without 400 Bad Request errors.
-    const channel = supabase
-      .channel('dashboard-changes')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'media_assets_studio' },
-        () => {
-          console.log('Realtime update: media_assets_studio changed');
-          loadData();
-        }
-      )
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'projects_studio' },
-        () => {
-          console.log('Realtime update: projects_studio changed');
-          loadData();
-        }
-      )
-      .subscribe();
+    // Dynamically sync changes every 5 seconds
+    const intervalId = setInterval(loadData, 5000);
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-    */
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
@@ -165,26 +100,13 @@ export default function DashboardOverview() {
           </button>
           <button 
             onClick={handleUploadClick}
-            disabled={isUploading}
-            className="px-6 py-3 bg-black/20 backdrop-blur-sm text-white rounded-xl font-bold hover:bg-black/30 transition-colors flex items-center justify-center gap-2 border border-white/10 disabled:opacity-70 disabled:cursor-not-allowed"
+            className="px-6 py-3 bg-black/20 backdrop-blur-sm text-white rounded-xl font-bold hover:bg-black/30 transition-colors flex items-center justify-center gap-2 border border-white/10"
           >
-            {isUploading ? (
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            ) : (
-              <FiPlus className="text-lg" />
-            )}
-            {isUploading ? 'Uploading...' : 
-             profile?.role === 'kid' ? 'Upload Clips' :
+            <FiPlus className="text-lg" />
+            {profile?.role === 'kid' ? 'Upload Clips' :
              profile?.role === 'doctor' ? 'Upload Medical Assets' :
              'Upload Content'}
           </button>
-          <input 
-            type="file" 
-            ref={fileInputRef} 
-            onChange={handleFileChange} 
-            className="hidden" 
-            accept="video/*,image/*"
-          />
         </div>
       </div>
 
@@ -216,49 +138,7 @@ export default function DashboardOverview() {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Recent Projects */}
-        <div className="lg:col-span-2 space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xl font-bold font-heading text-slate-900">Recent Projects</h3>
-            <button className="text-sm font-semibold text-brand-red hover:text-[#F02865]">View All</button>
-          </div>
-          
-          {loading ? (
-            <div className="h-64 bg-slate-100 rounded-2xl animate-pulse"></div>
-          ) : recentProjects.length > 0 ? (
-            <div className="space-y-4">
-              {recentProjects.map(project => (
-                <div key={project.id} className="p-5 rounded-2xl border border-slate-200 hover:border-brand-red/30 transition-colors bg-white flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400">
-                      <FiFolder className="text-xl" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-slate-900">{project.name}</h4>
-                      <p className="text-sm text-slate-500">Status: {project.status}</p>
-                    </div>
-                  </div>
-                  <button className="px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
-                    View
-                  </button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="p-8 text-center bg-[#F7F9FC] rounded-[2rem] border border-dashed border-slate-300">
-              <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center mx-auto mb-4 text-slate-400">
-                <FiFolder className="text-2xl" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-900 mb-1">No projects yet</h4>
-              <p className="text-slate-500 mb-4 text-sm max-w-sm mx-auto">Create a project to organize your videos and track production progress.</p>
-              <button className="px-5 py-2.5 bg-brand-red text-white rounded-xl font-semibold hover:bg-[#F02865] transition-colors text-sm">
-                Create Project
-              </button>
-            </div>
-          )}
-        </div>
-
+      <div className="grid grid-cols-1 gap-8">
         {/* Recent Uploads */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">

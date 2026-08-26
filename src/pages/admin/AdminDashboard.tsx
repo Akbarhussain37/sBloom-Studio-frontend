@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 import { uploadDocument } from '../../lib/api';
-import { FiArrowLeft, FiSearch, FiVideo, FiMoreVertical, FiCheck, FiClock, FiPlayCircle, FiRefreshCw, FiAlertCircle, FiDownload, FiX, FiLogOut, FiMail, FiPhone, FiMapPin, FiFileText, FiImage, FiUploadCloud } from 'react-icons/fi';
+import { FiArrowLeft, FiSearch, FiCheck, FiClock, FiPlayCircle, FiRefreshCw, FiAlertCircle, FiDownload, FiX, FiLogOut, FiMail, FiPhone, FiMapPin, FiFileText, FiImage, FiUploadCloud } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // API Configuration
@@ -63,7 +63,9 @@ export default function AdminDashboard() {
       }
       const result = await response.json();
       if (result.success) {
-        setDocuments(result.data || []);
+        // Filter out the jobs created by Admin uploads to prevent overlapping duplicates
+        const validDocs = (result.data || []).filter((d: any) => d.user_name !== 'Admin Edit');
+        setDocuments(validDocs);
       } else {
         throw new Error(result.error || 'Unknown error occurred');
       }
@@ -118,33 +120,47 @@ export default function AdminDashboard() {
     if (!doc) return;
 
     try {
-      // 1. Upload to local Node.js backend (OneDrive)
-      const response = await uploadDocument(file, doc.user_name || 'Admin Edit', doc.user_email);
-      
-      // The response from backend contains the file details in response.data.file_id
+      // 1. Upload the edited file to OneDrive via the backend
+      const response = await uploadDocument(file, 'Admin Edit', doc.user_email);
       const newFileId = response.data?.file_id || response.file_id;
       
-      if (newFileId) {
-        // 2. Update Supabase record's storage_path to point to OneDrive
-        const { data: assets } = await supabase.from('media_assets_studio').select('id').eq('file_name', doc.file_name);
-        if (assets && assets.length > 0) {
-          await supabase.from('media_assets_studio').update({ 
-            status: 'READY_FOR_REVIEW',
-            storage_path: `onedrive:${newFileId}` 
-          }).eq('id', assets[0].id);
-          
-          await supabase.from('production_jobs_studio').update({ status: 'READY_FOR_REVIEW' }).eq('media_asset_id', assets[0].id);
-        }
-        
-        // 3. Also update local backend status for UI
-        await handleUpdateStatus(uploadingDocId, 'Review');
-        alert("Upload complete and sent for review!");
-      } else {
+      if (!newFileId) {
         throw new Error('Failed to retrieve file ID from OneDrive upload.');
       }
-    } catch (err) {
-      console.error(err);
-      alert("Upload failed. Make sure your local backend supports uploadDocument.");
+
+      // 2. Use the backend service-role endpoint to update the user's media_assets_studio record.
+      //    We CANNOT do this directly from the frontend because Supabase RLS blocks the
+      //    admin from modifying another user's rows using the anon key — it silently updates 0 rows.
+      const syncResponse = await fetch(`${API_BASE_URL}/admin-sync-edited-video`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          docId: doc.doc_id,
+          fileId: newFileId,
+          fileType: file.type,
+          fileName: doc.file_name,
+          userEmail: doc.user_email,
+        }),
+      });
+
+      const syncResult = await syncResponse.json();
+
+      if (!syncResponse.ok) {
+        // Non-fatal: log the error but don't block the admin — the OneDrive upload succeeded
+        const errMsg = typeof syncResult.error === 'string' ? syncResult.error : JSON.stringify(syncResult.error);
+        const detailMsg = syncResult.details || '';
+        console.warn('Supabase sync warning:', errMsg, detailMsg);
+        // Still update the local admin queue status
+        await handleUpdateStatus(uploadingDocId, 'Review');
+        alert(`Video uploaded to OneDrive!\n\nCould not sync to user's dashboard:\n${errMsg}\n${detailMsg}`);
+      } else {
+        // 3. Update admin queue status in local backend
+        await handleUpdateStatus(uploadingDocId, 'Review');
+        alert('Upload complete! The edited video is now visible under "Review Edits" on the user\'s dashboard.');
+      }
+    } catch (err: any) {
+      console.error('Admin upload error:', err);
+      alert(`Upload failed: ${err.message}`);
     } finally {
       setUploadingDocId(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -413,7 +429,7 @@ export default function AdminDashboard() {
           type="file" 
           ref={fileInputRef} 
           className="hidden" 
-          accept="video/*"
+          accept="video/*,image/*"
           onChange={handleAdminFileChange}
         />
 

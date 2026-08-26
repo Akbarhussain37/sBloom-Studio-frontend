@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiFolder, FiFilter, FiUploadCloud } from 'react-icons/fi';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiFolder, FiFilter, FiUploadCloud, FiX } from 'react-icons/fi';
 import MediaGrid from '../../components/dashboard/MediaGrid';
+import MediaPreview from '../../components/dashboard/MediaPreview';
 import { getMediaAssets, deleteMediaAsset, getSecureMediaUrl } from '../../lib/creatorService';
 import type { Database } from '../../types/database.types';
 
@@ -11,27 +13,41 @@ export default function MediaLibrary() {
   const [assets, setAssets] = useState<MediaAsset[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'video' | 'image'>('all');
+  const [viewingAsset, setViewingAsset] = useState<MediaAsset | null>(null);
   const navigate = useNavigate();
 
-  const loadAssets = async () => {
-    setLoading(true);
-    try {
-      const data = await getMediaAssets();
-      setAssets(data);
-    } catch (error) {
-      console.error('Error loading media assets:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    let isMounted = true;
+    
+    const loadAssets = async () => {
+      let isFirstLoad = true;
+      try {
+        const data = await getMediaAssets();
+        if (isMounted) setAssets(data);
+      } catch (error) {
+        console.error('Error loading media assets:', error);
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+          isFirstLoad = false;
+        }
+      }
+    };
+
     loadAssets();
     
     // Listen for upload completion
     const handleUpload = () => loadAssets();
     window.addEventListener('media-uploaded', handleUpload);
-    return () => window.removeEventListener('media-uploaded', handleUpload);
+    
+    // Dynamically sync changes every 5 seconds
+    const interval = setInterval(loadAssets, 5000);
+    
+    return () => {
+      isMounted = false;
+      window.removeEventListener('media-uploaded', handleUpload);
+      clearInterval(interval);
+    };
   }, []);
 
   const handleDelete = async (asset: MediaAsset) => {
@@ -68,6 +84,37 @@ export default function MediaLibrary() {
     if (filter === 'image') return asset.file_type.startsWith('image/');
     return true;
   });
+
+  const renderModal = () => (
+    <AnimatePresence>
+      {viewingAsset && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/80 backdrop-blur-sm p-4"
+        >
+          <div className="bg-black rounded-2xl overflow-hidden shadow-2xl max-w-4xl w-full relative border border-slate-800">
+            <button 
+              onClick={() => setViewingAsset(null)}
+              className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-black/70 transition-colors cursor-pointer"
+            >
+              <FiX className="text-xl" />
+            </button>
+            <div className="aspect-video bg-black w-full flex items-center justify-center h-full">
+              <MediaPreview 
+                storagePath={viewingAsset.storage_path} 
+                fileType={viewingAsset.file_type} 
+                className="w-full h-full object-contain"
+                autoPlay={true}
+                controls={true}
+              />
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 
   return (
     <div className="space-y-8">
@@ -110,7 +157,7 @@ export default function MediaLibrary() {
       <MediaGrid 
         assets={filteredAssets} 
         loading={loading}
-        onPreview={(asset) => navigate(`/dashboard/videos/${asset.id}`)}
+        onPreview={(asset) => setViewingAsset(asset)}
         onDelete={handleDelete}
         onDownload={handleDownload}
         emptyState={
@@ -129,6 +176,7 @@ export default function MediaLibrary() {
           </div>
         }
       />
+      {renderModal()}
     </div>
   );
 }

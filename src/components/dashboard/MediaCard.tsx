@@ -1,5 +1,6 @@
 import { FiVideo, FiMoreVertical, FiPlay, FiDownload, FiTrash2, FiEdit2 } from 'react-icons/fi';
 import type { Database } from '../../types/database.types';
+import MediaPreview from './MediaPreview';
 
 type MediaAsset = Database['public']['Tables']['media_assets']['Row'];
 
@@ -14,19 +15,19 @@ export default function MediaCard({ asset, onPreview, onDelete, onDownload }: Me
   const isVideo = asset.file_type.startsWith('video/');
 
   return (
-    <div className="group relative bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg hover:border-brand-red/30 transition-all duration-300">
+    <div className="group relative bg-white border border-slate-200 rounded-2xl hover:shadow-lg hover:border-brand-red/30 transition-all duration-300">
       {/* Thumbnail Area */}
       <div 
-        className="aspect-video bg-slate-100 relative overflow-hidden cursor-pointer"
+        className="aspect-video bg-slate-100 relative overflow-hidden rounded-t-2xl cursor-pointer"
         onClick={() => onPreview?.(asset)}
       >
         {isVideo ? (
           <div className="absolute inset-0 flex items-center justify-center bg-slate-200 group-hover:bg-slate-300 transition-colors">
-             {asset.thumbnail_path ? (
-               <img src={asset.thumbnail_path} alt="" className="w-full h-full object-cover" />
-             ) : (
-               <FiVideo className="text-4xl text-slate-400" />
-             )}
+             <MediaPreview 
+               storagePath={asset.storage_path} 
+               fileType={asset.file_type} 
+               className="w-full h-full"
+             />
              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20 backdrop-blur-[2px]">
                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-brand-red shadow-lg transform scale-75 group-hover:scale-100 transition-transform">
                  <FiPlay className="text-xl ml-1" />
@@ -34,11 +35,10 @@ export default function MediaCard({ asset, onPreview, onDelete, onDownload }: Me
              </div>
           </div>
         ) : (
-          <img 
-            src={asset.thumbnail_path || ''} 
-            alt={asset.file_name} 
-            className="w-full h-full object-cover" 
-            onError={(e) => (e.currentTarget.style.display = 'none')}
+          <MediaPreview 
+            storagePath={asset.storage_path} 
+            fileType={asset.file_type} 
+            className="w-full h-full object-cover"
           />
         )}
 
