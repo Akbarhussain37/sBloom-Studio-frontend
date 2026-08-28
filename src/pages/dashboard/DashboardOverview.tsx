@@ -4,8 +4,7 @@ import { FiVideo, FiClock, FiCheckCircle, FiPlus, FiFolder } from 'react-icons/f
 import { useAuth } from '../../contexts/AuthContext';
 import StatsCard from '../../components/dashboard/StatsCard';
 import RecentUploadsList from '../../components/dashboard/RecentUploadsList';
-import { getMediaAssets, getProjects, uploadMediaFile } from '../../lib/creatorService';
-import { supabase } from '../../lib/supabase';
+import { getMediaAssets, getProjects } from '../../lib/creatorService';
 import type { Database } from '../../types/database.types';
 
 type Project = Database['public']['Tables']['projects_studio']['Row'];
@@ -19,7 +18,7 @@ export default function DashboardOverview() {
     readyForReview: 0,
     completed: 0,
   });
-  const [recentProjects, setRecentProjects] = useState<Project[]>([]);
+
   const [recentUploads, setRecentUploads] = useState<MediaAsset[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -31,12 +30,7 @@ export default function DashboardOverview() {
   useEffect(() => {
     async function loadData() {
       try {
-        const [assets, projects] = await Promise.all([
-          getMediaAssets(),
-          getProjects()
-        ]);
-
-        setRecentProjects(projects.slice(0, 3));
+        const assets = await getMediaAssets();
         setRecentUploads(prev => {
           // Preserve optimistic local blob uploads so they don't get wiped by strict RLS policies
           const localBlobs = prev.filter(a => a.storage_path.startsWith('blob:'));

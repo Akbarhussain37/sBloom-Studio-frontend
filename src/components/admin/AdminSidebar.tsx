@@ -8,8 +8,7 @@ import {
   FiLogOut,
   FiX,
   FiMessageSquare,
-  FiShield,
-  FiPlayCircle
+  FiShield
 } from 'react-icons/fi';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
@@ -18,10 +17,9 @@ import { useNavigate } from 'react-router-dom';
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  onOpenUpload?: () => void;
 }
 
-export default function DashboardSidebar({ isOpen, onClose }: SidebarProps) {
+export default function AdminSidebar({ isOpen, onClose }: SidebarProps) {
   const { profile } = useAuth();
   const navigate = useNavigate();
 
@@ -33,9 +31,7 @@ export default function DashboardSidebar({ isOpen, onClose }: SidebarProps) {
   const navItemClass = ({ isActive }: { isActive: boolean }) => `
     flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all
     ${isActive 
-      ? profile?.role === 'kid' ? 'bg-[#FF5E00] text-white shadow-md' :
-        profile?.role === 'doctor' ? 'bg-teal-600 text-white shadow-md' :
-        'bg-brand-red text-white shadow-md' 
+      ? 'bg-slate-900 text-white shadow-md' 
       : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}
   `;
 
@@ -43,14 +39,10 @@ export default function DashboardSidebar({ isOpen, onClose }: SidebarProps) {
     <div className="flex flex-col h-full bg-[#F7F9FC] border-r border-slate-200 w-64 pt-6 pb-4 px-4 flex-shrink-0">
       <div className="flex items-center justify-between mb-8 px-2">
         <div className="font-heading font-bold text-xl tracking-wide text-slate-900 flex items-center gap-2">
-          <div className={`w-8 h-8 rounded-lg flex items-center justify-center shadow-sm
-            ${profile?.role === 'kid' ? 'bg-[#FFD500]' : 
-              profile?.role === 'doctor' ? 'bg-gradient-to-br from-teal-500 to-cyan-500' : 
-              'bg-gradient-to-br from-brand-red to-[#F02865]'}`}
-          >
-            <span className="text-white text-lg font-bold">s</span>
+          <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center shadow-sm">
+            <span className="text-white text-lg font-bold font-heading">A</span>
           </div>
-          Studio
+          Admin Panel
         </div>
         <button 
           onClick={onClose}
@@ -64,50 +56,21 @@ export default function DashboardSidebar({ isOpen, onClose }: SidebarProps) {
         <div>
           <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-2">Workspace</p>
           <nav className="space-y-1">
-            <NavLink to="/dashboard" end className={navItemClass}>
+            <NavLink to="/admin" end className={navItemClass}>
               <FiHome className="text-lg" /> Overview
             </NavLink>
-            <NavLink to="/dashboard/review" className={navItemClass}>
-              <FiPlayCircle className="text-lg" /> Review Edits
-            </NavLink>
-            <NavLink to="/dashboard/media" className={navItemClass}>
-              <FiFolder className="text-lg" /> Media Library
-            </NavLink>
-          </nav>
-        </div>
-
-        <div>
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-2">Tools</p>
-          <nav className="space-y-1">
-            <NavLink to="/dashboard/script-assistant" className={navItemClass}>
-              <FiMessageSquare className="text-lg" /> AI Script Bot
-            </NavLink>
-            <NavLink to="/dashboard/jobs" className={navItemClass}>
+            <NavLink to="/admin/jobs" className={navItemClass}>
               <FiFolder className="text-lg" /> Job Lifecycle
             </NavLink>
-            <NavLink to="/dashboard/chat" className={navItemClass}>
+            <NavLink to="/admin/chat" className={navItemClass}>
               <FiMessageSquare className="text-lg" /> Messages
             </NavLink>
           </nav>
         </div>
-
-        {profile?.role === 'admin' && (
-          <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-2">Administration</p>
-            <nav className="space-y-1">
-              <NavLink to="/admin" className={navItemClass}>
-                <FiShield className="text-lg" /> Admin Panel
-              </NavLink>
-            </nav>
-          </div>
-        )}
       </div>
 
       <div className="mt-auto pt-6 border-t border-slate-200">
         <nav className="space-y-1">
-          <NavLink to="/dashboard/settings" className={navItemClass}>
-            <FiSettings className="text-lg" /> Settings
-          </NavLink>
           <button 
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all text-left"
@@ -117,19 +80,19 @@ export default function DashboardSidebar({ isOpen, onClose }: SidebarProps) {
         </nav>
         
         {profile && (
-          <Link to="/dashboard/profile" className="mt-6 flex items-center gap-3 px-2 cursor-pointer hover:bg-slate-100 p-2 rounded-xl transition-colors">
+          <div className="mt-6 flex items-center gap-3 px-2 p-2 rounded-xl">
             <div className="w-10 h-10 rounded-full bg-slate-200 border-2 border-white shadow-sm flex items-center justify-center overflow-hidden">
-              <FiUser className="text-slate-400 text-xl" />
+              <FiShield className="text-slate-400 text-xl" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-slate-900 truncate">
-                {profile.full_name}
+                {profile.full_name || 'Admin'}
               </p>
               <p className="text-xs text-slate-500 truncate capitalize">
                 {profile.role}
               </p>
             </div>
-          </Link>
+          </div>
         )}
       </div>
     </div>

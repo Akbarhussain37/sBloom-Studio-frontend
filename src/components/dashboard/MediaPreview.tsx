@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FiVideo, FiImage } from 'react-icons/fi';
 import { getSecureMediaUrl } from '../../lib/creatorService';
 
@@ -24,7 +24,7 @@ export default function MediaPreview({ storagePath, fileType, className = '', co
         setError(true);
         return;
       }
-      
+
       if (storagePath.startsWith('blob:')) {
         setSecureUrl(storagePath);
         setLoading(false);
@@ -80,10 +80,10 @@ export default function MediaPreview({ storagePath, fileType, className = '', co
   if (isVideo) {
     if (controls) {
       return (
-        <video 
-          src={secureUrl} 
-          className={className} 
-          controls 
+        <video
+          src={secureUrl}
+          className={className}
+          controls
           autoPlay={autoPlay}
         />
       );
@@ -91,11 +91,11 @@ export default function MediaPreview({ storagePath, fileType, className = '', co
 
     return (
       <div className={`relative bg-black flex items-center justify-center overflow-hidden ${className}`}>
-        <video 
-          src={secureUrl} 
-          className="w-full h-full object-cover opacity-80" 
-          muted 
-          loop 
+        <video
+          src={secureUrl}
+          className="w-full h-full object-cover opacity-80"
+          muted
+          loop
           playsInline
           onMouseOver={(e) => e.currentTarget.play()}
           onMouseOut={(e) => e.currentTarget.pause()}
@@ -111,10 +111,10 @@ export default function MediaPreview({ storagePath, fileType, className = '', co
 
   if (isImage) {
     return (
-      <img 
-        src={secureUrl} 
-        alt="Preview" 
-        className={`object-cover ${className}`}
+      <img
+        src={secureUrl}
+        alt="Preview"
+        className={`${className.includes('object-') ? '' : 'object-cover '}${className}`}
         onError={() => setError(true)}
       />
     );

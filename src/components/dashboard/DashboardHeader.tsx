@@ -1,4 +1,4 @@
-import { FiMenu, FiBell, FiSearch, FiUser, FiUploadCloud, FiEdit3 } from 'react-icons/fi';
+import { FiMenu, FiBell, FiSearch, FiUser, FiEdit3 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
 interface HeaderProps {
@@ -7,7 +7,7 @@ interface HeaderProps {
   title?: string;
 }
 
-export default function DashboardHeader({ onMenuClick, onOpenUpload, title = 'Dashboard' }: HeaderProps) {
+export default function DashboardHeader({ onMenuClick, title = 'Dashboard' }: HeaderProps) {
   return (
     <header className="sticky top-0 z-30 bg-white border-b border-slate-200 h-16 px-4 md:px-8 flex items-center justify-between">
       <div className="flex items-center gap-4">

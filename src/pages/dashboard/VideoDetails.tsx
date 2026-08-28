@@ -4,14 +4,20 @@ import { FiArrowLeft, FiDownload, FiTrash2, FiPlay, FiSend } from 'react-icons/f
 import { getMediaAssetById, getSecureMediaUrl, submitForProduction, deleteMediaAsset } from '../../lib/creatorService';
 import ProductionStatusBadge from '../../components/dashboard/ProductionStatusBadge';
 import { LoadingSpinner } from '../../components/ui/LoadingSpinner';
+import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../contexts/AuthContext';
+import JobLifecycleProgressBar from '../../components/dashboard/JobLifecycleProgressBar';
+import JobChatBox from '../../components/dashboard/JobChatBox';
 import type { Database } from '../../types/database.types';
 
-type MediaAsset = Database['public']['Tables']['media_assets']['Row'];
+type MediaAsset = Database['public']['Tables']['media_assets_studio']['Row'];
 
 export default function VideoDetails() {
+  const { profile } = useAuth();
   const { videoId } = useParams();
   const navigate = useNavigate();
   const [asset, setAsset] = useState<MediaAsset | null>(null);
+  const [jobId, setJobId] = useState<string | null>(null);
   const [url, setUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -27,6 +33,17 @@ export default function VideoDetails() {
            const signedUrl = await getSecureMediaUrl(data.storage_path);
            setUrl(signedUrl);
         }
+
+        // Fetch associated job
+        const { data: jobData } = await supabase
+          .from('production_jobs_studio')
+          .select('id')
+          .eq('media_asset_id', videoId)
+          .maybeSingle();
+          
+        if (jobData) {
+          setJobId(jobData.id);
+        }
       } catch (error) {
         console.error('Error loading video:', error);
       } finally {
@@ -41,8 +58,9 @@ export default function VideoDetails() {
     if (confirm('Ready to submit? Once submitted, the sBloom Studio production team can begin working on your content.')) {
       setSubmitting(true);
       try {
-        await submitForProduction(asset.id);
+        const newJob = await submitForProduction(asset.id);
         setAsset({ ...asset, status: 'SUBMITTED' });
+        setJobId(newJob.id);
         alert('Submitted successfully!');
       } catch (error) {
         console.error('Submit error:', error);
@@ -92,6 +110,10 @@ export default function VideoDetails() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main Content Area */}
         <div className="lg:col-span-2 space-y-6">
+          <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
+            <JobLifecycleProgressBar status={asset.status as any} />
+          </div>
+          
           <div className="bg-black rounded-[2rem] overflow-hidden aspect-video flex items-center justify-center relative shadow-lg">
              {url ? (
                isVideo ? (
@@ -142,6 +164,14 @@ export default function VideoDetails() {
                )}
              </div>
           </div>
+          
+          {jobId && profile ? (
+             <JobChatBox jobId={jobId} currentUserId={profile.id} />
+          ) : (
+             <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm text-center">
+                <p className="text-slate-500">Submit this video for production to enable chat with the admin.</p>
+             </div>
+          )}
         </div>
 
         {/* Sidebar Info */}

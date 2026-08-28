@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FiVideo, FiStar, FiFileText, FiShield, FiX, FiDownload, FiLoader, FiAlertCircle } from 'react-icons/fi';
+import { useState } from 'react';
+import { FiStar, FiFileText, FiShield, FiX, FiDownload, FiLoader, FiAlertCircle } from 'react-icons/fi';
 import MediaPreview from './MediaPreview';
 import { motion, AnimatePresence } from 'framer-motion';
 import { downloadMediaAsset } from '../../lib/creatorService';
@@ -109,7 +109,7 @@ export default function RecentUploadsList({ recentUploads, role, loading = false
   if (role === 'kid') {
     return (
       <>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {recentUploads.map((asset) => (
             <div
               key={asset.id}

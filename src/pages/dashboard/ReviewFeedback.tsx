@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FiCheckCircle } from 'react-icons/fi';
 import RecentUploadsList from '../../components/dashboard/RecentUploadsList';
 import { getMediaAssets } from '../../lib/creatorService';
@@ -12,7 +11,6 @@ export default function ReviewFeedback() {
   const { profile } = useAuth();
   const [assets, setAssets] = useState<MediaAsset[]>([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     let isMounted = true;

@@ -1,8 +1,8 @@
-import { FiVideo, FiMoreVertical, FiPlay, FiDownload, FiTrash2, FiEdit2 } from 'react-icons/fi';
+import { FiMoreVertical, FiPlay, FiDownload, FiTrash2, FiEdit2 } from 'react-icons/fi';
 import type { Database } from '../../types/database.types';
 import MediaPreview from './MediaPreview';
 
-type MediaAsset = Database['public']['Tables']['media_assets']['Row'];
+type MediaAsset = Database['public']['Tables']['media_assets_studio']['Row'];
 
 interface MediaCardProps {
   asset: MediaAsset;

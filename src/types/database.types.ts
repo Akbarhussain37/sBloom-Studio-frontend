@@ -23,6 +23,15 @@ export interface Database {
           interest: string | null
           onboarding_completed: boolean
           free_edits_remaining: number | null
+          years_experience: number | null
+          youtube_url: string | null
+          instagram_url: string | null
+          favorite_youtuber: string | null
+          equipment_used: string | null
+          clinic_name: string | null
+          medical_license: string | null
+          years_in_practice: number | null
+          metadata: Json | null
           created_at: string
           updated_at: string
         }
@@ -39,6 +48,15 @@ export interface Database {
           interest?: string | null
           onboarding_completed?: boolean
           free_edits_remaining?: number | null
+          years_experience?: number | null
+          youtube_url?: string | null
+          instagram_url?: string | null
+          favorite_youtuber?: string | null
+          equipment_used?: string | null
+          clinic_name?: string | null
+          medical_license?: string | null
+          years_in_practice?: number | null
+          metadata?: Json | null
           created_at?: string
           updated_at?: string
         }
@@ -55,6 +73,15 @@ export interface Database {
           interest?: string | null
           onboarding_completed?: boolean
           free_edits_remaining?: number | null
+          years_experience?: number | null
+          youtube_url?: string | null
+          instagram_url?: string | null
+          favorite_youtuber?: string | null
+          equipment_used?: string | null
+          clinic_name?: string | null
+          medical_license?: string | null
+          years_in_practice?: number | null
+          metadata?: Json | null
           created_at?: string
           updated_at?: string
         }
@@ -240,6 +267,32 @@ export interface Database {
           completed_at?: string | null
           created_at?: string
           updated_at?: string
+        }
+      }
+      messages_studio: {
+        Row: {
+          id: string
+          job_id: string
+          sender_id: string
+          content: string
+          created_at: string
+          is_read: boolean
+        }
+        Insert: {
+          id?: string
+          job_id: string
+          sender_id: string
+          content: string
+          created_at?: string
+          is_read?: boolean
+        }
+        Update: {
+          id?: string
+          job_id?: string
+          sender_id?: string
+          content?: string
+          created_at?: string
+          is_read?: boolean
         }
       }
     }

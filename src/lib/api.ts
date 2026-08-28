@@ -161,3 +161,53 @@ export const uploadDocument = async (file: File, userName?: string, userEmail?: 
 
   return response.json();
 };
+
+// ==========================================
+// CHAT MODULE API CALLS
+// ==========================================
+
+/**
+ * Fetches all chat messages for a given job ID via the Node.js backend
+ */
+export const fetchChatMessages = async (jobId: string) => {
+  const response = await fetch(`http://localhost:3000/api/messages/${jobId}`);
+  if (!response.ok) throw new Error('Failed to fetch messages from backend');
+  return response.json();
+};
+
+/**
+ * Sends a chat message via the Node.js backend
+ */
+export const sendChatMessage = async (jobId: string, senderId: string, content: string) => {
+  const response = await fetch('http://localhost:3000/api/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ jobId, senderId, content }),
+  });
+  
+  if (!response.ok) throw new Error('Failed to send message via backend');
+  return response.json();
+};
+
+/**
+ * Marks unread messages as read for a specific job via the Node.js backend
+ */
+export const markChatAsRead = async (jobId: string, currentUserId: string) => {
+  const response = await fetch('http://localhost:3000/api/messages/read', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ jobId, currentUserId }),
+  });
+  
+  if (!response.ok) throw new Error('Failed to mark messages as read via backend');
+  return response.json();
+};
+
+/**
+ * Fetches unread message counts across all jobs for the current user
+ */
+export const fetchUnreadCounts = async (userId: string) => {
+  const response = await fetch(`http://localhost:3000/api/messages/unread/counts?userId=${userId}`);
+  if (!response.ok) throw new Error('Failed to fetch unread counts via backend');
+  return response.json();
+};

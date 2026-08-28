@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiFolder, FiFilter, FiUploadCloud, FiX } from 'react-icons/fi';
 import MediaGrid from '../../components/dashboard/MediaGrid';
@@ -7,20 +6,19 @@ import MediaPreview from '../../components/dashboard/MediaPreview';
 import { getMediaAssets, deleteMediaAsset, getSecureMediaUrl } from '../../lib/creatorService';
 import type { Database } from '../../types/database.types';
 
-type MediaAsset = Database['public']['Tables']['media_assets']['Row'];
+type MediaAsset = Database['public']['Tables']['media_assets_studio']['Row'];
 
 export default function MediaLibrary() {
   const [assets, setAssets] = useState<MediaAsset[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'video' | 'image'>('all');
   const [viewingAsset, setViewingAsset] = useState<MediaAsset | null>(null);
-  const navigate = useNavigate();
+
 
   useEffect(() => {
     let isMounted = true;
     
     const loadAssets = async () => {
-      let isFirstLoad = true;
       try {
         const data = await getMediaAssets();
         if (isMounted) setAssets(data);
@@ -29,7 +27,6 @@ export default function MediaLibrary() {
       } finally {
         if (isMounted) {
           setLoading(false);
-          isFirstLoad = false;
         }
       }
     };

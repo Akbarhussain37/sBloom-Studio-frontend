@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiUploadCloud, FiFileText, FiCheckCircle, FiInfo } from 'react-icons/fi';
+import { FiUploadCloud, FiFileText, FiCheckCircle } from 'react-icons/fi';
 import { useAuth } from '../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { uploadDocument } from '../../lib/api';
@@ -23,7 +23,7 @@ export default function UploadJob() {
   const [recentAssets, setRecentAssets] = useState<MediaAsset[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
 
-  const uploadedCount = recentAssets.length;
+
 
   const loadHistory = async () => {
     setIsLoadingHistory(true);

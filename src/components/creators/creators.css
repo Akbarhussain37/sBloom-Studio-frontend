@@ -1,0 +1,321 @@
+/* ================================================================
+   SBLOOM CREATORS PAGE — CYBERPUNK NEON MOTION GRAPHICS
+   ================================================================ */
+
+.creators-page {
+  --c-bg:          #05050A;
+  --c-surface:     #08080E;
+  --c-surface-glass: rgba(8, 8, 14, 0.6);
+  --c-charcoal:    #111116;
+  --c-border:      rgba(0, 240, 255, 0.15);
+  --c-ivory:       #F0F0FF;
+  --c-ivory-dim:   #7A8A9E;
+  --c-ivory-faint: rgba(240, 240, 255, 0.1);
+  --c-accent:      #00F0FF; /* Electric Blue */
+  --c-accent-dim:  rgba(0, 240, 255, 0.2);
+  --c-magenta:     #FF003C;
+  --c-cyan:        #00FFFF;
+  
+  /* Glowing Effects */
+  --glow-accent:   0 0 12px rgba(0, 240, 255, 0.4), 0 0 24px rgba(0, 240, 255, 0.1);
+  --glow-magenta:  0 0 12px rgba(255, 0, 60, 0.4), 0 0 24px rgba(255, 0, 60, 0.1);
+  --glow-text:     0 0 8px rgba(0, 240, 255, 0.5);
+
+  background-color: var(--c-bg);
+  color: var(--c-ivory);
+  font-family: 'Outfit', 'Inter', sans-serif;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* --- Typography --- */
+.creators-page .c-display {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.8rem, 8vw, 7rem);
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  color: var(--c-ivory);
+  text-shadow: 0 0 20px rgba(240,240,255,0.1);
+}
+.creators-page .c-h1 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2rem, 6vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--c-ivory);
+}
+.creators-page .c-h2 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.5rem, 4vw, 3.2rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--c-ivory);
+}
+.creators-page .c-body {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+  line-height: 1.75;
+  color: var(--c-ivory-dim);
+}
+.creators-page .c-label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.68rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+  text-shadow: var(--glow-text);
+}
+.creators-page .c-mono {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.75rem;
+  color: var(--c-ivory-dim);
+}
+
+/* --- Scene layout --- */
+.creators-page .c-scene-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 3rem;
+}
+@media (max-width: 1024px) { .creators-page .c-scene-inner { padding: 0 2rem; } }
+@media (max-width: 640px)  { .creators-page .c-scene-inner { padding: 0 1.25rem; } }
+
+/* --- Buttons --- */
+.creators-page .c-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  background-color: transparent;
+  color: var(--c-accent);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.88rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 4px; /* Tech block style instead of pills */
+  border: 1px solid var(--c-accent);
+  box-shadow: var(--glow-accent);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  min-height: 44px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.creators-page .c-btn-primary::before {
+  content: ''; position: absolute; top:0; left:-100%; width:100%; height:100%;
+  background: linear-gradient(90deg, transparent, rgba(0,240,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+.creators-page .c-btn-primary:hover { background-color: var(--c-accent-dim); box-shadow: 0 0 20px rgba(0,240,255,0.6); }
+.creators-page .c-btn-primary:hover::before { left: 100%; }
+
+.creators-page .c-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  background-color: transparent;
+  color: var(--c-ivory);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.88rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  min-height: 44px;
+  transition: all 0.3s ease;
+}
+.creators-page .c-btn-secondary:hover { border-color: var(--c-ivory); color: #fff; background: rgba(255,255,255,0.05); }
+
+/* --- Keyframes --- */
+@keyframes c-cursor-blink  { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+@keyframes c-scroll-bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+@keyframes c-float         { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-15px) rotate(2deg)} }
+@keyframes c-spin-slow     { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+@keyframes c-pulse-glow    { 0%,100%{opacity:0.3; filter:blur(4px)} 50%{opacity:0.8; filter:blur(8px)} }
+@keyframes c-scanline      { 0%{transform:translateY(-100%)} 100%{transform:translateY(100vh)} }
+
+/* --- Cursor & Effects --- */
+.creators-page .c-cursor {
+  display: inline-block;
+  width: 4px;
+  height: 0.9em;
+  background-color: var(--c-magenta);
+  box-shadow: var(--glow-magenta);
+  margin-left: 6px;
+  vertical-align: middle;
+  animation: c-cursor-blink 1s step-start infinite;
+}
+
+/* Global Scanline Overlay */
+.creators-page::after {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 999;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  background-size: 100% 4px, 3px 100%;
+  opacity: 0.4;
+}
+
+/* --- Scene label --- */
+.creators-page .c-scene-label-wrap { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
+.creators-page .c-scene-num   { font-family:'Outfit',sans-serif; font-weight:900; font-size:0.85rem; color:var(--c-accent); opacity: 0.5; letter-spacing:0.15em; }
+.creators-page .c-scene-title { font-family:'Inter',sans-serif;  font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--c-accent); font-weight:700; text-shadow: var(--glow-text); }
+
+/* --- Section divider --- */
+.creators-page .c-divider {
+  width:100%; height:1px;
+  background: linear-gradient(to right, transparent, var(--c-accent-dim) 50%, transparent);
+  box-shadow: 0 0 10px var(--c-accent-dim);
+}
+
+/* --- Progress nav (desktop only) --- */
+.creators-page .c-progress-nav { position: fixed; left: 1.75rem; top: 50%; transform: translateY(-50%); z-index: 40; display: flex; flex-direction: column; gap: 1rem; pointer-events: none; }
+.creators-page .c-progress-nav-label { font-size:0.58rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--c-accent); opacity:0.4; margin-bottom:0.6rem; writing-mode: vertical-rl; transform: rotate(180deg); }
+.creators-page .c-progress-item { display:flex; align-items:center; gap:0.75rem; pointer-events:auto; position: relative; }
+.creators-page .c-progress-dot  { width:6px; height:6px; border-radius:0; background:rgba(255,255,255,0.1); flex-shrink:0; transition:all 0.3s ease; transform: rotate(45deg); }
+.creators-page .c-progress-dot.active { background:var(--c-accent); box-shadow: var(--glow-accent); transform: rotate(45deg) scale(1.5); }
+.creators-page .c-progress-step { font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.2); white-space:nowrap; transition:color 0.3s ease; opacity: 0; transform: translateX(-10px); }
+.creators-page .c-progress-item:hover .c-progress-step { opacity: 0.5; transform: translateX(0); }
+.creators-page .c-progress-item.active .c-progress-step { color:var(--c-accent); opacity: 1; transform: translateX(0); text-shadow: var(--glow-text); }
+@media (max-width:1024px) { .creators-page .c-progress-nav { display:none; } }
+
+/* ---------------------------------------------------------------- */
+/* SCENE 01 — HERO                                                  */
+/* ---------------------------------------------------------------- */
+.creators-page .c-hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+.creators-page .c-hero-bg {
+  position: absolute; inset: 0;
+  background: 
+    radial-gradient(ellipse at 50% 50%, rgba(0, 240, 255, 0.05) 0%, transparent 60%),
+    radial-gradient(circle at 15% 80%, rgba(255, 0, 60, 0.05) 0%, transparent 40%);
+  pointer-events: none;
+}
+.creators-page .c-hero-grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: 
+    linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  transform: perspective(500px) rotateX(60deg) scale(2);
+  transform-origin: bottom;
+  opacity: 0.3;
+}
+.creators-page .c-hero-layout { position:relative; z-index:1; display:grid; grid-template-columns: 1.1fr 0.9fr; gap:4rem; align-items:center; min-height:100vh; padding:120px 3rem 6rem; max-width:1440px; margin:0 auto; width:100%; }
+.creators-page .c-hero-idea-zone { position:relative; display:flex; align-items:center; justify-content:center; min-height:500px; }
+
+/* The Central Video HUD */
+.creators-page .c-hud-video-wrapper {
+  position: relative; z-index: 10; width: 100%; max-width: 640px; aspect-ratio: 16/9;
+  border: 1px solid var(--c-accent-dim);
+  background: var(--c-surface-glass);
+  backdrop-filter: blur(10px);
+  padding: 4px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.8), var(--glow-accent);
+  border-radius: 2px;
+}
+.creators-page .c-hud-video-wrapper::before, .creators-page .c-hud-video-wrapper::after {
+  content:''; position:absolute; width: 20px; height: 20px; border: 2px solid var(--c-accent); pointer-events:none; z-index: 12;
+}
+.creators-page .c-hud-video-wrapper::before { top: -6px; left: -6px; border-right: none; border-bottom: none; }
+.creators-page .c-hud-video-wrapper::after { bottom: -6px; right: -6px; border-left: none; border-top: none; }
+
+.creators-page .c-hud-video {
+  width: 100%; height: 100%; object-fit: cover; filter: contrast(1.1) brightness(0.9);
+}
+.creators-page .c-hud-overlay {
+  position: absolute; inset: 0; pointer-events: none; z-index: 11;
+  background: linear-gradient(rgba(0, 240, 255, 0.1), transparent);
+  mix-blend-mode: overlay;
+}
+
+.creators-page .c-hero-content { display:flex; flex-direction:column; gap:1.5rem; position: relative; z-index: 20; }
+.creators-page .c-hero-eyebrow { display:flex; align-items:center; gap:0.75rem; font-size:0.7rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--c-accent); font-weight:700; font-family:'Inter',sans-serif; text-shadow: var(--glow-text); }
+.creators-page .c-hero-eyebrow::before { content:''; display:block; width:30px; height:2px; background:var(--c-accent); box-shadow: var(--glow-accent); }
+.creators-page .c-cta-row { display:flex; flex-wrap:wrap; gap:1.5rem; align-items:center; margin-top:1rem; }
+.creators-page .c-scroll-cue { display:flex; flex-direction:column; align-items:center; gap:0.6rem; margin-top:3rem; position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); }
+.creators-page .c-scroll-cue span { font-size:0.62rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--c-accent); opacity:0.6; }
+.creators-page .c-scroll-arrow { animation:c-scroll-bounce 2s ease-in-out infinite; color:var(--c-accent); text-shadow: var(--glow-text); }
+
+/* Fragments - Geometric Tech Style */
+.creators-page .c-fragment { position:absolute; pointer-events:none; user-select:none; z-index: 5; }
+.creators-page .c-frag-geo { animation: c-float 6s ease-in-out infinite; }
+.creators-page .c-frag-geo svg { filter: drop-shadow(0 0 8px rgba(0,240,255,0.4)); }
+
+@media (max-width:768px) {
+  .creators-page .c-hero-layout { grid-template-columns:1fr; gap:3rem; padding:90px 1.25rem 4rem; text-align:center; }
+  .creators-page .c-hero-eyebrow { justify-content:center; }
+  .creators-page .c-cta-row { justify-content:center; }
+  .creators-page .c-scroll-cue { position: relative; bottom: 0; left: 0; transform: none; margin-top: 1rem; }
+}
+
+/* ---------------------------------------------------------------- */
+/* SCENE 02 — EDITING TIMELINE (CHAOS REIMAGINED)                   */
+/* ---------------------------------------------------------------- */
+.creators-page .c-chaos { position:relative; background-color:transparent; }
+.creators-page .c-chaos-sticky { position:sticky; top:0; height:100vh; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+.creators-page .c-chaos-canvas { position:relative; width:100%; height:100vh; }
+.creators-page .c-chaos-headline {
+  position:absolute; bottom:15%; left:50%; transform:translateX(-50%);
+  text-align:center; width:90%; max-width:880px; z-index:20; pointer-events:none;
+}
+.creators-page .c-chaos-tag {
+  position:absolute; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--c-magenta); font-weight: 700; white-space:nowrap; padding:4px 10px;
+  border:1px solid var(--c-magenta); border-radius:0; background:rgba(255,0,60,0.1);
+  box-shadow: var(--glow-magenta); pointer-events:none; backdrop-filter: blur(4px);
+}
+@media (max-width:768px) {
+  .creators-page .c-chaos-sticky { position:relative; height:auto; min-height:70vh; padding:4rem 1.25rem; }
+  .creators-page .c-chaos-canvas { height:auto; min-height:60vh; }
+  .creators-page .c-chaos-headline { position:relative; bottom:auto; left:auto; transform:none; margin-top:2rem; text-align:center; }
+}
+
+/* ---------------------------------------------------------------- */
+/* SCENE 03 — GLOWING TERMINAL (SCRIPT REIMAGINED)                  */
+/* ---------------------------------------------------------------- */
+.creators-page .c-script { background-color:transparent; padding:8rem 0; position: relative; z-index: 10; }
+.creators-page .c-script-layout { display:grid; grid-template-columns:1fr 1.4fr; gap:5rem; align-items:start; max-width:1440px; margin:0 auto; padding:0 3rem; }
+.creators-page .c-script-left { position:sticky; top:25vh; }
+.creators-page .c-script-doc {
+  border:1px solid var(--c-border); background:rgba(8, 8, 14, 0.85); backdrop-filter: blur(12px);
+  border-radius:2px; overflow:hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 15px rgba(0,240,255,0.05);
+  position: relative;
+}
+.creators-page .c-script-doc::before { content: ''; position: absolute; top:0; left:0; width: 100%; height: 2px; background: var(--c-accent); box-shadow: var(--glow-accent); }
+.creators-page .c-script-doc-header {
+  padding:1rem 1.5rem; border-bottom:1px solid rgba(255,255,255,0.05);
+  display:flex; align-items:center; justify-content:space-between; background:rgba(0, 240, 255, 0.03);
+}
+.creators-page .c-script-doc-body { padding:2.5rem 2rem; display:flex; flex-direction:column; gap:2.5rem; }
+.creators-page .c-script-block { border-left:2px solid var(--c-accent); padding-left:1.25rem; position: relative; }
+.creators-page .c-script-block::before { content:''; position:absolute; top:-2px; left:-5px; width:8px; height:8px; background:var(--c-accent); box-shadow:var(--glow-accent); }
+.creators-page .c-script-block-label { font-size:0.65rem; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:var(--c-accent); margin-bottom:0.8rem; font-family:'Inter',sans-serif; text-shadow: var(--glow-text); }
+.creators-page .c-script-line { height:4px; border-radius:0; background:var(--c-accent-dim); margin-bottom:8px; position: relative; overflow: hidden; }
+.creators-page .c-script-line::after { content:''; position:absolute; top:0; left:-100%; width:50%; height:100%; background:var(--c-accent); opacity:0.5; animation: c-scanline 2s infinite linear; }
+.creators-page .c-script-line.short { width:40%; }
+.creators-page .c-script-bullets { list-style:none; padding:0; margin:1.5rem 0 0; display:flex; flex-direction:column; gap:0.8rem; }
+.creators-page .c-script-bullets li { display:flex; align-items:flex-start; gap:0.8rem; font-family:'Inter',sans-serif; font-size:0.9rem; color:var(--c-ivory); line-height:1.6; }
+.creators-page .c-script-bullets li::before { content:'>'; display:block; color:var(--c-magenta); font-weight: 700; margin-top:0; font-size: 1rem; text-shadow: var(--glow-magenta); }
+@media (max-width:1024px) { .creators-page .c-script-layout { grid-template-columns:1fr; gap:4rem; padding:0 2rem; } .creators-page .c-script-left { position:static; } }
+@media (max-width:640px) { .creators-page .c-script { padding:5rem 0; } .creators-page .c-script-layout { padding:0 1.25rem; } }
+
+/* ---------------------------------------------------------------- */
+/* REDUCED MOTION                                                   */
+/* ---------------------------------------------------------------- */
+@media (prefers-reduced-motion:reduce) {
+  .creators-page *, .creators-page *::before, .creators-page *::after {
+    animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;
+  }
+}
+

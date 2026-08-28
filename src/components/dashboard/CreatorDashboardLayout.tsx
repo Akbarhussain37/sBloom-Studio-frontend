@@ -44,7 +44,13 @@ export default function CreatorDashboardLayout() {
   };
 
   return (
-    <div className="flex h-screen bg-white overflow-hidden font-body">
+    <div 
+      className="flex h-screen bg-white overflow-hidden"
+      style={{ 
+        '--font-body': 'var(--font-jakarta)', 
+        '--font-heading': 'var(--font-jakarta)' 
+      } as React.CSSProperties}
+    >
       <DashboardSidebar 
         isOpen={isSidebarOpen} 
         onClose={() => setIsSidebarOpen(false)} 

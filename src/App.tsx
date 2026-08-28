@@ -16,7 +16,11 @@ import CompletedContent from './pages/dashboard/CompletedContent';
 import VideoDetails from './pages/dashboard/VideoDetails';
 import ScriptAssistant from './pages/dashboard/ScriptAssistant';
 import UploadJob from './pages/dashboard/UploadJob';
-import AdminDashboard from './pages/admin/AdminDashboard';
+import UserJobLifecycle from './pages/dashboard/UserJobLifecycle';
+import UserChat from './pages/dashboard/UserChat';
+import AdminDashboardLayout from './components/admin/AdminDashboardLayout';
+import AdminJobLifecycle from './pages/admin/AdminJobLifecycle';
+import AdminChat from './pages/admin/AdminChat';
 import ProfileSettings from './pages/dashboard/ProfileSettings';
 
 function App() {
@@ -47,12 +51,18 @@ function App() {
           <Route path="review" element={<ReviewFeedback />} />
           <Route path="completed" element={<CompletedContent />} />
           <Route path="script-assistant" element={<ScriptAssistant />} />
+          <Route path="jobs" element={<UserJobLifecycle />} />
+          <Route path="chat" element={<UserChat />} />
           <Route path="upload-job" element={<UploadJob />} />
           <Route path="profile" element={<ProfileSettings />} />
         </Route>
 
         {/* Admin Routes */}
-        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin" element={<AdminDashboardLayout />}>
+          <Route index element={<AdminJobLifecycle />} />
+          <Route path="jobs" element={<AdminJobLifecycle />} />
+          <Route path="chat" element={<AdminChat />} />
+        </Route>
       </Routes>
 
       {!hideHeaderFooter && <Footer />}

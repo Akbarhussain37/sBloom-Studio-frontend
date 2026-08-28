@@ -4,7 +4,7 @@ import { getProjects, createProject } from '../../lib/creatorService';
 import type { Database } from '../../types/database.types';
 import ProductionStatusBadge from '../../components/dashboard/ProductionStatusBadge';
 
-type Project = Database['public']['Tables']['projects']['Row'];
+type Project = Database['public']['Tables']['projects_studio']['Row'];
 
 export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);

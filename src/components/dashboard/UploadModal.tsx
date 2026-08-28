@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiUploadCloud, FiFile, FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
-import { uploadMediaFile } from '../../lib/creatorService';
 import { uploadDocument } from '../../lib/api';
 import { LoadingSpinner } from '../ui/LoadingSpinner';
 import { useAuth } from '../../contexts/AuthContext';

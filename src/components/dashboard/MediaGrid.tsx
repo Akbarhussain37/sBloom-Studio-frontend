@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import type { Database } from '../../types/database.types';
 import MediaCard from './MediaCard';
 
-type MediaAsset = Database['public']['Tables']['media_assets']['Row'];
+type MediaAsset = Database['public']['Tables']['media_assets_studio']['Row'];
 
 interface MediaGridProps {
   assets: MediaAsset[];

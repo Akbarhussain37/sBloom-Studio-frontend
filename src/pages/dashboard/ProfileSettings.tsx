@@ -123,7 +123,7 @@ export default function ProfileSettings() {
     setError(null);
     setSuccess(false);
     try {
-      const data = await uploadProfileImage(file, user.id);
+      const data = await uploadProfileImage(file, user.id) as any;
       if (data) {
         setAvatarUrl(data.image_url);
       }
