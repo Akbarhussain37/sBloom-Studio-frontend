@@ -1,17 +1,25 @@
 @import "tailwindcss";
 
 @theme {
-  --font-heading: "Plus Jakarta Sans", sans-serif;
-  --font-body: "Plus Jakarta Sans", sans-serif;
+  --font-heading: "Outfit", sans-serif;
+  --font-body: "Inter", sans-serif;
   --font-system: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   --font-jakarta: "Plus Jakarta Sans", sans-serif;
-
+  --font-health-display: "Fraunces", serif;
+  --font-health-mono: "IBM Plex Mono", monospace;
   --color-navy: #27235C;
   --color-navy-dark: #1A1744;
   --color-brand-red: #DE1B54;
   --color-brand-red-hover: #F02865;
   --color-offwhite: #F8F9FA;
 
+  /* Healthcare Section Palette */
+  --color-health-paper: #FAF7F1;
+  --color-health-teal: #1C6E5C;
+  --color-health-teal-dark: #0F3D33;
+  --color-health-coral: #E8714A;
+  --color-health-sage: #DCE8DF;
+  --color-health-gold: #C9A227;
   --shadow-glow: 0 0 20px rgba(222, 27, 84, 0.4);
 
   --animate-slowZoom: slowZoom 30s ease-in-out infinite alternate;
