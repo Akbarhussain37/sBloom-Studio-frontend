@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -14,6 +15,8 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 import { useNavigate } from 'react-router-dom';
+import { fetchUnreadCounts } from '../../lib/api';
+import { io } from 'socket.io-client';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -24,6 +27,51 @@ interface SidebarProps {
 export default function DashboardSidebar({ isOpen, onClose }: SidebarProps) {
   const { profile } = useAuth();
   const navigate = useNavigate();
+  const [totalUnread, setTotalUnread] = useState(0);
+
+  useEffect(() => {
+    if (!profile) return;
+
+    const getUnread = async () => {
+      try {
+        const counts = await fetchUnreadCounts(profile.id);
+        
+        // Fetch jobs this user has access to (RLS handles permissions)
+        const { data: jobs } = await supabase
+          .from('production_jobs_studio')
+          .select('id');
+          
+        const validJobIds = new Set((jobs || []).map(j => j.id));
+        
+        let total = 0;
+        Object.entries(counts as Record<string, number>).forEach(([id, count]) => {
+          if (validJobIds.has(id)) {
+            total += count;
+          }
+        });
+        
+        setTotalUnread(total);
+      } catch (err) {
+        console.error("Failed to fetch sidebar unread counts:", err);
+      }
+    };
+
+    getUnread();
+
+    const socket = io('http://localhost:3000');
+    socket.on('unreadUpdate', (data: any) => {
+      if (data.senderId !== profile.id) {
+        getUnread();
+      }
+    });
+
+    window.addEventListener('chatReadUpdate', getUnread);
+
+    return () => {
+      socket.disconnect();
+      window.removeEventListener('chatReadUpdate', getUnread);
+    };
+  }, [profile]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -85,8 +133,22 @@ export default function DashboardSidebar({ isOpen, onClose }: SidebarProps) {
             <NavLink to="/dashboard/jobs" className={navItemClass}>
               <FiFolder className="text-lg" /> Job Lifecycle
             </NavLink>
-            <NavLink to="/dashboard/chat" className={navItemClass}>
-              <FiMessageSquare className="text-lg" /> Messages
+            <NavLink to="/dashboard/chat" className={({ isActive }) => `
+              flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold transition-all group
+              ${isActive 
+                ? profile?.role === 'kid' ? 'bg-[#FF5E00] text-white shadow-md' :
+                  profile?.role === 'doctor' ? 'bg-teal-600 text-white shadow-md' :
+                  'bg-brand-red text-white shadow-md' 
+                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}
+            `}>
+              <div className="flex items-center gap-3">
+                <FiMessageSquare className="text-lg" /> Messages
+              </div>
+              {totalUnread > 0 && (
+                <div className="bg-brand-red text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full flex items-center justify-center shadow-sm min-w-[20px]">
+                  {totalUnread > 99 ? '99+' : totalUnread}
+                </div>
+              )}
             </NavLink>
           </nav>
         </div>

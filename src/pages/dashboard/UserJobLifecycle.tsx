@@ -3,6 +3,7 @@ import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { LoadingSpinner } from '../../components/ui/LoadingSpinner';
 import JobLifecycleProgressBar from '../../components/dashboard/JobLifecycleProgressBar';
+import JobChatBox from '../../components/dashboard/JobChatBox';
 import { FiFileText, FiClock, FiCheck } from 'react-icons/fi';
 import type { Database } from '../../types/database.types';
 
@@ -32,6 +33,36 @@ export default function UserJobLifecycle() {
     }
 
     fetchJobs();
+
+    // Subscribe to real-time updates for this user's jobs
+    if (profile) {
+      const channel = supabase
+        .channel('schema-db-changes')
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'production_jobs_studio',
+            filter: `user_id=eq.${profile.id}`
+          },
+          (payload) => {
+            // Update the specific job in the state
+            setJobs((currentJobs) => 
+              currentJobs.map((job) => 
+                job.id === payload.new.id 
+                  ? { ...job, ...payload.new } 
+                  : job
+              )
+            );
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    }
   }, [profile]);
 
   if (loading) {
@@ -100,7 +131,23 @@ export default function UserJobLifecycle() {
                <h2 className="text-lg font-bold font-heading text-slate-900 mb-6">
                  {selectedJob.media_assets_studio?.file_name || 'Job Details'}
                </h2>
-               <JobLifecycleProgressBar status={selectedJob.status as any} />
+               <JobLifecycleProgressBar completionPercentage={selectedJob.completion_percentage || 0} />
+
+               {/* Admin Feedback */}
+               {selectedJob.admin_comments && (
+                 <div className="mt-6 bg-blue-50 p-6 rounded-xl border border-blue-100 relative overflow-hidden">
+                   <div className="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
+                   <h3 className="text-sm font-bold text-blue-900 mb-2 flex items-center gap-2">
+                     <FiFileText className="text-blue-500" /> Admin Feedback
+                   </h3>
+                   <p className="text-sm text-blue-800 whitespace-pre-wrap">
+                     {selectedJob.admin_comments}
+                   </p>
+                 </div>
+               )}
+
+               {/* Chat Interface */}
+               <JobChatBox jobId={selectedJob.id} currentUserId={profile.id} />
             </div>
           ) : (
             <div className="bg-white border border-slate-200 rounded-2xl flex-1 flex flex-col items-center justify-center p-8 text-center shadow-sm min-h-[300px]">

@@ -1,23 +1,14 @@
-import { NavLink } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  FiFolder, 
-  FiUser, 
-  FiLogOut,
-  FiX,
-  FiMessageSquare,
-  FiShield
-} from 'react-icons/fi';
+import { useState } from 'react';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { LoadingSpinner } from '../ui/LoadingSpinner';
+import DashboardHeader from '../dashboard/DashboardHeader';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiHome, FiFolder, FiMessageSquare, FiLogOut, FiX, FiShield } from 'react-icons/fi';
 import { supabase } from '../../lib/supabase';
-import { useNavigate } from 'react-router-dom';
 
-interface SidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export default function AdminSidebar({ isOpen, onClose }: SidebarProps) {
+function EditorSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { profile } = useAuth();
   const navigate = useNavigate();
 
@@ -37,15 +28,12 @@ export default function AdminSidebar({ isOpen, onClose }: SidebarProps) {
     <div className="flex flex-col h-full bg-[#F7F9FC] border-r border-slate-200 w-64 pt-6 pb-4 px-4 flex-shrink-0">
       <div className="flex items-center justify-between mb-8 px-2">
         <div className="font-heading font-bold text-xl tracking-wide text-slate-900 flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center shadow-sm">
-            <span className="text-white text-lg font-bold font-heading">A</span>
+          <div className="w-8 h-8 rounded-lg bg-brand-red flex items-center justify-center shadow-sm">
+            <span className="text-white text-lg font-bold font-heading">E</span>
           </div>
-          Admin Panel
+          Editor Studio
         </div>
-        <button 
-          onClick={onClose}
-          className="md:hidden text-slate-400 hover:text-slate-700"
-        >
+        <button onClick={onClose} className="md:hidden text-slate-400 hover:text-slate-700">
           <FiX className="text-xl" />
         </button>
       </div>
@@ -54,14 +42,8 @@ export default function AdminSidebar({ isOpen, onClose }: SidebarProps) {
         <div>
           <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-2">Workspace</p>
           <nav className="space-y-1">
-            <NavLink to="/admin/jobs" className={navItemClass}>
-              <FiFolder className="text-lg" /> Job Lifecycle
-            </NavLink>
-            <NavLink to="/admin/chat" className={navItemClass}>
-              <FiMessageSquare className="text-lg" /> Messages
-            </NavLink>
-            <NavLink to="/admin/users" className={navItemClass}>
-              <FiUser className="text-lg" /> Users
+            <NavLink to="/editor" end className={navItemClass}>
+              <FiFolder className="text-lg" /> Assigned Jobs
             </NavLink>
           </nav>
         </div>
@@ -84,7 +66,7 @@ export default function AdminSidebar({ isOpen, onClose }: SidebarProps) {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-slate-900 truncate">
-                {profile.full_name || 'Admin'}
+                {profile.full_name || 'Editor'}
               </p>
               <p className="text-xs text-slate-500 truncate capitalize">
                 {profile.role}
@@ -98,12 +80,7 @@ export default function AdminSidebar({ isOpen, onClose }: SidebarProps) {
 
   return (
     <>
-      {/* Desktop Sidebar */}
-      <div className="hidden md:block h-screen sticky top-0">
-        {sidebarContent}
-      </div>
-
-      {/* Mobile Drawer */}
+      <div className="hidden md:block h-screen sticky top-0">{sidebarContent}</div>
       <AnimatePresence>
         {isOpen && (
           <>
@@ -127,5 +104,46 @@ export default function AdminSidebar({ isOpen, onClose }: SidebarProps) {
         )}
       </AnimatePresence>
     </>
+  );
+}
+
+export default function EditorDashboardLayout() {
+  const { profile, loading } = useAuth();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const location = useLocation();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#F7F9FC]">
+        <LoadingSpinner className="w-8 h-8 border-brand-red border-t-transparent" />
+      </div>
+    );
+  }
+
+  // Protect route
+  if (!profile || profile.role !== 'editor') {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return (
+    <div 
+      className="flex h-screen bg-white overflow-hidden"
+      style={{ '--font-body': 'var(--font-jakarta)', '--font-heading': 'var(--font-jakarta)' } as React.CSSProperties}
+    >
+      <EditorSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+      
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+        <DashboardHeader 
+          onMenuClick={() => setIsSidebarOpen(true)} 
+          title="Editor Dashboard"
+        />
+        
+        <main className="flex-1 overflow-y-auto bg-slate-50 p-4 md:p-8 custom-scrollbar">
+          <div className="max-w-7xl mx-auto">
+            <Outlet />
+          </div>
+        </main>
+      </div>
+    </div>
   );
 }

@@ -42,7 +42,7 @@ export default function VideoDetails() {
           .maybeSingle();
           
         if (jobData) {
-          setJobId(jobData.id);
+          setJobId((jobData as any).id);
         }
       } catch (error) {
         console.error('Error loading video:', error);
@@ -111,7 +111,10 @@ export default function VideoDetails() {
         {/* Main Content Area */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
-            <JobLifecycleProgressBar status={asset.status as any} />
+            <JobLifecycleProgressBar completionPercentage={
+              asset.status === 'COMPLETED' ? 100 :
+              ['EDITING', 'READY_FOR_REVIEW', 'CHANGES_REQUESTED', 'SUBMITTED'].includes(asset.status) ? 50 : 0
+            } />
           </div>
           
           <div className="bg-black rounded-[2rem] overflow-hidden aspect-video flex items-center justify-center relative shadow-lg">

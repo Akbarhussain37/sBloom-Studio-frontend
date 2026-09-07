@@ -15,6 +15,7 @@ export default function UploadJob() {
   const { profile, user } = useAuth();
   const [files, setFiles] = useState<File[]>([]);
   const [instructions, setInstructions] = useState('');
+  const [requirements, setRequirements] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -82,7 +83,8 @@ export default function UploadJob() {
             user?.email || profile?.email || '',
             user?.phone || '',
             instructions,
-            profile?.role
+            profile?.role,
+            requirements
           );
           oneDriveFileId = uploadRes?.data?.file_id;
         } catch (oneDriveErr) {
@@ -133,6 +135,7 @@ export default function UploadJob() {
                 setIsSubmitted(false);
                 setFiles([]);
                 setInstructions('');
+                setRequirements('');
               }}
               className="px-6 py-3 border border-slate-200 text-slate-700 rounded-xl font-bold hover:bg-slate-50 transition-colors"
             >
@@ -272,6 +275,26 @@ export default function UploadJob() {
             <p className="text-xs text-slate-500 mt-2 ml-1">
               Be as specific as possible so our editors know exactly what you want.
             </p>
+          </div>
+
+          {/* Requirements */}
+          <div>
+            <label htmlFor="requirements" className="block text-sm font-bold text-slate-800 mb-3">
+              Job Requirements <span className="text-brand-red">*</span>
+            </label>
+            <div className="relative">
+              <div className="absolute top-4 left-4 pointer-events-none">
+                <FiFileText className="text-slate-400 text-lg" />
+              </div>
+              <textarea
+                id="requirements"
+                required
+                value={requirements}
+                onChange={(e) => setRequirements(e.target.value)}
+                placeholder="List specific requirements (e.g. 1080p, final duration < 1m, brand colors...)"
+                className="w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-2xl bg-[#F7F9FC] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red text-sm transition-all resize-none min-h-[100px]"
+              />
+            </div>
           </div>
 
           <div className="pt-4 border-t border-slate-100 flex flex-col items-end gap-2">

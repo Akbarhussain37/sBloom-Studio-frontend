@@ -14,7 +14,7 @@ export interface Database {
           id: string
           full_name: string
           email: string
-          role: 'creator' | 'kid' | 'doctor' | 'admin'
+          role: 'creator' | 'kid' | 'doctor' | 'admin' | 'editor'
           portfolio_url: string | null
           bio: string | null
           primary_software: string | null
@@ -39,7 +39,7 @@ export interface Database {
           id: string
           full_name: string
           email: string
-          role: 'creator' | 'kid' | 'doctor' | 'admin'
+          role: 'creator' | 'kid' | 'doctor' | 'admin' | 'editor'
           portfolio_url?: string | null
           bio?: string | null
           primary_software?: string | null
@@ -64,7 +64,7 @@ export interface Database {
           id?: string
           full_name?: string
           email?: string
-          role?: 'creator' | 'kid' | 'doctor' | 'admin'
+          role?: 'creator' | 'kid' | 'doctor' | 'admin' | 'editor'
           portfolio_url?: string | null
           bio?: string | null
           primary_software?: string | null
@@ -241,6 +241,10 @@ export interface Database {
           user_id: string
           status: 'DRAFT' | 'UPLOADED' | 'SUBMITTED' | 'IN_REVIEW' | 'EDITING' | 'READY_FOR_REVIEW' | 'CHANGES_REQUESTED' | 'COMPLETED'
           notes: string | null
+          completion_percentage: number | null
+          admin_comments: string | null
+          job_requirements: string | null
+          editor_id: string | null
           submitted_at: string
           completed_at: string | null
           created_at: string
@@ -252,6 +256,10 @@ export interface Database {
           user_id: string
           status?: 'DRAFT' | 'UPLOADED' | 'SUBMITTED' | 'IN_REVIEW' | 'EDITING' | 'READY_FOR_REVIEW' | 'CHANGES_REQUESTED' | 'COMPLETED'
           notes?: string | null
+          completion_percentage?: number | null
+          admin_comments?: string | null
+          job_requirements?: string | null
+          editor_id?: string | null
           submitted_at?: string
           completed_at?: string | null
           created_at?: string
@@ -263,6 +271,10 @@ export interface Database {
           user_id?: string
           status?: 'DRAFT' | 'UPLOADED' | 'SUBMITTED' | 'IN_REVIEW' | 'EDITING' | 'READY_FOR_REVIEW' | 'CHANGES_REQUESTED' | 'COMPLETED'
           notes?: string | null
+          completion_percentage?: number | null
+          admin_comments?: string | null
+          job_requirements?: string | null
+          editor_id?: string | null
           submitted_at?: string
           completed_at?: string | null
           created_at?: string

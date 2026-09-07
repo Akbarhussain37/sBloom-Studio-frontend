@@ -30,6 +30,11 @@ export default function CreatorDashboardLayout() {
     return <Navigate to="/admin" replace />;
   }
 
+  // Redirect editors to editor dashboard
+  if (profile.role === 'editor') {
+    return <Navigate to="/editor" replace />;
+  }
+
   // Get dynamic title based on path
   const getPageTitle = () => {
     const path = location.pathname;

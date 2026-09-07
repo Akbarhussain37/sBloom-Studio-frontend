@@ -17,7 +17,11 @@ interface DocumentData {
   user_email?: string;
   user_phone?: string;
   instructions?: string;
+  job_requirements?: string;
+  completion_percentage?: number;
+  admin_comments?: string;
   user_role?: string;
+  editor_id?: string;
 }
 
 export default function AdminJobLifecycle() {
@@ -29,6 +33,18 @@ export default function AdminJobLifecycle() {
   const [viewingMedia, setViewingMedia] = useState<DocumentData | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadingDocId, setUploadingDocId] = useState<string | null>(null);
+
+  const [sliders, setSliders] = useState<Record<string, number>>({});
+  const [comments, setComments] = useState<Record<string, string>>({});
+  const [isSavingDetails, setIsSavingDetails] = useState<string | null>(null);
+  const [editors, setEditors] = useState<{id: string, full_name: string}[]>([]);
+  
+  useEffect(() => {
+    import('../../lib/supabase').then(({ supabase }) => {
+      supabase.from('profile_studio').select('id, full_name').eq('role', 'editor')
+        .then(({ data }) => { if (data) setEditors(data); });
+    });
+  }, []);
 
   const isImage = (filename?: string) => {
     if (!filename) return false;
@@ -48,6 +64,15 @@ export default function AdminJobLifecycle() {
       if (result.success) {
         const validDocs = (result.data || []).filter((d: any) => d.user_name !== 'Admin Edit');
         setDocuments(validDocs);
+        
+        const initialSliders: Record<string, number> = {};
+        const initialComments: Record<string, string> = {};
+        validDocs.forEach((d: any) => {
+          initialSliders[d.doc_id] = d.completion_percentage || 0;
+          initialComments[d.doc_id] = d.admin_comments || '';
+        });
+        setSliders(initialSliders);
+        setComments(initialComments);
       } else {
         throw new Error(result.error || 'Unknown error occurred');
       }
@@ -83,6 +108,53 @@ export default function AdminJobLifecycle() {
     } catch (err) {
       console.error(err);
       alert('Failed to update status.');
+    }
+  };
+
+  const handleSaveDetails = async (doc: DocumentData) => {
+    setIsSavingDetails(doc.doc_id);
+    try {
+      const response = await fetch(`${API_BASE_URL}/sync-job-details`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fileName: doc.file_name,
+          completion_percentage: sliders[doc.doc_id],
+          admin_comments: comments[doc.doc_id]
+        })
+      });
+      if (!response.ok) throw new Error('Failed to save details');
+      
+      // Update local status based on percentage
+      const newPercentage = sliders[doc.doc_id];
+      let newStatus = 'Editing';
+      if (newPercentage === 0) newStatus = 'Uploaded';
+      if (newPercentage === 100) newStatus = 'Completed';
+      
+      setDocuments(prev => prev.map(d => d.doc_id === doc.doc_id ? { ...d, status: newStatus } : d));
+      
+      alert('Progress and comments saved successfully!');
+    } catch (err: any) {
+      console.error(err);
+      alert(`Failed to save details: ${err.message}`);
+    } finally {
+      setIsSavingDetails(null);
+    }
+  };
+
+  const handleAssignEditor = async (doc: DocumentData, editorId: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/assign-editor`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fileName: doc.file_name, editorId })
+      });
+      if (!response.ok) throw new Error('Failed to assign editor');
+      setDocuments(prev => prev.map(d => d.doc_id === doc.doc_id ? { ...d, editor_id: editorId } : d));
+      alert('Editor assigned successfully!');
+    } catch (err: any) {
+      console.error(err);
+      alert(`Failed to assign editor: ${err.message}`);
     }
   };
 
@@ -201,7 +273,7 @@ export default function AdminJobLifecycle() {
                 <th className="px-6 py-4">Job ID / Date</th>
                 <th className="px-6 py-4">User & Role</th>
                 <th className="px-6 py-4">Instructions</th>
-                <th className="px-6 py-4">Status</th>
+                <th className="px-6 py-4">Status & Progress</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
@@ -282,10 +354,23 @@ export default function AdminJobLifecycle() {
                       <div className="mb-3 text-[10px] font-bold px-2 py-0.5 rounded-md inline-block uppercase tracking-wider border bg-purple-50 text-purple-700 border-purple-100">
                         {role}
                       </div>
-                      <div className="text-xs text-slate-500 flex flex-col gap-1.5">
+                      <div className="text-xs text-slate-500 flex flex-col gap-1.5 mb-3">
                         {doc.user_email && <span className="flex items-center gap-1.5"><FiMail className="text-slate-400 flex-shrink-0" /> <span className="truncate max-w-[150px]">{doc.user_email}</span></span>}
                         {doc.user_phone && <span className="flex items-center gap-1.5"><FiPhone className="text-slate-400 flex-shrink-0" /> <span className="truncate">{doc.user_phone}</span></span>}
                         <span className="flex items-center gap-1.5"><FiMapPin className="text-slate-400 flex-shrink-0" /> Location Placeholder</span>
+                      </div>
+                      <div className="mt-2 pt-2 border-t border-slate-100">
+                        <label className="block text-xs font-bold text-slate-500 mb-1">Assign Editor:</label>
+                        <select 
+                          className="w-full text-xs p-1.5 border border-slate-200 rounded-lg focus:ring-1 focus:ring-brand-red"
+                          value={doc.editor_id || ''}
+                          onChange={(e) => handleAssignEditor(doc, e.target.value)}
+                        >
+                          <option value="">-- Unassigned --</option>
+                          {editors.map(ed => (
+                            <option key={ed.id} value={ed.id}>{ed.full_name}</option>
+                          ))}
+                        </select>
                       </div>
                     </td>
                     
@@ -293,21 +378,62 @@ export default function AdminJobLifecycle() {
                       <div className="text-sm text-slate-900 font-bold mb-2 flex items-center gap-1.5 truncate">
                           <FiFileText className="text-slate-400 flex-shrink-0" /> {doc.file_name}
                       </div>
-                      <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 min-w-[200px] max-w-[300px]">
-                        <p className={`text-sm ${doc.instructions ? 'text-slate-700' : 'text-slate-400 italic'}`}>
+                      <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 min-w-[200px] max-w-[300px] mb-2">
+                        <span className="text-xs font-bold text-slate-500 uppercase">Instructions</span>
+                        <p className={`text-sm mt-1 ${doc.instructions ? 'text-slate-700' : 'text-slate-400 italic'}`}>
                           {doc.instructions || 'No instructions provided.'}
                         </p>
                       </div>
+                      {doc.job_requirements && (
+                        <div className="bg-blue-50 p-3 rounded-xl border border-blue-100 min-w-[200px] max-w-[300px]">
+                          <span className="text-xs font-bold text-blue-500 uppercase">Requirements</span>
+                          <p className="text-sm mt-1 text-blue-700">
+                            {doc.job_requirements}
+                          </p>
+                        </div>
+                      )}
                     </td>
                     
-                    <td className="px-6 py-4 align-top">
-                      <div className={`flex items-center gap-1.5 text-xs font-bold px-2.5 py-1.5 rounded-lg border w-max
+                    <td className="px-6 py-4 align-top min-w-[250px]">
+                      <div className={`flex items-center gap-1.5 text-xs font-bold px-2.5 py-1.5 rounded-lg border w-max mb-4
                         ${doc.status?.toLowerCase() === 'completed' ? 'bg-green-50 text-green-700 border-green-200' : 
                           doc.status?.toLowerCase() === 'uploaded' ? 'bg-blue-50 text-blue-700 border-blue-200' : 
                           'bg-slate-100 text-slate-700 border-slate-200'}`}
                       >
                         {doc.status?.toLowerCase() === 'completed' ? <FiCheck /> : <FiClock />}
                         <span className="capitalize">{doc.status || 'Unknown'}</span>
+                      </div>
+                      
+                      <div className="mb-4">
+                        <label className="flex justify-between text-xs font-bold text-slate-600 mb-1">
+                          Completion: <span>{sliders[doc.doc_id] || 0}%</span>
+                        </label>
+                        <input 
+                          type="range" 
+                          min="0" 
+                          max="100" 
+                          value={sliders[doc.doc_id] || 0} 
+                          onChange={(e) => setSliders({...sliders, [doc.doc_id]: parseInt(e.target.value)})}
+                          className="w-full accent-brand-red"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-xs font-bold text-slate-600 mb-1">Admin Comments</label>
+                        <textarea 
+                          className="w-full text-xs p-2 border border-slate-200 rounded-lg focus:ring-1 focus:ring-brand-red resize-none"
+                          rows={2}
+                          placeholder="Leave feedback for the user..."
+                          value={comments[doc.doc_id] || ''}
+                          onChange={(e) => setComments({...comments, [doc.doc_id]: e.target.value})}
+                        />
+                        <button
+                          onClick={() => handleSaveDetails(doc)}
+                          disabled={isSavingDetails === doc.doc_id}
+                          className="mt-2 w-full py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition-colors border border-slate-200"
+                        >
+                          {isSavingDetails === doc.doc_id ? 'Saving...' : 'Save Progress & Comments'}
+                        </button>
                       </div>
                     </td>
                     

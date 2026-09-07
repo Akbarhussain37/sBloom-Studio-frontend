@@ -21,14 +21,18 @@ import UserChat from './pages/dashboard/UserChat';
 import AdminDashboardLayout from './components/admin/AdminDashboardLayout';
 import AdminJobLifecycle from './pages/admin/AdminJobLifecycle';
 import AdminChat from './pages/admin/AdminChat';
+import AdminUsers from './pages/admin/AdminUsers';
 import ProfileSettings from './pages/dashboard/ProfileSettings';
+import EditorDashboardLayout from './components/editor/EditorDashboardLayout';
+import EditorDashboard from './pages/editor/EditorDashboard';
 
 function App() {
   const location = useLocation();
   const isAuthPage = ['/login', '/register'].includes(location.pathname);
   const isDashboardPage = location.pathname.startsWith('/dashboard');
   const isAdminPage = location.pathname.startsWith('/admin');
-  const hideHeaderFooter = isAuthPage || isDashboardPage || isAdminPage;
+  const isEditorPage = location.pathname.startsWith('/editor');
+  const hideHeaderFooter = isAuthPage || isDashboardPage || isAdminPage || isEditorPage;
 
   return (
     <div className="bg-white min-h-screen font-body text-gray-900 selection:bg-brand-red selection:text-white">
@@ -62,6 +66,12 @@ function App() {
           <Route index element={<AdminJobLifecycle />} />
           <Route path="jobs" element={<AdminJobLifecycle />} />
           <Route path="chat" element={<AdminChat />} />
+          <Route path="users" element={<AdminUsers />} />
+        </Route>
+
+        {/* Editor Routes */}
+        <Route path="/editor" element={<EditorDashboardLayout />}>
+          <Route index element={<EditorDashboard />} />
         </Route>
       </Routes>
 
