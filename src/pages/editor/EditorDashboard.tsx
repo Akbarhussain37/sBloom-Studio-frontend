@@ -5,7 +5,6 @@ import { LoadingSpinner } from '../../components/ui/LoadingSpinner';
 import JobLifecycleProgressBar from '../../components/dashboard/JobLifecycleProgressBar';
 import EditorJobChatBox from '../../components/dashboard/EditorJobChatBox';
 import { FiFileText, FiClock, FiCheck, FiDownload } from 'react-icons/fi';
-import type { Database } from '../../types/database.types';
 
 type EditorJob = {
   id: string; // we will map doc_id to id
@@ -40,12 +39,13 @@ export default function EditorDashboard() {
           const editorDocs = json.data.filter((doc: any) => doc.editor_id === profile.id);
           
           // Cross-reference with production_jobs_studio to get the correct UUID for chat
-          const { data: prodJobs } = await supabase
+          const { data: prodJobsData } = await supabase
             .from('production_jobs_studio')
             .select('id, media_assets_studio(file_name)');
+          const prodJobs = (prodJobsData as any[]) || [];
             
           const mappedJobs = editorDocs.map((doc: any) => {
-            const prodJob = prodJobs?.find(pj => pj.media_assets_studio?.file_name === doc.file_name);
+            const prodJob = prodJobs.find(pj => pj.media_assets_studio?.file_name === doc.file_name);
             
             return {
               id: prodJob ? prodJob.id : doc.doc_id, // Use production job UUID if found!

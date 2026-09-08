@@ -5,7 +5,7 @@ import type { Database } from '../../types/database.types';
 import { io } from 'socket.io-client';
 import { fetchChatMessages, sendChatMessage, markChatAsRead, deleteChatMessage, deleteEntireChat } from '../../lib/api';
 
-type Message = Database['public']['Tables']['messages_studio']['Row'];
+type Message = Database['public']['Tables']['messages_studio']['Row'] & { sender_role?: string };
 type ProductionJob = Database['public']['Tables']['production_jobs_studio']['Row'];
 
 interface Props {
@@ -132,17 +132,7 @@ export default function JobChatBox({ jobId, currentUserId, chatType = 'public' }
     }
   };
 
-  const handleDeleteChat = async () => {
-    if (!window.confirm('Are you sure you want to delete this entire chat conversation? This cannot be undone.')) return;
-    
-    try {
-      await deleteEntireChat(jobId);
-      // The socket event 'chatDeleted' will clear the messages list
-    } catch (error: any) {
-      console.error('Error deleting chat:', error);
-      alert('Failed to delete chat.');
-    }
-  };
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

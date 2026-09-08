@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { LoadingSpinner } from '../ui/LoadingSpinner';
 import DashboardHeader from '../dashboard/DashboardHeader';
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiHome, FiFolder, FiMessageSquare, FiLogOut, FiX, FiShield } from 'react-icons/fi';
+import { FiFolder, FiLogOut, FiX, FiShield } from 'react-icons/fi';
 import { supabase } from '../../lib/supabase';
 
 function EditorSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -110,7 +110,6 @@ function EditorSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
 export default function EditorDashboardLayout() {
   const { profile, loading } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const location = useLocation();
 
   if (loading) {
     return (

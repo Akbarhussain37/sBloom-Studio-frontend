@@ -4,10 +4,9 @@ import { FiVideo, FiClock, FiCheckCircle, FiPlus, FiFolder } from 'react-icons/f
 import { useAuth } from '../../contexts/AuthContext';
 import StatsCard from '../../components/dashboard/StatsCard';
 import RecentUploadsList from '../../components/dashboard/RecentUploadsList';
-import { getMediaAssets, getProjects } from '../../lib/creatorService';
+import { getMediaAssets } from '../../lib/creatorService';
 import type { Database } from '../../types/database.types';
 
-type Project = Database['public']['Tables']['projects_studio']['Row'];
 type MediaAsset = Database['public']['Tables']['media_assets_studio']['Row'];
 
 export default function DashboardOverview() {

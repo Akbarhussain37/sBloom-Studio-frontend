@@ -37,11 +37,12 @@ export default function DashboardSidebar({ isOpen, onClose }: SidebarProps) {
         const counts = await fetchUnreadCounts(profile.id);
         
         // Fetch jobs this user has access to (RLS handles permissions)
-        const { data: jobs } = await supabase
+        const { data } = await supabase
           .from('production_jobs_studio')
           .select('id');
           
-        const validJobIds = new Set((jobs || []).map(j => j.id));
+        const jobs = (data as any[]) || [];
+        const validJobIds = new Set(jobs.map(j => j.id));
         
         let total = 0;
         Object.entries(counts as Record<string, number>).forEach(([id, count]) => {

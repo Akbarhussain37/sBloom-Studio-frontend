@@ -4,7 +4,7 @@ import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import { LoadingSpinner } from '../../components/ui/LoadingSpinner';
 import JobChatBox from '../../components/dashboard/JobChatBox';
-import { FiFileText, FiClock, FiCheck, FiSearch, FiMessageSquare } from 'react-icons/fi';
+import { FiFileText, FiSearch, FiMessageSquare } from 'react-icons/fi';
 import type { Database } from '../../types/database.types';
 import { fetchUnreadCounts } from '../../lib/api';
 

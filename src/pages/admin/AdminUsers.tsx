@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { FiUsers, FiEdit2, FiCheck, FiX } from 'react-icons/fi';
+import { FiEdit2, FiCheck, FiX } from 'react-icons/fi';
 import type { Database } from '../../types/database.types';
 
 type Profile = Database['public']['Tables']['profile_studio']['Row'];
@@ -33,6 +33,7 @@ export default function AdminUsers() {
     if (!selectedRole) return;
     
     try {
+      // @ts-expect-error - role update type mismatch
       const { error } = await supabase
         .from('profile_studio')
         .update({ role: selectedRole as Role })

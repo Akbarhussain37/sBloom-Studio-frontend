@@ -43,7 +43,7 @@ export default function DashboardHeader({ onMenuClick, title = 'Dashboard' }: He
         }
 
         // Fetch recent notifications
-        const { data: messages, error } = await supabase
+        const { data, error } = await supabase
           .from('messages_studio')
           .select('*')
           .eq('is_read', false)
@@ -53,17 +53,21 @@ export default function DashboardHeader({ onMenuClick, title = 'Dashboard' }: He
 
         if (error) throw error;
 
-        if (messages && messages.length > 0) {
+        const messages = (data as any[]) || [];
+
+        if (messages.length > 0) {
           const jobIds = [...new Set(messages.map(m => m.job_id))];
           
-          const { data: jobs } = await supabase
+          const { data: jobsData } = await supabase
             .from('production_jobs_studio')
             .select('id, media_asset_id, media_assets_studio(file_name)')
             .in('id', jobIds);
             
+          const jobs = (jobsData as any[]) || [];
+            
           const mappedMessages = messages.map(msg => ({
             ...msg,
-            production_jobs_studio: jobs?.find(j => j.id === msg.job_id) || null
+            production_jobs_studio: jobs.find(j => j.id === msg.job_id) || null
           }));
           
           setNotifications(mappedMessages);

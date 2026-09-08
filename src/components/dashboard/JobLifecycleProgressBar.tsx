@@ -1,6 +1,5 @@
 
 import { UploadCloud, Scissors, CheckCircle, Check } from 'lucide-react';
-import type { Database } from '../../types/database.types';
 
 interface Props {
   completionPercentage: number;
