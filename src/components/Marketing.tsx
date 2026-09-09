@@ -77,17 +77,17 @@ export default function Marketing() {
             <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-[0_40px_100px_rgba(0,0,0,0.6)] relative overflow-hidden group">
               
               {/* Subtle glow effect behind form */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-brand-red/10 blur-[60px] pointer-events-none rounded-full"></div>
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-brand-primary/10 blur-[60px] pointer-events-none rounded-full"></div>
               
               <div className="relative z-10 text-center mb-10">
-                <h3 className="text-sm font-bold text-brand-red uppercase tracking-[0.2em] mb-4">Early-Bird Access</h3>
+                <h3 className="text-sm font-bold text-brand-primary uppercase tracking-[0.2em] mb-4">Early-Bird Access</h3>
                 <h2 className="text-3xl md:text-4xl font-heading font-bold text-white">Reserve Your Spot</h2>
               </div>
               
               <form className="relative z-10 flex flex-col gap-6 w-full" onSubmit={handleSubmit}>
                 
                 <div className="flex flex-col gap-2 group/input text-left">
-                  <label htmlFor="name" className="text-[10px] font-bold text-gray-400 uppercase tracking-widest group-focus-within/input:text-brand-red transition-colors">Full Name</label>
+                  <label htmlFor="name" className="text-[10px] font-bold text-gray-400 uppercase tracking-widest group-focus-within/input:text-brand-primary transition-colors">Full Name</label>
                   <input 
                     type="text" 
                     id="name" 
@@ -96,12 +96,12 @@ export default function Marketing() {
                     onChange={(e) => setName(e.target.value)}
                     disabled={loading}
                     placeholder="Enter your name" 
-                    className="w-full bg-black/20 border border-white/10 rounded-xl text-white text-lg px-5 py-4 placeholder-white/30 focus:outline-none focus:border-brand-red focus:bg-black/40 transition-all"
+                    className="w-full bg-black/20 border border-white/10 rounded-xl text-white text-lg px-5 py-4 placeholder-white/30 focus:outline-none focus:border-brand-primary focus:bg-black/40 transition-all"
                   />
                 </div>
                 
                 <div className="flex flex-col gap-2 group/input text-left">
-                  <label htmlFor="email" className="text-[10px] font-bold text-gray-400 uppercase tracking-widest group-focus-within/input:text-brand-red transition-colors">Email Address</label>
+                  <label htmlFor="email" className="text-[10px] font-bold text-gray-400 uppercase tracking-widest group-focus-within/input:text-brand-primary transition-colors">Email Address</label>
                   <input 
                     type="email" 
                     id="email" 
@@ -110,12 +110,12 @@ export default function Marketing() {
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
                     placeholder="Enter your email" 
-                    className="w-full bg-black/20 border border-white/10 rounded-xl text-white text-lg px-5 py-4 placeholder-white/30 focus:outline-none focus:border-brand-red focus:bg-black/40 transition-all"
+                    className="w-full bg-black/20 border border-white/10 rounded-xl text-white text-lg px-5 py-4 placeholder-white/30 focus:outline-none focus:border-brand-primary focus:bg-black/40 transition-all"
                   />
                 </div>
                 
                 <div className="flex flex-col gap-2 group/input text-left">
-                  <label htmlFor="projectType" className="text-[10px] font-bold text-gray-400 uppercase tracking-widest group-focus-within/input:text-brand-red transition-colors">Project Type</label>
+                  <label htmlFor="projectType" className="text-[10px] font-bold text-gray-400 uppercase tracking-widest group-focus-within/input:text-brand-primary transition-colors">Project Type</label>
                   <div className="relative">
                     <select 
                       id="projectType" 
@@ -123,14 +123,14 @@ export default function Marketing() {
                       value={projectType}
                       onChange={(e) => setProjectType(e.target.value)}
                       disabled={loading}
-                      className="w-full bg-black/20 border border-white/10 rounded-xl text-white text-lg px-5 py-4 focus:outline-none focus:border-brand-red focus:bg-black/40 transition-all appearance-none cursor-pointer"
+                      className="w-full bg-black/20 border border-white/10 rounded-xl text-white text-lg px-5 py-4 focus:outline-none focus:border-brand-primary focus:bg-black/40 transition-all appearance-none cursor-pointer"
                     >
                       <option value="" disabled className="bg-navy text-gray-400">Select an option...</option>
                       <option value="editing" className="bg-navy">Video Editing (Level 1)</option>
                       <option value="podcast" className="bg-navy">Podcast Recording (Level 2)</option>
                       <option value="production" className="bg-navy">Full Production (Level 3)</option>
                     </select>
-                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-white/50 group-focus-within/input:text-brand-red transition-colors">
+                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-white/50 group-focus-within/input:text-brand-primary transition-colors">
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
@@ -142,7 +142,7 @@ export default function Marketing() {
                   <button 
                     type="submit" 
                     disabled={loading}
-                    className="w-full flex justify-center items-center bg-brand-red hover:bg-[#c9184c] text-white font-bold py-5 px-10 rounded-xl uppercase tracking-[0.15em] text-xs transition-all duration-300 shadow-[0_0_20px_rgba(222,27,84,0.3)] hover:shadow-[0_0_30px_rgba(222,27,84,0.5)] hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed"
+                    className="w-full flex justify-center items-center bg-brand-primary hover:bg-[#c9184c] text-white font-bold py-5 px-10 rounded-xl uppercase tracking-[0.15em] text-xs transition-all duration-300 shadow-[0_0_20px_rgba(222,27,84,0.3)] hover:shadow-[0_0_30px_rgba(222,27,84,0.5)] hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed"
                   >
                     {loading ? (
                       <LoadingSpinner className="w-5 h-5 border-white" />
@@ -155,7 +155,7 @@ export default function Marketing() {
                     <p className="text-green-400 text-sm mt-4 font-medium tracking-wide animate-pulse">{status}</p>
                   )}
                   {error && (
-                    <p className="text-brand-red text-sm mt-4 font-medium tracking-wide animate-pulse">{error}</p>
+                    <p className="text-brand-primary text-sm mt-4 font-medium tracking-wide animate-pulse">{error}</p>
                   )}
                 </div>
               </form>

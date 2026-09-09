@@ -62,18 +62,18 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F9FC] font-body flex flex-col relative">
+    <div className="min-h-screen bg-white font-body flex flex-col relative">
       {/* Top Navigation */}
       <div className="w-full px-6 md:px-12 py-6 flex justify-between items-center absolute top-0 left-0">
         <Link 
           to="/" 
-          className="flex items-center gap-2 text-brand-red font-bold text-sm tracking-wide hover:opacity-80 transition-opacity uppercase"
+          className="flex items-center gap-2 text-brand-primary font-bold text-sm tracking-wide hover:opacity-80 transition-opacity uppercase"
         >
           <FiArrowLeft className="text-lg" />
           Back to Home
         </Link>
         <Link to="/" className="font-heading font-bold text-xl tracking-wide text-slate-900">
-          <span className="text-brand-red">s</span>Bloom Studio
+          <span className="text-brand-primary">s</span>BLOOM
         </Link>
       </div>
 
@@ -86,7 +86,7 @@ export default function Login() {
           className="w-full max-w-[540px] bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-8 md:p-12"
         >
           <div className="text-center mb-8">
-            <p className="text-brand-red text-xs font-bold uppercase tracking-[0.2em] mb-4">
+            <p className="text-brand-primary text-xs font-bold uppercase tracking-[0.2em] mb-4">
               Studio Portal
             </p>
             <h2 className="text-3xl font-extrabold text-slate-900 mb-3">
@@ -103,7 +103,7 @@ export default function Login() {
             {/* Email Field */}
             <div>
               <label htmlFor="email" className="block text-sm font-bold text-slate-800 mb-2">
-                Registered Mail <span className="text-brand-red">*</span>
+                Registered Mail <span className="text-brand-primary">*</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -117,7 +117,7 @@ export default function Login() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red sm:text-sm transition-all"
+                  className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary sm:text-sm transition-all"
                   placeholder="name@gmail.com"
                   disabled={loading}
                 />
@@ -127,7 +127,7 @@ export default function Login() {
             {/* Password Field */}
             <div>
               <label htmlFor="password" className="block text-sm font-bold text-slate-800 mb-2">
-                Password <span className="text-brand-red">*</span>
+                Password <span className="text-brand-primary">*</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -141,7 +141,7 @@ export default function Login() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red sm:text-sm transition-all font-mono"
+                  className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary sm:text-sm transition-all font-mono"
                   placeholder="••••••••••••"
                   disabled={loading}
                 />
@@ -155,7 +155,7 @@ export default function Login() {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-brand-red focus:ring-brand-red border-slate-300 rounded cursor-pointer"
+                  className="h-4 w-4 text-brand-primary focus:ring-brand-primary border-slate-300 rounded cursor-pointer"
                   disabled={loading}
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-slate-500 cursor-pointer">
@@ -167,7 +167,7 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="font-semibold text-brand-red hover:text-[#DE1B54]"
+                  className="font-semibold text-brand-primary hover:text-[#DE1B54]"
                   disabled={loading}
                 >
                   {showPassword ? 'Hide Password' : 'Show Password'}
@@ -180,7 +180,7 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center items-center gap-2 py-4 px-4 border border-transparent rounded-xl shadow-sm text-base font-bold text-white bg-brand-red hover:bg-[#F02865] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-red transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full flex justify-center items-center gap-2 py-4 px-4 border border-transparent rounded-xl shadow-sm text-base font-bold text-white bg-brand-primary hover:bg-[#F02865] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <LoadingSpinner className="text-white w-6 h-6 border-white" />
@@ -192,7 +192,7 @@ export default function Login() {
             
             <p className="mt-6 text-center text-sm text-slate-500">
               Don't have an account?{' '}
-              <Link to="/register" className="font-semibold text-brand-red hover:text-[#DE1B54]">
+              <Link to="/register" className="font-semibold text-brand-primary hover:text-[#DE1B54]">
                 Sign up
               </Link>
             </p>

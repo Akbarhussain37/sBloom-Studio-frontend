@@ -67,25 +67,21 @@ export default function DashboardOverview() {
   return (
     <div className="space-y-8">
       {/* Hero Section */}
-      <div className={`flex flex-col md:flex-row md:items-end justify-between gap-4 rounded-[2rem] p-8 md:p-10 text-white shadow-lg
-        ${profile?.role === 'kid' ? 'bg-gradient-to-br from-[#FFD500] via-[#FF5E00] to-[#00A3FF] shadow-[0_8px_30px_rgba(255,94,0,0.2)]' : 
-          profile?.role === 'doctor' ? 'bg-gradient-to-br from-teal-600 to-emerald-500 shadow-[0_8px_30px_rgba(20,184,166,0.2)]' : 
-          'bg-gradient-to-br from-brand-red to-[#F02865] shadow-[0_8px_30px_rgb(222,27,84,0.2)]'}`}
-      >
-        <div>
-          <h2 className="text-3xl md:text-4xl font-extrabold font-heading mb-2">
-            Welcome back, {profile?.full_name?.split(' ')[0]} 👋
+      <div className="relative flex flex-col md:flex-row md:items-end justify-between gap-4 rounded-[2rem] p-8 md:p-10 text-white shadow-lg bg-[var(--color-hero-bg)] overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        
+        <div className="relative z-10">
+          <h2 className="text-3xl md:text-4xl font-extrabold font-heading mb-2 text-white">
+            Welcome back, <span className="text-[var(--color-hero-text)]">{profile?.full_name?.split(' ')[0]}</span>!
           </h2>
-          <p className="text-white/90 max-w-md font-medium">
+          <p className="text-slate-400 max-w-md font-medium text-sm mt-4">
             {profile?.role === 'kid' ? "Let's make some awesome magic videos!" : 
              profile?.role === 'doctor' ? "Manage your patient education content and professional videos." :
              "Manage your content and production from one place."}
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row gap-3">
-          <button className={`px-6 py-3 bg-white rounded-xl font-bold hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 shadow-sm
-            ${profile?.role === 'kid' ? 'text-[#FF5E00]' : profile?.role === 'doctor' ? 'text-teal-700' : 'text-brand-red'}`}
-          >
+        <div className="relative z-10 flex flex-col sm:flex-row gap-3">
+          <button className="px-6 py-3 bg-[#242940] rounded-xl font-bold text-white hover:bg-[#2A304B] transition-colors flex items-center justify-center gap-2 border border-white/10 shadow-sm">
             <FiFolder className="text-lg" /> 
             {profile?.role === 'kid' ? 'Start New Magic Video' : 
              profile?.role === 'doctor' ? 'New Patient Video' : 
@@ -93,7 +89,7 @@ export default function DashboardOverview() {
           </button>
           <button 
             onClick={handleUploadClick}
-            className="px-6 py-3 bg-black/20 backdrop-blur-sm text-white rounded-xl font-bold hover:bg-black/30 transition-colors flex items-center justify-center gap-2 border border-white/10"
+            className="px-6 py-3 bg-[var(--color-sidebar-active)] text-white rounded-xl font-bold hover:bg-violet-600 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-violet-500/20"
           >
             <FiPlus className="text-lg" />
             {profile?.role === 'kid' ? 'Upload Clips' :
@@ -110,24 +106,32 @@ export default function DashboardOverview() {
           value={loading ? '-' : stats.totalVideos} 
           icon={<FiVideo className="text-xl" />} 
           delay={0.1}
+          iconColor="text-emerald-500"
+          iconBgColor="bg-emerald-50"
         />
         <StatsCard 
           title="In Production"
           value={loading ? '-' : stats.inProduction} 
           icon={<FiClock className="text-xl" />} 
           delay={0.2}
+          iconColor="text-red-500"
+          iconBgColor="bg-red-50"
         />
         <StatsCard 
           title="Ready for Review"
           value={loading ? '-' : stats.readyForReview} 
           icon={<FiCheckCircle className="text-xl" />} 
           delay={0.3}
+          iconColor="text-orange-500"
+          iconBgColor="bg-orange-50"
         />
         <StatsCard 
           title="Completed"
           value={loading ? '-' : stats.completed} 
           icon={<FiVideo className="text-xl" />} 
           delay={0.4}
+          iconColor="text-violet-500"
+          iconBgColor="bg-violet-50"
         />
       </div>
 

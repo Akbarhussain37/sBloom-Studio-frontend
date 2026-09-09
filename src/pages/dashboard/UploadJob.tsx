@@ -143,7 +143,7 @@ export default function UploadJob() {
             </button>
             <Link 
               to="/dashboard"
-              className="px-6 py-3 bg-brand-red text-white rounded-xl font-bold hover:bg-[#F02865] transition-colors shadow-sm"
+              className="px-6 py-3 bg-brand-primary text-white rounded-xl font-bold hover:bg-[#F02865] transition-colors shadow-sm"
             >
               Back to Dashboard
             </Link>
@@ -176,7 +176,7 @@ export default function UploadJob() {
           {/* Upload Zone */}
           <div>
             <label className="block text-sm font-bold text-slate-800 mb-3">
-              Raw Footage or Images <span className="text-brand-red">*</span>
+              Raw Footage or Images <span className="text-brand-primary">*</span>
             </label>
             <div 
               onDragOver={handleDragOver}
@@ -184,7 +184,7 @@ export default function UploadJob() {
               onDrop={handleDrop}
               className={`border-2 border-dashed rounded-2xl p-10 text-center transition-all ${
                 isDragging 
-                  ? 'border-brand-red bg-red-50/50' 
+                  ? 'border-brand-primary bg-red-50/50' 
                   : files.length > 0 ? 'border-green-200 bg-green-50/30' : 'border-slate-200 hover:bg-slate-50 hover:border-slate-300'
               }`}
             >
@@ -205,7 +205,7 @@ export default function UploadJob() {
                         <button 
                           type="button" 
                           onClick={(e) => { e.preventDefault(); handleRemoveFile(index); }}
-                          className="text-xs font-bold text-brand-red hover:underline shrink-0"
+                          className="text-xs font-bold text-brand-primary hover:underline shrink-0"
                         >
                           Remove
                         </button>
@@ -257,7 +257,7 @@ export default function UploadJob() {
           {/* Instructions */}
           <div>
             <label htmlFor="instructions" className="block text-sm font-bold text-slate-800 mb-3">
-              Editing Instructions <span className="text-brand-red">*</span>
+              Editing Instructions <span className="text-brand-primary">*</span>
             </label>
             <div className="relative">
               <div className="absolute top-4 left-4 pointer-events-none">
@@ -269,7 +269,7 @@ export default function UploadJob() {
                 value={instructions}
                 onChange={(e) => setInstructions(e.target.value)}
                 placeholder="E.g. Add bold captions, cut out the pauses, and put a trendy background track..."
-                className="w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-2xl bg-[#F7F9FC] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red text-sm transition-all resize-none min-h-[150px]"
+                className="w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-2xl bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary text-sm transition-all resize-none min-h-[150px]"
               />
             </div>
             <p className="text-xs text-slate-500 mt-2 ml-1">
@@ -280,7 +280,7 @@ export default function UploadJob() {
           {/* Requirements */}
           <div>
             <label htmlFor="requirements" className="block text-sm font-bold text-slate-800 mb-3">
-              Job Requirements <span className="text-brand-red">*</span>
+              Job Requirements <span className="text-brand-primary">*</span>
             </label>
             <div className="relative">
               <div className="absolute top-4 left-4 pointer-events-none">
@@ -292,7 +292,7 @@ export default function UploadJob() {
                 value={requirements}
                 onChange={(e) => setRequirements(e.target.value)}
                 placeholder="List specific requirements (e.g. 1080p, final duration < 1m, brand colors...)"
-                className="w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-2xl bg-[#F7F9FC] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red text-sm transition-all resize-none min-h-[100px]"
+                className="w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-2xl bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary text-sm transition-all resize-none min-h-[100px]"
               />
             </div>
           </div>
@@ -302,7 +302,7 @@ export default function UploadJob() {
             <button
               type="submit"
               disabled={files.length === 0 || !instructions.trim() || isUploading}
-              className="px-8 py-3.5 bg-brand-red text-white font-bold rounded-xl hover:bg-[#F02865] transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="px-8 py-3.5 bg-brand-primary text-white font-bold rounded-xl hover:bg-[#F02865] transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               {isUploading ? (
                 <><LoadingSpinner className="w-5 h-5 text-white border-white" /> Uploading...</>

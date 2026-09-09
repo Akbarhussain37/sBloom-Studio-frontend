@@ -325,7 +325,7 @@ export default function AdminJobLifecycle() {
                             className={`flex items-center gap-1.5 text-xs font-semibold w-max px-2 py-1 rounded-md border transition-colors cursor-pointer ${
                               isImage(doc.file_name) 
                               ? 'text-purple-600 bg-purple-50 border-purple-100 hover:bg-purple-100'
-                              : 'text-brand-red bg-red-50 border-red-100 hover:bg-red-100'
+                              : 'text-brand-primary bg-red-50 border-red-100 hover:bg-red-100'
                             }`}
                           >
                             {isImage(doc.file_name) ? <><FiImage /> View Image</> : <><FiPlayCircle /> Play Video</>}
@@ -362,7 +362,7 @@ export default function AdminJobLifecycle() {
                       <div className="mt-2 pt-2 border-t border-slate-100">
                         <label className="block text-xs font-bold text-slate-500 mb-1">Assign Editor:</label>
                         <select 
-                          className="w-full text-xs p-1.5 border border-slate-200 rounded-lg focus:ring-1 focus:ring-brand-red"
+                          className="w-full text-xs p-1.5 border border-slate-200 rounded-lg focus:ring-1 focus:ring-brand-primary"
                           value={doc.editor_id || ''}
                           onChange={(e) => handleAssignEditor(doc, e.target.value)}
                         >
@@ -414,14 +414,14 @@ export default function AdminJobLifecycle() {
                           max="100" 
                           value={sliders[doc.doc_id] || 0} 
                           onChange={(e) => setSliders({...sliders, [doc.doc_id]: parseInt(e.target.value)})}
-                          className="w-full accent-brand-red"
+                          className="w-full accent-brand-primary"
                         />
                       </div>
                       
                       <div>
                         <label className="block text-xs font-bold text-slate-600 mb-1">Admin Comments</label>
                         <textarea 
-                          className="w-full text-xs p-2 border border-slate-200 rounded-lg focus:ring-1 focus:ring-brand-red resize-none"
+                          className="w-full text-xs p-2 border border-slate-200 rounded-lg focus:ring-1 focus:ring-brand-primary resize-none"
                           rows={2}
                           placeholder="Leave feedback for the user..."
                           value={comments[doc.doc_id] || ''}

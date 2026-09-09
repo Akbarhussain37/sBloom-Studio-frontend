@@ -29,7 +29,7 @@ const ROLE_CONFIG = {
   admin: {
     greeting: "Admin mode active. Test the script generation pipeline.",
     genres: ['Promo Video', 'Feature Announcement', 'Studio Update'],
-    systemPrompt: "You are a professional scriptwriter for sBloom Studio's internal marketing."
+    systemPrompt: "You are a professional scriptwriter for sBLOOM's internal marketing."
   }
 };
 
@@ -100,7 +100,7 @@ export default function ScriptAssistant() {
       {/* Header */}
       <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-white z-10">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-red to-[#F02865] flex items-center justify-center shadow-md">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-primary to-[#F02865] flex items-center justify-center shadow-md">
             <FiCommand className="text-white text-xl" />
           </div>
           <div>
@@ -111,7 +111,7 @@ export default function ScriptAssistant() {
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar bg-[#F7F9FC]">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar bg-white">
         <AnimatePresence initial={false}>
           {messages.map((msg) => (
             <motion.div
@@ -129,7 +129,7 @@ export default function ScriptAssistant() {
                   {msg.role === 'user' ? (
                      <div className="text-white text-xs font-bold">{profile?.full_name?.charAt(0) || 'U'}</div>
                   ) : (
-                    <FiCommand className="text-brand-red text-sm" />
+                    <FiCommand className="text-brand-primary text-sm" />
                   )}
                 </div>
 
@@ -164,7 +164,7 @@ export default function ScriptAssistant() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
              <div className="flex gap-3 flex-row">
                 <div className="w-8 h-8 rounded-full bg-white border border-slate-200 flex-shrink-0 flex items-center justify-center mt-1 shadow-sm">
-                  <FiCommand className="text-brand-red text-sm" />
+                  <FiCommand className="text-brand-primary text-sm" />
                 </div>
                 <div className="px-5 py-4 rounded-2xl bg-white border border-slate-100 rounded-tl-sm flex items-center gap-1.5 shadow-sm">
                   <div className="w-2 h-2 bg-slate-300 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
@@ -187,7 +187,7 @@ export default function ScriptAssistant() {
               <button
                 key={genre}
                 onClick={() => handleSend(`Write a script for a ${genre}`)}
-                className="px-4 py-1.5 rounded-full border border-slate-200 bg-[#F7F9FC] text-slate-600 text-xs font-semibold hover:border-brand-red hover:text-brand-red transition-colors whitespace-nowrap"
+                className="px-4 py-1.5 rounded-full border border-slate-200 bg-white text-slate-600 text-xs font-semibold hover:border-brand-primary hover:text-brand-primary transition-colors whitespace-nowrap"
               >
                 + {genre}
               </button>
@@ -203,7 +203,7 @@ export default function ScriptAssistant() {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Describe the video you want to make..."
-            className="w-full bg-[#F7F9FC] border border-slate-200 rounded-2xl pl-5 pr-14 py-4 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red transition-all resize-none custom-scrollbar"
+            className="w-full bg-white border border-slate-200 rounded-2xl pl-5 pr-14 py-4 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary transition-all resize-none custom-scrollbar"
             rows={1}
             style={{ minHeight: '56px', maxHeight: '150px' }}
             onKeyDown={(e) => {
@@ -216,7 +216,7 @@ export default function ScriptAssistant() {
           <button
             type="submit"
             disabled={!inputValue.trim() || isTyping}
-            className="absolute right-2 bottom-2 p-2.5 bg-brand-red text-white rounded-xl hover:bg-[#F02865] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+            className="absolute right-2 bottom-2 p-2.5 bg-brand-primary text-white rounded-xl hover:bg-[#F02865] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
           >
             <FiSend className="text-lg" />
           </button>

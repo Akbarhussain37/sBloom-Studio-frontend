@@ -169,7 +169,7 @@ export default function JobChatBox({ jobId, currentUserId, chatType = 'public' }
     
     return parts.map((part, i) => {
       if (part.match(mentionRegex)) {
-        return <span key={i} className="bg-brand-red/10 text-brand-red px-1 py-0.5 rounded font-medium">{part}</span>;
+        return <span key={i} className="bg-brand-primary/10 text-brand-primary px-1 py-0.5 rounded font-medium">{part}</span>;
       }
       return <span key={i}>{part}</span>;
     });
@@ -268,7 +268,7 @@ export default function JobChatBox({ jobId, currentUserId, chatType = 'public' }
         )}
         
         <form onSubmit={handleSendMessage} className="flex gap-3 items-end max-w-5xl mx-auto">
-          <div className="flex-1 flex items-center bg-white border border-slate-200 rounded-full px-2 py-1.5 focus-within:ring-2 focus-within:ring-brand-red/20 focus-within:border-brand-red transition-all shadow-sm">
+          <div className="flex-1 flex items-center bg-white border border-slate-200 rounded-full px-2 py-1.5 focus-within:ring-2 focus-within:ring-brand-primary/20 focus-within:border-brand-primary transition-all shadow-sm">
             <button type="button" className="p-2 text-slate-400 hover:text-slate-600 transition-colors">
               <Paperclip className="w-5 h-5" />
             </button>
@@ -290,7 +290,7 @@ export default function JobChatBox({ jobId, currentUserId, chatType = 'public' }
           <button
             type="submit"
             disabled={!newMessage.trim()}
-            className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-brand-red text-white hover:bg-red-700 disabled:opacity-50 transition-all shadow-sm"
+            className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-brand-primary text-white hover:bg-red-700 disabled:opacity-50 transition-all shadow-sm"
           >
             <Send className="w-5 h-5" />
           </button>

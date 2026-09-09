@@ -3,14 +3,14 @@ import { FiMapPin, FiPhone, FiMail, FiClock } from 'react-icons/fi';
 
 export default function Contact() {
   return (
-    <div className="min-h-screen bg-[#F7F9FC] relative overflow-hidden font-body pt-32 pb-24">
+    <div className="min-h-screen bg-white relative overflow-hidden font-body pt-32 pb-24">
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-brand-red font-bold uppercase tracking-[0.2em] text-sm mb-4"
+            className="text-brand-primary font-bold uppercase tracking-[0.2em] text-sm mb-4"
           >
             STUDIO DESK
           </motion.p>
@@ -21,7 +21,7 @@ export default function Contact() {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 font-heading"
           >
-            Get in Touch with sBloom Studio.
+            Get in Touch with sBLOOM.
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -45,7 +45,7 @@ export default function Contact() {
           >
             {/* Address */}
             <div className="flex gap-6">
-              <div className="w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center flex-shrink-0 text-brand-red">
+              <div className="w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center flex-shrink-0 text-brand-primary">
                 <FiMapPin className="text-2xl" />
               </div>
               <div>
@@ -60,7 +60,7 @@ export default function Contact() {
 
             {/* Phone */}
             <div className="flex gap-6">
-              <div className="w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center flex-shrink-0 text-brand-red">
+              <div className="w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center flex-shrink-0 text-brand-primary">
                 <FiPhone className="text-2xl" />
               </div>
               <div>
@@ -71,7 +71,7 @@ export default function Contact() {
 
             {/* Email */}
             <div className="flex gap-6">
-              <div className="w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center flex-shrink-0 text-brand-red">
+              <div className="w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center flex-shrink-0 text-brand-primary">
                 <FiMail className="text-2xl" />
               </div>
               <div>
@@ -83,7 +83,7 @@ export default function Contact() {
 
             {/* Hours */}
             <div className="flex gap-6">
-              <div className="w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center flex-shrink-0 text-brand-red">
+              <div className="w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center flex-shrink-0 text-brand-primary">
                 <FiClock className="text-2xl" />
               </div>
               <div>
@@ -110,7 +110,7 @@ export default function Contact() {
               className="absolute inset-0 z-10 cursor-pointer"
               aria-label="Open location in Google Maps"
             >
-              <div className="absolute inset-0 bg-brand-red/0 group-hover:bg-brand-red/5 transition-colors rounded-[1.5rem] m-4"></div>
+              <div className="absolute inset-0 bg-brand-primary/0 group-hover:bg-brand-primary/5 transition-colors rounded-[1.5rem] m-4"></div>
             </a>
 
             <iframe
@@ -119,7 +119,7 @@ export default function Contact() {
               allowFullScreen={true}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="sBloom Studio Location"
+              title="sBLOOM Location"
             ></iframe>
           </motion.div>
         </div>

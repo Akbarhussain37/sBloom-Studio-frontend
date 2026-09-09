@@ -124,7 +124,7 @@ export default function MediaLibrary() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="bg-[#F7F9FC] border border-slate-200 rounded-xl p-1 flex">
+          <div className="bg-white border border-slate-200 rounded-xl p-1 flex">
             <button 
               onClick={() => setFilter('all')}
               className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors ${filter === 'all' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
@@ -158,7 +158,7 @@ export default function MediaLibrary() {
         onDelete={handleDelete}
         onDownload={handleDownload}
         emptyState={
-          <div className="py-20 text-center bg-[#F7F9FC] rounded-[2rem] border border-dashed border-slate-300">
+          <div className="py-20 text-center bg-white rounded-[2rem] border border-dashed border-slate-300">
             <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center mx-auto mb-4 text-slate-400">
               <FiFolder className="text-2xl" />
             </div>
@@ -166,7 +166,7 @@ export default function MediaLibrary() {
             <p className="text-slate-500 mb-6 text-sm max-w-sm mx-auto">Upload your first video or image to get started with production.</p>
             <button 
               onClick={() => window.document.querySelector<HTMLButtonElement>('button[title="Upload"]')?.click() /* A bit hacky, but triggers upload modal if we add an ID or trigger via layout */}
-              className="px-6 py-3 bg-brand-red text-white rounded-xl font-bold hover:bg-[#F02865] transition-colors flex items-center justify-center gap-2 mx-auto shadow-sm"
+              className="px-6 py-3 bg-brand-primary text-white rounded-xl font-bold hover:bg-[#F02865] transition-colors flex items-center justify-center gap-2 mx-auto shadow-sm"
             >
               <FiUploadCloud className="text-lg" /> Upload Content
             </button>

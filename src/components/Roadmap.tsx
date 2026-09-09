@@ -47,7 +47,7 @@ export default function Roadmap() {
 
               
               <h2 className="text-3xl lg:text-[2.5rem] font-heading font-extrabold mb-6 leading-[1.15] tracking-tight">
-                <span className="bg-clip-text text-transparent bg-gradient-to-br from-navy via-navy to-brand-red">
+                <span className="bg-clip-text text-transparent bg-gradient-to-br from-navy via-navy to-brand-primary">
                   The 3-Phase<br/>Studio Rollout
                 </span>
               </h2>
@@ -62,7 +62,7 @@ export default function Roadmap() {
                 <div className="absolute left-[23px] top-[24px] bottom-[24px] w-[2px] bg-gray-200 -z-10">
                   {/* Active Progress Line */}
                   <div 
-                    className="absolute top-0 left-0 w-full bg-brand-red transition-all duration-700 ease-in-out"
+                    className="absolute top-0 left-0 w-full bg-brand-primary transition-all duration-700 ease-in-out"
                     style={{ height: activePhase === 1 ? '0%' : activePhase === 2 ? '50%' : '100%' }}
                   ></div>
                 </div>
@@ -71,11 +71,11 @@ export default function Roadmap() {
                 <div className="flex items-center gap-4 transition-all duration-500">
                   <div className={`w-12 h-12 shrink-0 rounded-full flex items-center justify-center font-bold font-heading text-lg transition-all duration-500 ${
                     activePhase === 1 
-                      ? 'bg-brand-red text-white shadow-[0_0_20px_rgba(222,27,84,0.4)] ring-4 ring-brand-red/20' 
-                      : 'bg-brand-red text-white' 
+                      ? 'bg-brand-primary text-white shadow-[0_0_20px_rgba(222,27,84,0.4)] ring-4 ring-brand-primary/20' 
+                      : 'bg-brand-primary text-white' 
                   }`}>1</div>
                   <div className={`transition-opacity duration-500 ${activePhase > 1 ? 'opacity-40' : 'opacity-100'}`}>
-                    <span className={`block font-bold text-[10px] tracking-widest uppercase transition-colors ${activePhase === 1 ? 'text-brand-red' : 'text-gray-400'}`}>Phase One</span>
+                    <span className={`block font-bold text-[10px] tracking-widest uppercase transition-colors ${activePhase === 1 ? 'text-brand-primary' : 'text-gray-400'}`}>Phase One</span>
                     <span className={`font-heading text-sm font-bold transition-colors ${activePhase === 1 ? 'text-navy' : 'text-gray-500'}`}>The Editing Bay</span>
                   </div>
                 </div>
@@ -84,13 +84,13 @@ export default function Roadmap() {
                 <div className="flex items-center gap-4 transition-all duration-500">
                   <div className={`w-12 h-12 shrink-0 rounded-full flex items-center justify-center font-bold font-heading text-lg transition-all duration-500 ${
                     activePhase === 2 
-                      ? 'bg-brand-red text-white shadow-[0_0_20px_rgba(222,27,84,0.4)] ring-4 ring-brand-red/20' 
+                      ? 'bg-brand-primary text-white shadow-[0_0_20px_rgba(222,27,84,0.4)] ring-4 ring-brand-primary/20' 
                       : activePhase > 2
-                        ? 'bg-brand-red text-white' 
+                        ? 'bg-brand-primary text-white' 
                         : 'bg-white border-2 border-gray-200 text-gray-400' 
                   }`}>2</div>
                   <div className={`transition-opacity duration-500 ${activePhase < 2 ? 'opacity-40' : activePhase > 2 ? 'opacity-40' : 'opacity-100'}`}>
-                    <span className={`block font-bold text-[10px] tracking-widest uppercase transition-colors ${activePhase === 2 ? 'text-brand-red' : 'text-gray-400'}`}>Phase Two</span>
+                    <span className={`block font-bold text-[10px] tracking-widest uppercase transition-colors ${activePhase === 2 ? 'text-brand-primary' : 'text-gray-400'}`}>Phase Two</span>
                     <span className={`font-heading text-sm font-bold transition-colors ${activePhase === 2 ? 'text-navy' : 'text-gray-500'}`}>The Lounge</span>
                   </div>
                 </div>
@@ -99,11 +99,11 @@ export default function Roadmap() {
                 <div className="flex items-center gap-4 transition-all duration-500">
                   <div className={`w-12 h-12 shrink-0 rounded-full flex items-center justify-center font-bold font-heading text-lg transition-all duration-500 ${
                     activePhase === 3 
-                      ? 'bg-brand-red text-white shadow-[0_0_20px_rgba(222,27,84,0.4)] ring-4 ring-brand-red/20' 
+                      ? 'bg-brand-primary text-white shadow-[0_0_20px_rgba(222,27,84,0.4)] ring-4 ring-brand-primary/20' 
                       : 'bg-white border-2 border-gray-200 text-gray-400' 
                   }`}>3</div>
                   <div className={`transition-opacity duration-500 ${activePhase < 3 ? 'opacity-40' : 'opacity-100'}`}>
-                    <span className={`block font-bold text-[10px] tracking-widest uppercase transition-colors ${activePhase === 3 ? 'text-brand-red' : 'text-gray-400'}`}>Phase Three</span>
+                    <span className={`block font-bold text-[10px] tracking-widest uppercase transition-colors ${activePhase === 3 ? 'text-brand-primary' : 'text-gray-400'}`}>Phase Three</span>
                     <span className={`font-heading text-sm font-bold transition-colors ${activePhase === 3 ? 'text-navy' : 'text-gray-500'}`}>Full Studio</span>
                   </div>
                 </div>
@@ -123,14 +123,14 @@ export default function Roadmap() {
                   <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/40 to-[#0A0818]"></div>
                   
                   {/* Top Badge */}
-                  <div className="absolute top-8 right-8 bg-brand-red/90 backdrop-blur-md text-white text-xs font-bold px-4 py-2 rounded-full uppercase tracking-widest shadow-[0_0_20px_rgba(222,27,84,0.5)] border border-brand-red/50">
+                  <div className="absolute top-8 right-8 bg-brand-primary/90 backdrop-blur-md text-white text-xs font-bold px-4 py-2 rounded-full uppercase tracking-widest shadow-[0_0_20px_rgba(222,27,84,0.5)] border border-brand-primary/50">
                     Active / Open Now
                   </div>
 
                   {/* Content Panel */}
                   <div className="relative z-10 p-8 md:p-12 w-full mt-auto">
                     <h3 className="text-4xl md:text-5xl font-heading font-extrabold text-white tracking-tight mb-2">Level 1: The Editing Bay</h3>
-                    <p className="text-brand-red font-bold mb-6 text-sm uppercase tracking-[0.15em]">Structural Complete</p>
+                    <p className="text-brand-primary font-bold mb-6 text-sm uppercase tracking-[0.15em]">Structural Complete</p>
                     <p className="text-gray-300 text-lg mb-10 leading-relaxed font-light max-w-2xl">
                       A dedicated post-production hub designed to take existing footage and elevate it. The structural work is fully complete, providing a dust-free, professional environment.
                     </p>
@@ -138,7 +138,7 @@ export default function Roadmap() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
                       <div className="flex gap-4 items-start">
                         <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center shrink-0 border border-white/20">
-                          <svg className="w-5 h-5 text-brand-red" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                          <svg className="w-5 h-5 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                         </div>
                         <div>
                           <strong className="block text-white mb-1 font-heading text-lg tracking-wide">In-House Editors</strong>
@@ -147,7 +147,7 @@ export default function Roadmap() {
                       </div>
                       <div className="flex gap-4 items-start">
                         <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center shrink-0 border border-white/20">
-                          <svg className="w-5 h-5 text-brand-red" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                          <svg className="w-5 h-5 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                         </div>
                         <div>
                           <strong className="block text-white mb-1 font-heading text-lg tracking-wide">Frictionless Handoff</strong>
@@ -157,7 +157,7 @@ export default function Roadmap() {
                     </div>
                     
                     <div className="bg-white/5 backdrop-blur-xl p-6 rounded-2xl border border-white/10 flex items-start md:items-center gap-5 transition-all hover:bg-white/10 group/card">
-                      <div className="w-12 h-12 rounded-xl bg-brand-red flex items-center justify-center shrink-0 text-white shadow-lg group-hover/card:scale-110 transition-transform">
+                      <div className="w-12 h-12 rounded-xl bg-brand-primary flex items-center justify-center shrink-0 text-white shadow-lg group-hover/card:scale-110 transition-transform">
                         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />

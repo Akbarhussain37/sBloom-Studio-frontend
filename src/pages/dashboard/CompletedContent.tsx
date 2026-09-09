@@ -59,7 +59,7 @@ export default function CompletedContent() {
         onPreview={(asset) => navigate(`/dashboard/videos/${asset.id}`)}
         onDownload={handleDownload}
         emptyState={
-          <div className="py-20 text-center bg-[#F7F9FC] rounded-[2rem] border border-dashed border-slate-300">
+          <div className="py-20 text-center bg-white rounded-[2rem] border border-dashed border-slate-300">
             <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center mx-auto mb-4 text-green-500">
               <FiCheckCircle className="text-2xl" />
             </div>

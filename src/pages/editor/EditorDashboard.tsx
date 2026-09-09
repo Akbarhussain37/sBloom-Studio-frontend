@@ -4,7 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { LoadingSpinner } from '../../components/ui/LoadingSpinner';
 import JobLifecycleProgressBar from '../../components/dashboard/JobLifecycleProgressBar';
 import EditorJobChatBox from '../../components/dashboard/EditorJobChatBox';
-import { FiFileText, FiClock, FiCheck, FiDownload } from 'react-icons/fi';
+import { FiFileText, FiClock, FiCheck, FiDownload, FiUploadCloud } from 'react-icons/fi';
 
 type EditorJob = {
   id: string; // we will map doc_id to id
@@ -26,6 +26,7 @@ export default function EditorDashboard() {
   const [slider, setSlider] = useState(0);
   const [roleFilter, setRoleFilter] = useState<string>('all');
   const [chatType, setChatType] = useState<'public' | 'internal'>('public');
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     async function fetchJobs() {
@@ -113,10 +114,90 @@ export default function EditorDashboard() {
     }
   };
 
+  const handleReupload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !selectedJobId) return;
+
+    setUploading(true);
+    try {
+      const job = jobs.find(j => j.id === selectedJobId);
+      if (!job) throw new Error("Job not found");
+
+      const fileExt = file.name.split('.').pop();
+      const fileName = `edited_${Date.now()}.${fileExt}`;
+      const filePath = `edits/${job.id}/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('creator-content')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // Get media_asset_id
+      const { data: prodJobData, error: prodJobError } = await supabase
+        .from('production_jobs_studio')
+        .select('media_asset_id')
+        .eq('id', job.id)
+        .single();
+        
+      if (prodJobError) throw prodJobError;
+
+      // Update media_assets_studio
+      const { error: updateAssetError } = await supabase
+        .from('media_assets_studio')
+        .update({
+           storage_path: filePath, 
+           status: 'READY_FOR_REVIEW',
+           file_name: file.name
+        })
+        .eq('id', prodJobData.media_asset_id);
+
+      if (updateAssetError) throw updateAssetError;
+
+      // Update production_jobs_studio
+      const { error: updateJobError } = await supabase
+        .from('production_jobs_studio')
+        .update({
+           status: 'READY_FOR_REVIEW',
+           completion_percentage: 100
+        })
+        .eq('id', job.id);
+
+      if (updateJobError) throw updateJobError;
+
+      // Also tell backend to sync the progress 
+      await fetch('http://localhost:3000/api/sync-job-details', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fileName: job.media_assets_studio?.file_name,
+          completion_percentage: 100
+        })
+      });
+
+      alert('Successfully uploaded edited video!');
+      
+      setJobs(prev => prev.map(j => j.id === job.id ? { 
+        ...j, 
+        status: 'READY_FOR_REVIEW',
+        completion_percentage: 100,
+        media_assets_studio: { file_name: file.name }
+      } : j));
+      setSlider(100);
+      
+    } catch (err: any) {
+      console.error(err);
+      alert(`Upload failed: ${err.message}`);
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <LoadingSpinner className="w-8 h-8 border-brand-red border-t-transparent" />
+        <LoadingSpinner className="w-8 h-8 border-brand-primary border-t-transparent" />
       </div>
     );
   }
@@ -164,12 +245,12 @@ export default function EditorDashboard() {
                   onClick={() => setSelectedJobId(job.id)}
                   className={`w-full text-left p-3 rounded-xl transition-colors border ${
                     selectedJobId === job.id
-                      ? 'bg-red-50 border-brand-red shadow-sm'
+                      ? 'bg-red-50 border-brand-primary shadow-sm'
                       : 'bg-white border-transparent hover:bg-slate-50 hover:border-slate-200'
                   }`}
                 >
                   <div className="flex items-center gap-2 mb-1">
-                    <FiFileText className={selectedJobId === job.id ? 'text-brand-red' : 'text-slate-400'} />
+                    <FiFileText className={selectedJobId === job.id ? 'text-brand-primary' : 'text-slate-400'} />
                     <span className="font-semibold text-sm text-slate-900 truncate">
                       {job.media_assets_studio?.file_name || 'Untitled Job'}
                     </span>
@@ -182,7 +263,7 @@ export default function EditorDashboard() {
                     {job.status === 'COMPLETED' ? (
                        <FiCheck className="text-green-500" /> 
                     ) : (
-                       <FiClock className="text-brand-red" />
+                       <FiClock className="text-brand-primary" />
                     )}
                     <span className={job.status === 'COMPLETED' ? 'text-green-700' : 'text-slate-700'}>
                       {job.status}
@@ -211,15 +292,21 @@ export default function EditorDashboard() {
                       Client Role: {selectedJob.user_role === 'kid' ? 'Kid/Parent' : selectedJob.user_role === 'doctor' ? 'Doctor/Hospital' : 'Creator'}
                     </span>
                   </div>
-                  {selectedJob.file_id && (
-                    <a 
-                      href={`http://localhost:3000/api/documents/${selectedJob.file_id}/stream`} 
-                      download={selectedJob.media_assets_studio?.file_name || 'video.mp4'}
-                      className="flex items-center gap-1.5 text-slate-700 text-xs font-semibold bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-200 transition-colors"
-                    >
-                      <FiDownload /> Download Original
-                    </a>
-                  )}
+                  <div className="flex gap-2">
+                    {selectedJob.file_id && (
+                      <a 
+                        href={`http://localhost:3000/api/documents/${selectedJob.file_id}/stream`} 
+                        download={selectedJob.media_assets_studio?.file_name || 'video.mp4'}
+                        className="flex items-center gap-1.5 text-slate-700 text-xs font-semibold bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-200 transition-colors"
+                      >
+                        <FiDownload /> Download Original
+                      </a>
+                    )}
+                    <label className={`flex items-center gap-1.5 text-white text-xs font-semibold bg-brand-primary px-3 py-1.5 rounded-lg border border-transparent hover:bg-[#7C3AED] transition-colors cursor-pointer shadow-sm ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                      <FiUploadCloud /> {uploading ? 'Uploading...' : 'Upload Edited File'}
+                      <input type="file" className="hidden" onChange={handleReupload} disabled={uploading} />
+                    </label>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -246,7 +333,7 @@ export default function EditorDashboard() {
                     min="0" max="100" 
                     value={slider} 
                     onChange={(e) => setSlider(parseInt(e.target.value))}
-                    className="w-full accent-brand-red"
+                    className="w-full accent-brand-primary"
                   />
                   <div className="flex justify-end mt-4">
                     <button 
@@ -265,7 +352,7 @@ export default function EditorDashboard() {
               <div className="flex gap-4 border-b border-slate-200">
                 <button 
                   onClick={() => setChatType('public')}
-                  className={`pb-2 px-1 text-sm font-bold transition-colors ${chatType === 'public' ? 'text-brand-red border-b-2 border-brand-red' : 'text-slate-500 hover:text-slate-700'}`}
+                  className={`pb-2 px-1 text-sm font-bold transition-colors ${chatType === 'public' ? 'text-brand-primary border-b-2 border-brand-primary' : 'text-slate-500 hover:text-slate-700'}`}
                 >
                   Client Chat
                 </button>

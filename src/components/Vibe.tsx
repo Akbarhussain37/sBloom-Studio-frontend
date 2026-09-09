@@ -27,7 +27,7 @@ export default function Vibe() {
   return (
     <section className="bg-[#05040F] py-32 relative overflow-hidden" id="infrastructure">
       {/* Decorative background accent */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-red/5 blur-[120px] rounded-full pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
       
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 relative z-10">
         
@@ -36,7 +36,7 @@ export default function Vibe() {
           <div className="mb-16 md:mb-24 flex flex-col items-start">
 
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-white leading-[1.1] tracking-tight mb-6">
-              Technical <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-red to-[#F02865]">Infrastructure</span>
+              Technical <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-[#F02865]">Infrastructure</span>
             </h2>
             <p className="text-lg md:text-xl text-gray-400 font-light max-w-2xl leading-relaxed">
               We built a controlled environment so you can focus entirely on creation. Every technical requirement has been engineered into the physical space.
@@ -77,7 +77,7 @@ export default function Vibe() {
                     </p>
                     <div className="flex justify-end">
                       {/* Interactive Button matching brand colors */}
-                      <div className="w-10 h-10 rounded-full bg-brand-red text-white flex items-center justify-center transition-all duration-300 hover:bg-[#c9184c] group-hover:scale-110 shadow-md">
+                      <div className="w-10 h-10 rounded-full bg-brand-primary text-white flex items-center justify-center transition-all duration-300 hover:bg-[#c9184c] group-hover:scale-110 shadow-md">
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                         </svg>

@@ -34,7 +34,7 @@ export default function BeforeAfter() {
         <Reveal>
           <div className="max-w-4xl mx-auto text-center mb-12">
             <h2 className="text-4xl md:text-6xl lg:text-7xl font-heading font-extrabold text-navy leading-[1.1] tracking-tight mb-6">
-              From Raw Potential to <br className="hidden md:block" /><span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-red to-[#F02865]">Premium Asset</span>
+              From Raw Potential to <br className="hidden md:block" /><span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-[#F02865]">Premium Asset</span>
             </h2>
             <p className="text-base md:text-lg text-gray-500 leading-relaxed font-light max-w-2xl mx-auto">
               Don't let flat lighting or echoey audio ruin a great message. We take your raw footage and apply industry-standard post-production to ensure your brand looks, sounds, and feels authoritative.
@@ -56,7 +56,7 @@ export default function BeforeAfter() {
                 >
                   <div className="py-8 md:py-12 px-4 md:px-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="flex items-center gap-6 md:gap-12">
-                      <span className={`text-xl md:text-2xl font-bold font-heading tracking-widest transition-colors duration-500 ${isActive ? 'text-brand-red' : 'text-gray-300'}`}>
+                      <span className={`text-xl md:text-2xl font-bold font-heading tracking-widest transition-colors duration-500 ${isActive ? 'text-brand-primary' : 'text-gray-300'}`}>
                         {feature.num}
                       </span>
                       <h3 className={`text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold tracking-tight transition-colors duration-500 ${isActive ? 'text-navy' : 'text-gray-300'}`}>
@@ -64,7 +64,7 @@ export default function BeforeAfter() {
                       </h3>
                     </div>
                     <div className={`hidden md:block transition-transform duration-500 ${isActive ? '-rotate-180' : 'rotate-0'}`}>
-                      <svg className={`w-10 h-10 transition-colors duration-500 ${isActive ? 'text-brand-red' : 'text-gray-300'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className={`w-10 h-10 transition-colors duration-500 ${isActive ? 'text-brand-primary' : 'text-gray-300'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
                       </svg>
                     </div>
@@ -75,7 +75,7 @@ export default function BeforeAfter() {
                   >
                     <div className="flex flex-col md:flex-row gap-12 items-center px-4 md:px-8 pt-4">
                       <div className="w-full md:w-5/12">
-                        <div className="w-16 h-1 bg-brand-red mb-8"></div>
+                        <div className="w-16 h-1 bg-brand-primary mb-8"></div>
                         <p className="text-xl text-gray-500 leading-relaxed font-light">
                           {feature.desc}
                         </p>
@@ -110,10 +110,10 @@ export default function BeforeAfter() {
             </div>
             
             {/* Polished Image */}
-            <div className="absolute top-0 left-0 h-full border-r border-brand-red/50 shadow-[5px_0_25px_rgba(222,27,84,0.3)] overflow-hidden" style={{ width: `${sliderValue}%` }}>
+            <div className="absolute top-0 left-0 h-full border-r border-brand-primary/50 shadow-[5px_0_25px_rgba(222,27,84,0.3)] overflow-hidden" style={{ width: `${sliderValue}%` }}>
               <img src="/assets/images/polished.png" alt="Polished color graded footage" className="absolute top-0 left-0 w-[100vw] max-w-[1400px] h-full object-cover object-left" />
               <div className="absolute top-8 right-8" style={{ transform: `translateX(calc(100vw * (100 - ${sliderValue}) / 100))` }}>
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-brand-red/90 text-white text-xs rounded-full font-bold backdrop-blur-xl border border-brand-red tracking-wider uppercase shadow-[0_0_20px_rgba(222,27,84,0.5)]">
+                <span className="inline-flex items-center gap-2 px-4 py-2 bg-brand-primary/90 text-white text-xs rounded-full font-bold backdrop-blur-xl border border-brand-primary tracking-wider uppercase shadow-[0_0_20px_rgba(222,27,84,0.5)]">
                   <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span> Polished Asset
                 </span>
               </div>
@@ -133,7 +133,7 @@ export default function BeforeAfter() {
               value={sliderValue} 
               onChange={(e) => setSliderValue(Number(e.target.value))}
               aria-label="Compare raw and polished video"
-              className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize comparison-slider-input z-30 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-red focus-visible:opacity-100 transition-opacity" 
+              className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize comparison-slider-input z-30 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary focus-visible:opacity-100 transition-opacity" 
             />
           </div>
         </Reveal>

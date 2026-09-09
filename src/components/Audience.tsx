@@ -45,9 +45,9 @@ export default function Audience() {
         <Reveal>
           <div className="max-w-3xl mb-16 md:mb-24">
             <h2 className="text-5xl md:text-7xl lg:text-[5.5rem] font-heading font-extrabold text-white leading-[1.05] tracking-tight mb-8">
-              Who Is This <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-red to-[#F02865]">Space For?</span>
+              Who Is This <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-[#F02865]">Space For?</span>
             </h2>
-            <p className="text-xl md:text-2xl text-gray-400 leading-relaxed font-light border-l-4 border-brand-red pl-6 md:pl-8">
+            <p className="text-xl md:text-2xl text-gray-400 leading-relaxed font-light border-l-4 border-brand-primary pl-6 md:pl-8">
               Designed specifically to elevate local brands, independent creators, young talents, and premium agencies.
             </p>
           </div>
@@ -63,7 +63,7 @@ export default function Audience() {
                   key={index}
                   onMouseEnter={() => setActiveCard(index)}
                   onClick={() => setActiveCard(index)}
-                  className={`flex flex-col h-[500px] md:h-[600px] w-full text-left bg-[#0E0B1F] border border-white/5 rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-red hover:border-white/10 ${isActive ? 'shadow-[0_0_40px_rgba(240,40,101,0.1)]' : ''}`}
+                  className={`flex flex-col h-[500px] md:h-[600px] w-full text-left bg-[#0E0B1F] border border-white/5 rounded-3xl overflow-hidden cursor-pointer transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary hover:border-white/10 ${isActive ? 'shadow-[0_0_40px_rgba(240,40,101,0.1)]' : ''}`}
                 >
                   {/* Top Content */}
                   <div className="p-8 md:p-10 flex flex-col z-10 relative bg-[#0E0B1F]">

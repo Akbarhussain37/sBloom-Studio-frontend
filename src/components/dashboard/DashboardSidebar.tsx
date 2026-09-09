@@ -10,7 +10,9 @@ import {
   FiX,
   FiMessageSquare,
   FiShield,
-  FiPlayCircle
+  FiPlayCircle,
+  FiChevronLeft,
+  FiChevronRight
 } from 'react-icons/fi';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
@@ -28,6 +30,9 @@ export default function DashboardSidebar({ isOpen, onClose }: SidebarProps) {
   const { profile } = useAuth();
   const navigate = useNavigate();
   const [totalUnread, setTotalUnread] = useState(0);
+  const [isPinned, setIsPinned] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const isExpanded = isPinned || isHovered;
 
   useEffect(() => {
     if (!profile) return;
@@ -80,75 +85,106 @@ export default function DashboardSidebar({ isOpen, onClose }: SidebarProps) {
   };
 
   const navItemClass = ({ isActive }: { isActive: boolean }) => `
-    flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all
+    flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap overflow-hidden
     ${isActive 
-      ? profile?.role === 'kid' ? 'bg-[#FF5E00] text-white shadow-md' :
-        profile?.role === 'doctor' ? 'bg-teal-600 text-white shadow-md' :
-        'bg-brand-red text-white shadow-md' 
-      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}
+      ? 'bg-[var(--color-sidebar-active)] text-white shadow-md shadow-violet-500/20' 
+      : 'text-slate-400 hover:bg-[#1C1A3A] hover:text-white'}
+    ${isExpanded ? 'px-4 w-full' : 'px-0 w-12 justify-center mx-auto'}
   `;
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-[#F7F9FC] border-r border-slate-200 w-64 pt-6 pb-4 px-4 flex-shrink-0">
-      <div className="flex items-center justify-between mb-8 px-2">
-        <div className="font-heading font-bold text-xl tracking-wide text-slate-900 flex items-center gap-2">
-          <div className={`w-8 h-8 rounded-lg flex items-center justify-center shadow-sm
-            ${profile?.role === 'kid' ? 'bg-[#FFD500]' : 
-              profile?.role === 'doctor' ? 'bg-gradient-to-br from-teal-500 to-cyan-500' : 
-              'bg-gradient-to-br from-brand-red to-[#F02865]'}`}
-          >
+    <div 
+      className={`flex flex-col h-full bg-[var(--color-sidebar-bg)] border-r border-[#1C1A3A] pt-6 pb-4 flex-shrink-0 text-slate-300 transition-[width] duration-300 z-50 relative ${isExpanded ? 'w-64 px-4' : 'w-20 px-2 items-center'}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <button 
+        onClick={() => setIsPinned(!isPinned)}
+        className="hidden md:flex absolute top-8 -right-3.5 z-[60] items-center justify-center w-7 h-7 rounded-full bg-[#1C1A3A] border border-slate-700 text-slate-400 hover:text-white transition-colors shadow-md cursor-pointer"
+      >
+        {isPinned ? <FiChevronLeft className="text-sm" /> : <FiChevronRight className="text-sm" />}
+      </button>
+
+      <div className={`flex items-center justify-between mb-8 ${isExpanded ? 'px-2' : 'justify-center w-full'} relative`}>
+        {isExpanded ? (
+          <div className="font-heading font-bold text-xl tracking-wide text-white flex items-center gap-2 overflow-hidden whitespace-nowrap">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center shadow-sm bg-[var(--color-sidebar-active)] shrink-0">
+              <span className="text-white text-lg font-bold">s</span>
+            </div>
+            BLOOM
+          </div>
+        ) : (
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center shadow-sm bg-[var(--color-sidebar-active)] shrink-0">
             <span className="text-white text-lg font-bold">s</span>
           </div>
-          Studio
-        </div>
+        )}
         <button 
           onClick={onClose}
-          className="md:hidden text-slate-400 hover:text-slate-700"
+          className="md:hidden text-slate-400 hover:text-slate-700 absolute right-0 top-0"
         >
           <FiX className="text-xl" />
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-6">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar pr-2 space-y-6 w-full">
         <div>
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-2">Workspace</p>
-          <nav className="space-y-1">
+          {isExpanded ? (
+            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 px-2 whitespace-nowrap">Workspace</p>
+          ) : (
+            <div className="h-4 mb-3 border-b border-[#1C1A3A] mx-4"></div>
+          )}
+          <nav className="space-y-2 flex flex-col items-center w-full">
             <NavLink to="/dashboard" end className={navItemClass}>
-              <FiHome className="text-lg" /> Overview
+              <FiHome className="text-lg shrink-0" /> 
+              {isExpanded && <span>Overview</span>}
             </NavLink>
             <NavLink to="/dashboard/review" className={navItemClass}>
-              <FiPlayCircle className="text-lg" /> Review Edits
+              <FiPlayCircle className="text-lg shrink-0" /> 
+              {isExpanded && <span>Review Edits</span>}
             </NavLink>
             <NavLink to="/dashboard/media" className={navItemClass}>
-              <FiFolder className="text-lg" /> Media Library
+              <FiFolder className="text-lg shrink-0" /> 
+              {isExpanded && <span>Media Library</span>}
             </NavLink>
           </nav>
         </div>
 
         <div>
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-2">Tools</p>
-          <nav className="space-y-1">
+          {isExpanded ? (
+            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 px-2 whitespace-nowrap">Tools</p>
+          ) : (
+            <div className="h-4 mb-3 border-b border-[#1C1A3A] mx-4"></div>
+          )}
+          <nav className="space-y-2 flex flex-col items-center w-full">
             <NavLink to="/dashboard/script-assistant" className={navItemClass}>
-              <FiMessageSquare className="text-lg" /> AI Script Bot
+              <FiMessageSquare className="text-lg shrink-0" /> 
+              {isExpanded && <span>AI Script Bot</span>}
             </NavLink>
             <NavLink to="/dashboard/jobs" className={navItemClass}>
-              <FiFolder className="text-lg" /> Job Lifecycle
+              <FiFolder className="text-lg shrink-0" /> 
+              {isExpanded && <span>Job Lifecycle</span>}
             </NavLink>
             <NavLink to="/dashboard/chat" className={({ isActive }) => `
-              flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold transition-all group
+              flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all overflow-hidden whitespace-nowrap relative
               ${isActive 
-                ? profile?.role === 'kid' ? 'bg-[#FF5E00] text-white shadow-md' :
-                  profile?.role === 'doctor' ? 'bg-teal-600 text-white shadow-md' :
-                  'bg-brand-red text-white shadow-md' 
-                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}
+                ? 'bg-[var(--color-sidebar-active)] text-white shadow-md shadow-violet-500/20' 
+                : 'text-slate-400 hover:bg-[#1C1A3A] hover:text-white'}
+              ${isExpanded ? 'px-4 w-full justify-between' : 'px-0 w-12 justify-center mx-auto'}
             `}>
               <div className="flex items-center gap-3">
-                <FiMessageSquare className="text-lg" /> Messages
+                <FiMessageSquare className="text-lg shrink-0" /> 
+                {isExpanded && <span>Messages</span>}
               </div>
-              {totalUnread > 0 && (
-                <div className="bg-brand-red text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full flex items-center justify-center shadow-sm min-w-[20px]">
-                  {totalUnread > 99 ? '99+' : totalUnread}
-                </div>
+              {isExpanded ? (
+                totalUnread > 0 && (
+                  <div className="bg-brand-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full flex items-center justify-center shadow-sm min-w-[20px] shrink-0">
+                    {totalUnread > 99 ? '99+' : totalUnread}
+                  </div>
+                )
+              ) : (
+                totalUnread > 0 && (
+                  <div className="absolute top-1 right-1 w-2.5 h-2.5 bg-brand-primary rounded-full border border-[var(--color-sidebar-bg)] shrink-0"></div>
+                )
               )}
             </NavLink>
           </nav>
@@ -156,42 +192,51 @@ export default function DashboardSidebar({ isOpen, onClose }: SidebarProps) {
 
         {profile?.role === 'admin' && (
           <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-2">Administration</p>
-            <nav className="space-y-1">
+            {isExpanded ? (
+              <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 px-2 whitespace-nowrap">Administration</p>
+            ) : (
+              <div className="h-4 mb-3 border-b border-[#1C1A3A] mx-4"></div>
+            )}
+            <nav className="space-y-2 flex flex-col items-center w-full">
               <NavLink to="/admin" className={navItemClass}>
-                <FiShield className="text-lg" /> Admin Panel
+                <FiShield className="text-lg shrink-0" /> 
+                {isExpanded && <span>Admin Panel</span>}
               </NavLink>
             </nav>
           </div>
         )}
       </div>
 
-      <div className="mt-auto pt-6 border-t border-slate-200">
-        <nav className="space-y-1">
+      <div className="mt-auto pt-6 border-t border-[#1C1A3A] w-full flex flex-col items-center">
+        <nav className="space-y-2 w-full flex flex-col items-center">
           <NavLink to="/dashboard/settings" className={navItemClass}>
-            <FiSettings className="text-lg" /> Settings
+            <FiSettings className="text-lg shrink-0" /> 
+            {isExpanded && <span>Settings</span>}
           </NavLink>
           <button 
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all text-left"
+            className={`flex items-center gap-3 py-2.5 rounded-xl text-sm font-semibold transition-all overflow-hidden whitespace-nowrap text-slate-400 hover:bg-[#1C1A3A] hover:text-white ${isExpanded ? 'px-4 w-full text-left' : 'px-0 w-12 justify-center mx-auto'}`}
           >
-            <FiLogOut className="text-lg" /> Log out
+            <FiLogOut className="text-lg shrink-0" /> 
+            {isExpanded && <span>Log out</span>}
           </button>
         </nav>
         
         {profile && (
-          <Link to="/dashboard/profile" className="mt-6 flex items-center gap-3 px-2 cursor-pointer hover:bg-slate-100 p-2 rounded-xl transition-colors">
-            <div className="w-10 h-10 rounded-full bg-slate-200 border-2 border-white shadow-sm flex items-center justify-center overflow-hidden">
+          <Link to="/dashboard/profile" className={`mt-6 flex items-center gap-3 cursor-pointer hover:bg-[#1C1A3A] p-2 rounded-xl transition-colors overflow-hidden whitespace-nowrap w-full ${!isExpanded && 'justify-center px-0'}`}>
+            <div className="w-10 h-10 rounded-full bg-[#1C1A3A] border-2 border-[var(--color-sidebar-bg)] shadow-sm flex items-center justify-center overflow-hidden shrink-0">
               <FiUser className="text-slate-400 text-xl" />
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-slate-900 truncate">
-                {profile.full_name}
-              </p>
-              <p className="text-xs text-slate-500 truncate capitalize">
-                {profile.role}
-              </p>
-            </div>
+            {isExpanded && (
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold text-white truncate">
+                  {profile.full_name}
+                </p>
+                <p className="text-xs text-slate-400 truncate capitalize">
+                  {profile.role}
+                </p>
+              </div>
+            )}
           </Link>
         )}
       </div>
@@ -201,7 +246,7 @@ export default function DashboardSidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className="hidden md:block h-screen sticky top-0">
+      <div className="hidden md:block h-screen sticky top-0 z-50 relative">
         {sidebarContent}
       </div>
 

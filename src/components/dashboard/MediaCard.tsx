@@ -15,7 +15,7 @@ export default function MediaCard({ asset, onPreview, onDelete, onDownload }: Me
   const isVideo = asset.file_type.startsWith('video/');
 
   return (
-    <div className="group relative bg-white border border-slate-200 rounded-2xl hover:shadow-lg hover:border-brand-red/30 transition-all duration-300">
+    <div className="group relative bg-white border border-slate-200 rounded-2xl hover:shadow-lg hover:border-brand-primary/30 transition-all duration-300">
       {/* Thumbnail Area */}
       <div 
         className="aspect-video bg-slate-100 relative overflow-hidden rounded-t-2xl cursor-pointer"
@@ -29,7 +29,7 @@ export default function MediaCard({ asset, onPreview, onDelete, onDownload }: Me
                className="w-full h-full"
              />
              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20 backdrop-blur-[2px]">
-               <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-brand-red shadow-lg transform scale-75 group-hover:scale-100 transition-transform">
+               <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-brand-primary shadow-lg transform scale-75 group-hover:scale-100 transition-transform">
                  <FiPlay className="text-xl ml-1" />
                </div>
              </div>
@@ -52,7 +52,7 @@ export default function MediaCard({ asset, onPreview, onDelete, onDownload }: Me
       <div className="p-4 flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
           <h4 
-            className="text-sm font-bold text-slate-900 truncate mb-1 cursor-pointer hover:text-brand-red transition-colors"
+            className="text-sm font-bold text-slate-900 truncate mb-1 cursor-pointer hover:text-brand-primary transition-colors"
             onClick={() => onPreview?.(asset)}
           >
             {asset.file_name}
@@ -68,13 +68,13 @@ export default function MediaCard({ asset, onPreview, onDelete, onDownload }: Me
             <FiMoreVertical />
           </button>
           <div className="absolute right-0 top-full mt-1 w-40 bg-white border border-slate-200 shadow-xl rounded-xl py-1 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all z-10 origin-top-right transform scale-95 group-hover/menu:scale-100">
-            <button onClick={() => onPreview?.(asset)} className="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-red flex items-center gap-2">
+            <button onClick={() => onPreview?.(asset)} className="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-primary flex items-center gap-2">
               <FiPlay className="text-slate-400" /> Preview
             </button>
-            <button onClick={() => onDownload?.(asset)} className="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-red flex items-center gap-2">
+            <button onClick={() => onDownload?.(asset)} className="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-primary flex items-center gap-2">
               <FiDownload className="text-slate-400" /> Download
             </button>
-            <button className="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-red flex items-center gap-2">
+            <button className="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-brand-primary flex items-center gap-2">
               <FiEdit2 className="text-slate-400" /> Rename
             </button>
             <div className="h-px bg-slate-100 my-1"></div>

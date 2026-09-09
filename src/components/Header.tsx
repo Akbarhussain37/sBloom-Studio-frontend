@@ -30,15 +30,15 @@ export default function Header() {
   };
 
   const textColor = isLightHeader ? 'text-slate-900' : 'text-white';
-  const underlineColor = isKidsZone ? 'bg-[#FF5E00]' : 'bg-brand-red';
+  const underlineColor = isKidsZone ? 'bg-[#FF5E00]' : 'bg-brand-primary';
 
   const NavLink = ({ to, children, className = "" }: { to: string, children: React.ReactNode, className?: string }) => {
     const isActive = location.pathname === to;
-    const hoverColor = isKidsZone ? 'hover:text-[#FF5E00]' : 'hover:text-brand-red';
+    const hoverColor = isKidsZone ? 'hover:text-[#FF5E00]' : 'hover:text-brand-primary';
     const baseColor = isLightHeader 
       ? `text-slate-600 ${hoverColor}` 
-      : 'text-white/80 hover:text-brand-red';
-    const activeColor = isKidsZone ? 'text-[#FF5E00] font-bold' : 'text-brand-red font-bold';
+      : 'text-white/80 hover:text-brand-primary';
+    const activeColor = isKidsZone ? 'text-[#FF5E00] font-bold' : 'text-brand-primary font-bold';
 
     return (
       <Link to={to} className={`relative group flex items-center gap-1.5 ${isActive ? activeColor : baseColor} transition-colors ${className}`}>
@@ -57,7 +57,7 @@ export default function Header() {
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? `${scrolledBg} py-4` : 'bg-transparent py-6'}`}>
       <div className="w-full px-6 md:px-12 lg:px-16 flex justify-between items-center">
         <Link to="/" className={`font-heading font-bold text-2xl tracking-wide ${textColor} hover:opacity-80 transition-opacity`}>
-          <span className="text-brand-red">s</span>Bloom Studio
+          <span className="text-brand-primary">s</span>BLOOM
         </Link>
         <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm xl:text-base font-medium">
           <NavLink to="/">Creators</NavLink>
@@ -71,7 +71,7 @@ export default function Header() {
               </span>
               <button 
                 onClick={handleLogout}
-                className={`flex items-center gap-1.5 text-sm ${isLightHeader ? 'text-slate-500 hover:text-brand-red' : 'text-white/70 hover:text-white'} transition-colors`}
+                className={`flex items-center gap-1.5 text-sm ${isLightHeader ? 'text-slate-500 hover:text-brand-primary' : 'text-white/70 hover:text-white'} transition-colors`}
               >
                 <FiLogOut /> Logout
               </button>
@@ -83,7 +83,7 @@ export default function Header() {
             </NavLink>
           )}
 
-          <Link to="/contact" className={`${location.pathname === '/contact' ? (isKidsZone ? 'bg-slate-100 border-[#FF5E00] text-[#FF5E00]' : 'bg-slate-100 border-brand-red text-brand-red') : (isLightHeader ? 'bg-white border-[#E2E8F0] text-[#1E293B] hover:bg-slate-50' : 'bg-white/10 border-white/20 text-white hover:bg-white/20')} border font-semibold py-2 px-6 rounded-full transition-all whitespace-nowrap`}>
+          <Link to="/contact" className={`${location.pathname === '/contact' ? (isKidsZone ? 'bg-slate-100 border-[#FF5E00] text-[#FF5E00]' : 'bg-slate-100 border-brand-primary text-brand-primary') : (isLightHeader ? 'bg-white border-[#E2E8F0] text-[#1E293B] hover:bg-slate-50' : 'bg-white/10 border-white/20 text-white hover:bg-white/20')} border font-semibold py-2 px-6 rounded-full transition-all whitespace-nowrap`}>
             Contact Us
           </Link>
 
@@ -91,7 +91,7 @@ export default function Header() {
 
         {/* Mobile Menu Toggle */}
         <button 
-          className={`lg:hidden text-2xl ${textColor} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-red rounded-md p-1`}
+          className={`lg:hidden text-2xl ${textColor} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded-md p-1`}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-expanded={isMobileMenuOpen}
           aria-label="Toggle mobile menu"
@@ -106,13 +106,13 @@ export default function Header() {
           isMobileMenuOpen ? 'opacity-100 visible translate-x-0' : 'opacity-0 invisible translate-x-full'
         }`}
       >
-        <Link to="/" className="hover:text-brand-red transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Creators</Link>
-        <Link to="/kids-zone" className="hover:text-brand-red transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Young Creators</Link>
-        <Link to="/healthcare" className="hover:text-brand-red transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Healthcare</Link>
+        <Link to="/" className="hover:text-brand-primary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Creators</Link>
+        <Link to="/kids-zone" className="hover:text-brand-primary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Young Creators</Link>
+        <Link to="/healthcare" className="hover:text-brand-primary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>Healthcare</Link>
         
         {user ? (
           <>
-            <div className="text-brand-red text-2xl mb-2">
+            <div className="text-brand-primary text-2xl mb-2">
               Hi, {profile?.full_name?.split(' ')[0] || 'User'}
             </div>
             <button 
@@ -120,13 +120,13 @@ export default function Header() {
                 handleLogout();
                 setIsMobileMenuOpen(false);
               }}
-              className="flex items-center gap-2 text-white/70 hover:text-brand-red transition-colors"
+              className="flex items-center gap-2 text-white/70 hover:text-brand-primary transition-colors"
             >
               <FiLogOut /> Logout
             </button>
           </>
         ) : (
-          <Link to="/login" className="flex items-center gap-2 hover:text-brand-red transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+          <Link to="/login" className="flex items-center gap-2 hover:text-brand-primary transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
             <FiUser /> Login
           </Link>
         )}

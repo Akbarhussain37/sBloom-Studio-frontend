@@ -55,7 +55,7 @@ export default function VideoDetails() {
 
   const handleSubmit = async () => {
     if (!asset) return;
-    if (confirm('Ready to submit? Once submitted, the sBloom Studio production team can begin working on your content.')) {
+    if (confirm('Ready to submit? Once submitted, the sBLOOM production team can begin working on your content.')) {
       setSubmitting(true);
       try {
         const newJob = await submitForProduction(asset.id);
@@ -87,7 +87,7 @@ export default function VideoDetails() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <LoadingSpinner className="w-8 h-8 border-brand-red border-t-transparent" />
+        <LoadingSpinner className="w-8 h-8 border-brand-primary border-t-transparent" />
       </div>
     );
   }
@@ -160,7 +160,7 @@ export default function VideoDetails() {
                  <button 
                    onClick={handleSubmit} 
                    disabled={submitting}
-                   className="px-6 py-3 bg-brand-red text-white font-bold rounded-xl hover:bg-[#F02865] transition-colors flex items-center gap-2 shadow-sm disabled:opacity-50"
+                   className="px-6 py-3 bg-brand-primary text-white font-bold rounded-xl hover:bg-[#F02865] transition-colors flex items-center gap-2 shadow-sm disabled:opacity-50"
                  >
                    {submitting ? <LoadingSpinner className="w-4 h-4 border-white border-t-transparent"/> : <><FiSend /> Submit for Production</>}
                  </button>
@@ -188,14 +188,14 @@ export default function VideoDetails() {
                 
                 {/* Timeline Items - simplified for now */}
                 <div className="relative pl-6">
-                  <div className="absolute w-3 h-3 bg-brand-red rounded-full -left-[7px] top-1.5 shadow-[0_0_0_4px_white]"></div>
+                  <div className="absolute w-3 h-3 bg-brand-primary rounded-full -left-[7px] top-1.5 shadow-[0_0_0_4px_white]"></div>
                   <p className="text-sm font-bold text-slate-900">Uploaded</p>
                   <p className="text-xs text-slate-500">{new Date(asset.created_at).toLocaleString()}</p>
                 </div>
 
                 {asset.status !== 'DRAFT' && asset.status !== 'UPLOADED' && (
                   <div className="relative pl-6">
-                    <div className="absolute w-3 h-3 bg-brand-red rounded-full -left-[7px] top-1.5 shadow-[0_0_0_4px_white]"></div>
+                    <div className="absolute w-3 h-3 bg-brand-primary rounded-full -left-[7px] top-1.5 shadow-[0_0_0_4px_white]"></div>
                     <p className="text-sm font-bold text-slate-900">Submitted</p>
                     <p className="text-xs text-slate-500">Pending editing</p>
                   </div>
@@ -203,7 +203,7 @@ export default function VideoDetails() {
                 
                 {['EDITING', 'READY_FOR_REVIEW', 'CHANGES_REQUESTED', 'COMPLETED'].includes(asset.status) && (
                   <div className="relative pl-6">
-                    <div className="absolute w-3 h-3 bg-brand-red rounded-full -left-[7px] top-1.5 shadow-[0_0_0_4px_white]"></div>
+                    <div className="absolute w-3 h-3 bg-brand-primary rounded-full -left-[7px] top-1.5 shadow-[0_0_0_4px_white]"></div>
                     <p className="text-sm font-bold text-slate-900">In Editing</p>
                   </div>
                 )}

@@ -8,11 +8,17 @@
 
   --color-navy: #27235C;
   --color-navy-dark: #1A1744;
-  --color-brand-red: #DE1B54;
-  --color-brand-red-hover: #F02865;
+  --color-brand-primary: #8B5CF6;
+  --color-brand-primary-hover: #7C3AED;
   --color-offwhite: #F8F9FA;
+  
+  --color-sidebar-bg: #13112A;
+  --color-sidebar-active: #8B5CF6;
+  --color-dashboard-bg: #F8F9FA;
+  --color-hero-bg: #1E2336;
+  --color-hero-text: #38BDF8;
 
-  --shadow-glow: 0 0 20px rgba(222, 27, 84, 0.4);
+  --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.4);
 
   --animate-slowZoom: slowZoom 30s ease-in-out infinite alternate;
 
@@ -72,7 +78,7 @@
 
 @layer utilities {
   .text-accent {
-    color: var(--color-brand-red);
+    color: var(--color-brand-primary);
   }
 
   .section-padding {
@@ -105,15 +111,15 @@
 
 @keyframes pulseGlow {
   0% {
-    box-shadow: 0 0 20px rgba(222, 27, 84, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.5);
   }
 
   50% {
-    box-shadow: 0 0 35px rgba(222, 27, 84, 0.9), inset 0 0 15px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 35px rgba(139, 92, 246, 0.9), inset 0 0 15px rgba(255, 255, 255, 0.8);
   }
 
   100% {
-    box-shadow: 0 0 20px rgba(222, 27, 84, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.5);
   }
 }
 

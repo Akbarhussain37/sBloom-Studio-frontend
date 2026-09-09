@@ -14,8 +14,8 @@ export default function CreatorDashboardLayout() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F7F9FC]">
-        <LoadingSpinner className="w-8 h-8 border-brand-red border-t-transparent" />
+      <div className="min-h-screen flex items-center justify-center bg-[var(--color-dashboard-bg)]">
+        <LoadingSpinner className="w-8 h-8 border-brand-primary border-t-transparent" />
       </div>
     );
   }
@@ -50,7 +50,7 @@ export default function CreatorDashboardLayout() {
 
   return (
     <div 
-      className="flex h-screen bg-white overflow-hidden"
+      className="flex h-screen bg-[var(--color-dashboard-bg)] overflow-hidden"
       style={{ 
         '--font-body': 'var(--font-jakarta)', 
         '--font-heading': 'var(--font-jakarta)' 
@@ -69,7 +69,7 @@ export default function CreatorDashboardLayout() {
           title={getPageTitle()}
         />
         
-        <main className="flex-1 overflow-y-auto bg-white p-4 md:p-8 custom-scrollbar">
+        <main className="flex-1 overflow-y-auto bg-[var(--color-dashboard-bg)] p-4 md:p-8 custom-scrollbar">
           <div className="max-w-7xl mx-auto">
             <Outlet />
           </div>

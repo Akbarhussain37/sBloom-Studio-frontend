@@ -7,7 +7,7 @@ interface LoadingSpinnerProps {
 export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ className = '' }) => {
   return (
     <div className={`flex justify-center items-center ${className}`}>
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-red"></div>
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-primary"></div>
     </div>
   );
 };

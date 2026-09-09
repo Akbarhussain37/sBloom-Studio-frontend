@@ -140,18 +140,18 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F9FC] font-body flex flex-col relative py-20">
+    <div className="min-h-screen bg-white font-body flex flex-col relative py-20">
       {/* Top Navigation */}
       <div className="w-full px-6 md:px-12 py-6 flex justify-between items-center absolute top-0 left-0">
         <Link 
           to="/" 
-          className="flex items-center gap-2 text-brand-red font-bold text-sm tracking-wide hover:opacity-80 transition-opacity uppercase"
+          className="flex items-center gap-2 text-brand-primary font-bold text-sm tracking-wide hover:opacity-80 transition-opacity uppercase"
         >
           <FiArrowLeft className="text-lg" />
           Back to Home
         </Link>
         <Link to="/" className="font-heading font-bold text-xl tracking-wide text-slate-900">
-          <span className="text-brand-red">s</span>Bloom Studio
+          <span className="text-brand-primary">s</span>BLOOM
         </Link>
       </div>
 
@@ -164,7 +164,7 @@ export default function Register() {
           className="w-full max-w-[700px] bg-white rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-8 md:p-12"
         >
           <div className="text-center mb-8">
-            <p className="text-brand-red text-xs font-bold uppercase tracking-[0.2em] mb-4">
+            <p className="text-brand-primary text-xs font-bold uppercase tracking-[0.2em] mb-4">
               Studio Onboarding
             </p>
             <h2 className="text-3xl font-extrabold text-slate-900 mb-3">
@@ -181,14 +181,14 @@ export default function Register() {
             
             {/* Role Selection Toggle */}
             <div className="flex justify-center mb-8">
-              <div className="bg-[#F7F9FC] p-1 rounded-xl flex w-full max-w-lg border border-slate-200">
+              <div className="bg-white p-1 rounded-xl flex w-full max-w-lg border border-slate-200">
                 <button
                   type="button"
                   disabled={loading}
                   onClick={() => setRole('creator')}
                   className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${
                     role === 'creator'
-                      ? 'bg-white text-brand-red shadow-sm'
+                      ? 'bg-white text-brand-primary shadow-sm'
                       : 'text-slate-500 hover:text-slate-700'
                   }`}
                 >
@@ -200,7 +200,7 @@ export default function Register() {
                   onClick={() => setRole('doctor')}
                   className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${
                     role === 'doctor'
-                      ? 'bg-white text-brand-red shadow-sm'
+                      ? 'bg-white text-brand-primary shadow-sm'
                       : 'text-slate-500 hover:text-slate-700'
                   }`}
                 >
@@ -212,7 +212,7 @@ export default function Register() {
                   onClick={() => setRole('kid')}
                   className={`flex-1 py-2.5 text-sm font-bold rounded-lg transition-all ${
                     role === 'kid'
-                      ? 'bg-white text-brand-red shadow-sm'
+                      ? 'bg-white text-brand-primary shadow-sm'
                       : 'text-slate-500 hover:text-slate-700'
                   }`}
                 >
@@ -228,7 +228,7 @@ export default function Register() {
               {/* Full Name */}
               <div>
                 <label htmlFor="name" className="block text-sm font-bold text-slate-800 mb-2">
-                  Full Name <span className="text-brand-red">*</span>
+                  Full Name <span className="text-brand-primary">*</span>
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -242,7 +242,7 @@ export default function Register() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     disabled={loading}
-                    className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red sm:text-sm transition-all"
+                    className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary sm:text-sm transition-all"
                     placeholder="John Doe"
                   />
                 </div>
@@ -251,7 +251,7 @@ export default function Register() {
               {/* Email Address */}
               <div>
                 <label htmlFor="email" className="block text-sm font-bold text-slate-800 mb-2">
-                  Email Address <span className="text-brand-red">*</span>
+                  Email Address <span className="text-brand-primary">*</span>
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -266,7 +266,7 @@ export default function Register() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
-                    className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red sm:text-sm transition-all"
+                    className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary sm:text-sm transition-all"
                     placeholder="john@example.com"
                   />
                 </div>
@@ -275,7 +275,7 @@ export default function Register() {
               {/* Password */}
               <div>
                 <label htmlFor="password" className="block text-sm font-bold text-slate-800 mb-2">
-                  Password <span className="text-brand-red">*</span>
+                  Password <span className="text-brand-primary">*</span>
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -290,7 +290,7 @@ export default function Register() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={loading}
-                    className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red sm:text-sm transition-all font-mono"
+                    className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary sm:text-sm transition-all font-mono"
                     placeholder="••••••••••••"
                   />
                 </div>
@@ -299,7 +299,7 @@ export default function Register() {
               {/* Confirm Password */}
               <div>
                 <label htmlFor="confirm-password" className="block text-sm font-bold text-slate-800 mb-2">
-                  Confirm Password <span className="text-brand-red">*</span>
+                  Confirm Password <span className="text-brand-primary">*</span>
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -314,7 +314,7 @@ export default function Register() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     disabled={loading}
-                    className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red sm:text-sm transition-all font-mono"
+                    className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary sm:text-sm transition-all font-mono"
                     placeholder="••••••••••••"
                   />
                 </div>
@@ -329,7 +329,7 @@ export default function Register() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="phone" className="block text-sm font-bold text-slate-800 mb-2">
-                      Phone Number <span className="text-brand-red">*</span>
+                      Phone Number <span className="text-brand-primary">*</span>
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -343,7 +343,7 @@ export default function Register() {
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         disabled={loading}
-                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red sm:text-sm"
+                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-primary sm:text-sm"
                         placeholder="+1 (555) 000-0000"
                       />
                     </div>
@@ -364,7 +364,7 @@ export default function Register() {
                         value={userLocation}
                         onChange={(e) => setUserLocation(e.target.value)}
                         disabled={loading}
-                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red sm:text-sm"
+                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-primary sm:text-sm"
                         placeholder="e.g. Los Angeles, USA"
                       />
                     </div>
@@ -389,7 +389,7 @@ export default function Register() {
                         value={age}
                         onChange={(e) => setAge(e.target.value)}
                         disabled={loading}
-                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red sm:text-sm"
+                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-primary sm:text-sm"
                         placeholder="e.g. 24"
                       />
                     </div>
@@ -409,7 +409,7 @@ export default function Register() {
                         value={gender}
                         onChange={(e) => setGender(e.target.value)}
                         disabled={loading}
-                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 focus:outline-none focus:ring-1 focus:ring-brand-red sm:text-sm"
+                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-white text-slate-900 focus:outline-none focus:ring-1 focus:ring-brand-primary sm:text-sm"
                       >
                         <option value="">Select gender</option>
                         <option value="male">Male</option>
@@ -437,7 +437,7 @@ export default function Register() {
                         value={portfolio}
                         onChange={(e) => setPortfolio(e.target.value)}
                         disabled={loading}
-                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red sm:text-sm"
+                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-primary sm:text-sm"
                         placeholder="@yourhandle"
                       />
                     </div>
@@ -457,7 +457,7 @@ export default function Register() {
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
                         disabled={loading}
-                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 focus:outline-none focus:ring-1 focus:ring-brand-red sm:text-sm"
+                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-white text-slate-900 focus:outline-none focus:ring-1 focus:ring-brand-primary sm:text-sm"
                       >
                         <option value="lifestyle">Lifestyle & Vlog</option>
                         <option value="tech">Tech & Review</option>
@@ -481,7 +481,7 @@ export default function Register() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="parent-phone" className="block text-sm font-bold text-slate-800 mb-2">
-                      Parent's Phone <span className="text-brand-red">*</span>
+                      Parent's Phone <span className="text-brand-primary">*</span>
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -495,7 +495,7 @@ export default function Register() {
                         value={parentPhone}
                         onChange={(e) => setParentPhone(e.target.value)}
                         disabled={loading}
-                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red sm:text-sm"
+                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-primary sm:text-sm"
                         placeholder="+1 (555) 000-0000"
                       />
                     </div>
@@ -516,7 +516,7 @@ export default function Register() {
                         value={userLocation}
                         onChange={(e) => setUserLocation(e.target.value)}
                         disabled={loading}
-                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red sm:text-sm"
+                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-primary sm:text-sm"
                         placeholder="e.g. Los Angeles, USA"
                       />
                     </div>
@@ -526,7 +526,7 @@ export default function Register() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="kid-age" className="block text-sm font-bold text-slate-800 mb-2">
-                      Kid's Age <span className="text-brand-red">*</span>
+                      Kid's Age <span className="text-brand-primary">*</span>
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -542,7 +542,7 @@ export default function Register() {
                         value={kidAge}
                         onChange={(e) => setKidAge(e.target.value)}
                         disabled={loading}
-                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-red sm:text-sm"
+                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-white text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-primary sm:text-sm"
                         placeholder="e.g. 10"
                       />
                     </div>
@@ -562,7 +562,7 @@ export default function Register() {
                         value={kidGender}
                         onChange={(e) => setKidGender(e.target.value)}
                         disabled={loading}
-                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 focus:outline-none focus:ring-1 focus:ring-brand-red sm:text-sm"
+                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-white text-slate-900 focus:outline-none focus:ring-1 focus:ring-brand-primary sm:text-sm"
                       >
                         <option value="">Select gender</option>
                         <option value="male">Male</option>
@@ -589,7 +589,7 @@ export default function Register() {
                         value={interest}
                         onChange={(e) => setInterest(e.target.value)}
                         disabled={loading}
-                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-[#F7F9FC] text-slate-900 focus:outline-none focus:ring-1 focus:ring-brand-red sm:text-sm"
+                        className="appearance-none block w-full pl-12 pr-4 py-3.5 border border-slate-200 rounded-xl bg-white text-slate-900 focus:outline-none focus:ring-1 focus:ring-brand-primary sm:text-sm"
                       >
                         <option value="vlogging">Vlogging & YouTube</option>
                         <option value="gaming">Gaming Content</option>
@@ -611,7 +611,7 @@ export default function Register() {
                   type="checkbox"
                   required
                   disabled={loading}
-                  className="h-4 w-4 text-brand-red focus:ring-brand-red border-slate-300 rounded cursor-pointer"
+                  className="h-4 w-4 text-brand-primary focus:ring-brand-primary border-slate-300 rounded cursor-pointer"
                 />
                 <label htmlFor="agree" className="ml-2 block text-sm text-slate-500 cursor-pointer">
                   I agree to Terms & Policies
@@ -623,7 +623,7 @@ export default function Register() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   disabled={loading}
-                  className="font-semibold text-brand-red hover:text-[#DE1B54]"
+                  className="font-semibold text-brand-primary hover:text-[#DE1B54]"
                 >
                   {showPassword ? 'Hide Passwords' : 'Show Passwords'}
                 </button>
@@ -635,7 +635,7 @@ export default function Register() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center items-center gap-2 py-4 px-4 border border-transparent rounded-xl shadow-sm text-base font-bold text-white bg-brand-red hover:bg-[#F02865] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-red transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full flex justify-center items-center gap-2 py-4 px-4 border border-transparent rounded-xl shadow-sm text-base font-bold text-white bg-brand-primary hover:bg-[#F02865] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <LoadingSpinner className="text-white w-6 h-6 border-white" />
@@ -647,7 +647,7 @@ export default function Register() {
             
             <p className="mt-6 text-center text-sm text-slate-500">
               Already have an account?{' '}
-              <Link to="/login" className="font-semibold text-brand-red hover:text-[#DE1B54]">
+              <Link to="/login" className="font-semibold text-brand-primary hover:text-[#DE1B54]">
                 Sign in
               </Link>
             </p>

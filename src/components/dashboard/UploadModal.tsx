@@ -148,7 +148,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }: Uploa
                   onDrop={handleDrop}
                   onClick={() => fileInputRef.current?.click()}
                   className={`border-2 border-dashed rounded-3xl p-10 flex flex-col items-center justify-center text-center cursor-pointer transition-all ${
-                    isDragging ? 'border-brand-red bg-brand-red/5' : 'border-slate-300 bg-slate-50 hover:bg-slate-100'
+                    isDragging ? 'border-brand-primary bg-brand-primary/5' : 'border-slate-300 bg-slate-50 hover:bg-slate-100'
                   }`}
                 >
                   <input
@@ -160,7 +160,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }: Uploa
                     onChange={(e) => handleFiles(e.target.files)}
                   />
                   <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 transition-colors ${
-                    isDragging ? 'bg-brand-red text-white' : 'bg-white text-slate-400 shadow-sm'
+                    isDragging ? 'bg-brand-primary text-white' : 'bg-white text-slate-400 shadow-sm'
                   }`}>
                     <FiUploadCloud className="text-2xl" />
                   </div>
@@ -199,14 +199,14 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }: Uploa
                             <span className="text-xs text-slate-500">{(file.file.size / (1024 * 1024)).toFixed(2)} MB</span>
                             {file.status === 'error' && <span className="text-xs text-red-500 truncate">{file.error}</span>}
                             {file.status === 'success' && <span className="text-xs text-green-500">Uploaded</span>}
-                            {file.status === 'uploading' && <span className="text-xs text-brand-red">Uploading...</span>}
+                            {file.status === 'uploading' && <span className="text-xs text-brand-primary">Uploading...</span>}
                           </div>
 
                           {/* Progress Bar */}
                           {file.status === 'uploading' && (
                             <div className="w-full bg-slate-100 rounded-full h-1.5 mt-2 overflow-hidden">
                               <motion.div 
-                                className="bg-brand-red h-full rounded-full"
+                                className="bg-brand-primary h-full rounded-full"
                                 initial={{ width: 0 }}
                                 animate={{ width: `${file.progress}%` }}
                                 transition={{ duration: 0.5 }}
@@ -231,7 +231,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }: Uploa
                 <button
                   onClick={startUploads}
                   disabled={files.length === 0 || files.every(f => f.status === 'success' || f.status === 'uploading')}
-                  className="px-6 py-2.5 text-sm font-semibold text-white bg-brand-red hover:bg-[#F02865] rounded-xl transition-colors shadow-sm disabled:opacity-50 flex items-center gap-2"
+                  className="px-6 py-2.5 text-sm font-semibold text-white bg-brand-primary hover:bg-[#F02865] rounded-xl transition-colors shadow-sm disabled:opacity-50 flex items-center gap-2"
                 >
                   {files.some(f => f.status === 'uploading') ? (
                     <><LoadingSpinner className="w-4 h-4 text-white border-white" /> Uploading...</>

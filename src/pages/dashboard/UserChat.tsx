@@ -112,7 +112,7 @@ export default function UserChat() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <LoadingSpinner className="w-8 h-8 border-brand-red border-t-transparent" />
+        <LoadingSpinner className="w-8 h-8 border-brand-primary border-t-transparent" />
       </div>
     );
   }
@@ -141,7 +141,7 @@ export default function UserChat() {
               <input 
                 type="text" 
                 placeholder="Search projects..." 
-                className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-brand-red focus:border-brand-red"
+                className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-brand-primary focus:border-brand-primary"
               />
             </div>
           </div>
@@ -172,12 +172,12 @@ export default function UserChat() {
                     }}
                     className={`w-full text-left p-3 rounded-xl transition-all flex items-center gap-3 group ${
                       selectedJobId === job.id
-                        ? 'bg-slate-50 border-l-4 border-brand-red'
+                        ? 'bg-slate-50 border-l-4 border-brand-primary'
                         : 'bg-white hover:bg-slate-50 border-l-4 border-transparent'
                     }`}
                   >
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold flex-shrink-0 ${
-                      selectedJobId === job.id ? 'bg-brand-red text-white' : 'bg-[#EEF2F6] text-slate-600'
+                      selectedJobId === job.id ? 'bg-brand-primary text-white' : 'bg-[#EEF2F6] text-slate-600'
                     }`}>
                       <FiFileText className="text-lg" />
                     </div>
@@ -187,7 +187,7 @@ export default function UserChat() {
                           {job.media_assets_studio?.file_name || 'Untitled Job'}
                         </span>
                         {timeString && (
-                          <span className={`text-[10px] whitespace-nowrap ${unread > 0 ? 'text-brand-red font-bold' : 'text-slate-400'}`}>
+                          <span className={`text-[10px] whitespace-nowrap ${unread > 0 ? 'text-brand-primary font-bold' : 'text-slate-400'}`}>
                             {timeString}
                           </span>
                         )}
@@ -198,7 +198,7 @@ export default function UserChat() {
                           {lastMessage ? lastMessage.content : 'No messages yet'}
                         </span>
                         {unread > 0 && selectedJobId !== job.id && (
-                          <div className="w-2 h-2 bg-brand-red rounded-full flex-shrink-0"></div>
+                          <div className="w-2 h-2 bg-brand-primary rounded-full flex-shrink-0"></div>
                         )}
                       </div>
                     </div>

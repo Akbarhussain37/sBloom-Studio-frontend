@@ -278,7 +278,7 @@ export default function AdminChat() {
                         setUnreadCounts(prev => ({ ...prev, [job.id]: 0 }));
                       }}
                       className={`w-full text-left p-3 rounded-xl transition-all flex items-center gap-3 group ${selectedJobId === job.id
-                          ? 'bg-slate-50 border-l-4 border-brand-red'
+                          ? 'bg-slate-50 border-l-4 border-brand-primary'
                           : 'bg-white hover:bg-slate-50 border-l-4 border-transparent'
                         }`}
                     >
@@ -291,7 +291,7 @@ export default function AdminChat() {
                             {creatorName}
                           </span>
                           {timeString && (
-                            <span className={`text-[10px] whitespace-nowrap ${unread > 0 ? 'text-brand-red font-bold' : 'text-slate-400'}`}>
+                            <span className={`text-[10px] whitespace-nowrap ${unread > 0 ? 'text-brand-primary font-bold' : 'text-slate-400'}`}>
                               {timeString}
                             </span>
                           )}
@@ -302,7 +302,7 @@ export default function AdminChat() {
                             {lastMessage ? lastMessage.content : (job.media_assets_studio?.file_name || 'Untitled Job')}
                           </span>
                           {unread > 0 && selectedJobId !== job.id && (
-                            <div className="w-2 h-2 bg-brand-red rounded-full flex-shrink-0"></div>
+                            <div className="w-2 h-2 bg-brand-primary rounded-full flex-shrink-0"></div>
                           )}
                         </div>
                       </div>
@@ -349,10 +349,10 @@ export default function AdminChat() {
               <div className="shrink-0 flex gap-6 border-b border-slate-100 px-6 pt-3 bg-white">
                 <button
                   onClick={() => setChatType('public')}
-                  className={`pb-3 px-1 text-sm font-semibold transition-colors relative ${chatType === 'public' ? 'text-brand-red' : 'text-slate-500 hover:text-slate-700'}`}
+                  className={`pb-3 px-1 text-sm font-semibold transition-colors relative ${chatType === 'public' ? 'text-brand-primary' : 'text-slate-500 hover:text-slate-700'}`}
                 >
                   Client Chat
-                  {chatType === 'public' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-red rounded-t-full"></div>}
+                  {chatType === 'public' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-primary rounded-t-full"></div>}
                 </button>
                 <button
                   onClick={() => setChatType('internal')}

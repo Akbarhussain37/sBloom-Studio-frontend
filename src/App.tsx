@@ -35,7 +35,7 @@ function App() {
   const hideHeaderFooter = isAuthPage || isDashboardPage || isAdminPage || isEditorPage;
 
   return (
-    <div className="bg-white min-h-screen font-body text-gray-900 selection:bg-brand-red selection:text-white">
+    <div className="bg-white min-h-screen font-body text-gray-900 selection:bg-brand-primary selection:text-white">
       {!hideHeaderFooter && <Header />}
       
       <Routes>

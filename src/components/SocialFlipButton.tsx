@@ -73,11 +73,11 @@ const SocialFlipNode = ({
                         animate={{ opacity: 1, y: -45, scale: 1, x: "-50%" }}
                         exit={{ opacity: 0, y: 10, scale: 0.8, x: "-50%" }}
                         transition={{ duration: 0.2, ease: "easeOut" }}
-                        className="absolute left-1/2 z-50 whitespace-nowrap rounded-md bg-brand-red px-3 py-1.5 text-xs font-bold text-white shadow-[0_0_15px_rgba(222,27,84,0.5)]"
+                        className="absolute left-1/2 z-50 whitespace-nowrap rounded-md bg-brand-primary px-3 py-1.5 text-xs font-bold text-white shadow-[0_0_15px_rgba(222,27,84,0.5)]"
                     >
                         {item.label}
                         {/* Arrow */}
-                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-2 w-2 rotate-45 bg-brand-red" />
+                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-2 w-2 rotate-45 bg-brand-primary" />
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -105,7 +105,7 @@ const SocialFlipNode = ({
 
                 {/* Back - Icon */}
                 <div
-                    className={`absolute inset-0 flex items-center justify-center rounded-full bg-brand-red text-base text-white shadow-[0_0_20px_rgba(222,27,84,0.4)] ${backClassName}`}
+                    className={`absolute inset-0 flex items-center justify-center rounded-full bg-brand-primary text-base text-white shadow-[0_0_20px_rgba(222,27,84,0.4)] ${backClassName}`}
                     style={{
                         backfaceVisibility: "hidden",
                         transform: "rotateY(180deg)",
@@ -142,7 +142,7 @@ export default function SocialFlipButton({
                 <div className="absolute -inset-[1px] overflow-hidden rounded-full pointer-events-none">
                     {/* Animated Top Border Line */}
                     <motion.div
-                        className="absolute top-0 left-0 h-[1px] w-full bg-gradient-to-r from-transparent via-brand-red/50 to-transparent"
+                        className="absolute top-0 left-0 h-[1px] w-full bg-gradient-to-r from-transparent via-brand-primary/50 to-transparent"
                         animate={{ x: ["-100%", "100%"] }}
                         transition={{
                             duration: 2.5,
@@ -153,7 +153,7 @@ export default function SocialFlipButton({
 
                     {/* Animated Bottom Border Line */}
                     <motion.div
-                        className="absolute bottom-0 left-0 h-[1px] w-full bg-gradient-to-r from-transparent via-brand-red/50 to-transparent"
+                        className="absolute bottom-0 left-0 h-[1px] w-full bg-gradient-to-r from-transparent via-brand-primary/50 to-transparent"
                         animate={{ x: ["100%", "-100%"] }}
                         transition={{
                             duration: 2.5,

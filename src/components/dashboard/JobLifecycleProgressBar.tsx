@@ -28,7 +28,7 @@ export default function JobLifecycleProgressBar({ completionPercentage }: Props)
         
         {/* Active Line */}
         <div 
-          className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-brand-red rounded-full transition-all duration-500 ease-in-out"
+          className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-brand-primary rounded-full transition-all duration-500 ease-in-out"
           style={{ width: `${completionPercentage}%` }}
         />
 
@@ -43,7 +43,7 @@ export default function JobLifecycleProgressBar({ completionPercentage }: Props)
               <div 
                 className={`w-10 h-10 rounded-full flex items-center justify-center border-4 transition-all duration-300 ${
                   isActive 
-                    ? 'bg-brand-red border-red-100 text-white shadow-lg shadow-red-500/30' 
+                    ? 'bg-brand-primary border-red-100 text-white shadow-lg shadow-red-500/30' 
                     : 'bg-white border-gray-200 text-gray-400'
                 } ${isCurrent ? 'scale-110' : 'scale-100'}`}
               >

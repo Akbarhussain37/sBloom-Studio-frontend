@@ -10,9 +10,19 @@ interface StatsCardProps {
     isPositive: boolean;
   };
   delay?: number;
+  iconColor?: string;
+  iconBgColor?: string;
 }
 
-export default function StatsCard({ title, value, icon, trend, delay = 0 }: StatsCardProps) {
+export default function StatsCard({ 
+  title, 
+  value, 
+  icon, 
+  trend, 
+  delay = 0,
+  iconColor = 'text-brand-primary',
+  iconBgColor = 'bg-white'
+}: StatsCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -21,7 +31,7 @@ export default function StatsCard({ title, value, icon, trend, delay = 0 }: Stat
       className="bg-white rounded-[1.5rem] p-6 border border-slate-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] flex flex-col justify-between"
     >
       <div className="flex justify-between items-start mb-4">
-        <div className="p-3 rounded-xl bg-[#F7F9FC] text-brand-red">
+        <div className={`p-3 rounded-xl ${iconBgColor} ${iconColor}`}>
           {icon}
         </div>
         {trend && (

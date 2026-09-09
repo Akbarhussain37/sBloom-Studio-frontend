@@ -227,7 +227,7 @@ export default function ProfileSettings() {
         {profile.onboarding_completed && !isEditing && (
           <button 
             onClick={() => setIsEditing(true)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-brand-red bg-brand-red/10 hover:bg-brand-red/20 transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-brand-primary bg-brand-primary/10 hover:bg-brand-primary/20 transition-all"
           >
             <FiEdit2 /> Edit Profile
           </button>
@@ -237,7 +237,7 @@ export default function ProfileSettings() {
       <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="p-8">
           {error && (
-            <div className="mb-6 p-4 bg-red-50 text-brand-red rounded-xl text-sm font-medium">
+            <div className="mb-6 p-4 bg-red-50 text-brand-primary rounded-xl text-sm font-medium">
               {error}
             </div>
           )}
@@ -339,7 +339,7 @@ export default function ProfileSettings() {
                   </div>
                   {isUploading && (
                     <div className="absolute inset-0 bg-white/80 rounded-full flex items-center justify-center">
-                      <div className="w-8 h-8 border-2 border-brand-red border-t-transparent rounded-full animate-spin"></div>
+                      <div className="w-8 h-8 border-2 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
                     </div>
                   )}
                 </div>
@@ -349,7 +349,7 @@ export default function ProfileSettings() {
                   <button 
                     type="button" 
                     onClick={() => fileInputRef.current?.click()}
-                    className="text-sm font-semibold text-brand-red bg-brand-red/10 px-5 py-2.5 rounded-lg hover:bg-brand-red/20 transition-colors"
+                    className="text-sm font-semibold text-brand-primary bg-brand-primary/10 px-5 py-2.5 rounded-lg hover:bg-brand-primary/20 transition-colors"
                   >
                     {avatarUrl ? 'Change Image' : 'Upload Image'}
                   </button>
@@ -372,7 +372,7 @@ export default function ProfileSettings() {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     required
-                    className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red transition-all"
+                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                   />
                 </div>
                 <div>
@@ -399,7 +399,7 @@ export default function ProfileSettings() {
                         value={portfolioUrl}
                         onChange={(e) => setPortfolioUrl(e.target.value)}
                         placeholder="https://yourportfolio.com"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                     <div>
@@ -409,7 +409,7 @@ export default function ProfileSettings() {
                         value={primarySoftware}
                         onChange={(e) => setPrimarySoftware(e.target.value)}
                         placeholder="e.g. Adobe Premiere, After Effects"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                   </div>
@@ -421,7 +421,7 @@ export default function ProfileSettings() {
                         value={yearsExperience}
                         onChange={(e) => setYearsExperience(e.target.value)}
                         placeholder="e.g. 5"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                     <div>
@@ -431,7 +431,7 @@ export default function ProfileSettings() {
                         value={youtubeUrl}
                         onChange={(e) => setYoutubeUrl(e.target.value)}
                         placeholder="https://youtube.com/c/yourchannel"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                   </div>
@@ -443,7 +443,7 @@ export default function ProfileSettings() {
                         value={instagramUrl}
                         onChange={(e) => setInstagramUrl(e.target.value)}
                         placeholder="https://instagram.com/yourhandle"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                     <div>
@@ -453,7 +453,7 @@ export default function ProfileSettings() {
                         value={availability}
                         onChange={(e) => setAvailability(e.target.value)}
                         placeholder="e.g. Full-time, Part-time, Freelance"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                   </div>
@@ -465,7 +465,7 @@ export default function ProfileSettings() {
                         value={equipmentList}
                         onChange={(e) => setEquipmentList(e.target.value)}
                         placeholder="e.g. Sony A7III, Rode Mic"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                     <div>
@@ -475,7 +475,7 @@ export default function ProfileSettings() {
                         value={preferredVideoStyles}
                         onChange={(e) => setPreferredVideoStyles(e.target.value)}
                         placeholder="e.g. Vlogs, Gaming, Documentary"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                   </div>
@@ -486,7 +486,7 @@ export default function ProfileSettings() {
                       onChange={(e) => setBio(e.target.value)}
                       rows={4}
                       placeholder="Tell us a bit about your editing experience..."
-                      className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-red/20 focus:border-brand-red transition-all resize-none"
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all resize-none"
                     />
                   </div>
                 </div>
@@ -503,7 +503,7 @@ export default function ProfileSettings() {
                         value={kidAge}
                         onChange={(e) => setKidAge(e.target.value)}
                         placeholder="e.g. 12"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5E00]/20 focus:border-[#FF5E00] transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                     <div>
@@ -513,7 +513,7 @@ export default function ProfileSettings() {
                         value={interest}
                         onChange={(e) => setInterest(e.target.value)}
                         placeholder="e.g. Gaming, Vlogs"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5E00]/20 focus:border-[#FF5E00] transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                   </div>
@@ -525,7 +525,7 @@ export default function ProfileSettings() {
                         value={favoriteYoutuber}
                         onChange={(e) => setFavoriteYoutuber(e.target.value)}
                         placeholder="e.g. MrBeast, Ryan's World"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5E00]/20 focus:border-[#FF5E00] transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                     <div>
@@ -535,7 +535,7 @@ export default function ProfileSettings() {
                         value={equipmentUsed}
                         onChange={(e) => setEquipmentUsed(e.target.value)}
                         placeholder="e.g. iPad, Smartphone, PC"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5E00]/20 focus:border-[#FF5E00] transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                   </div>
@@ -547,7 +547,7 @@ export default function ProfileSettings() {
                         value={favoriteGames}
                         onChange={(e) => setFavoriteGames(e.target.value)}
                         placeholder="e.g. Roblox, Minecraft"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5E00]/20 focus:border-[#FF5E00] transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                     <div>
@@ -557,7 +557,7 @@ export default function ProfileSettings() {
                         value={schoolGrade}
                         onChange={(e) => setSchoolGrade(e.target.value)}
                         placeholder="e.g. 5th Grade"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5E00]/20 focus:border-[#FF5E00] transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                   </div>
@@ -569,7 +569,7 @@ export default function ProfileSettings() {
                         value={dreamJob}
                         onChange={(e) => setDreamJob(e.target.value)}
                         placeholder="e.g. Professional Gamer"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5E00]/20 focus:border-[#FF5E00] transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                     <div>
@@ -578,7 +578,7 @@ export default function ProfileSettings() {
                         type="email" 
                         value={parentEmail}
                         onChange={(e) => setParentEmail(e.target.value)}
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF5E00]/20 focus:border-[#FF5E00] transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                   </div>
@@ -596,7 +596,7 @@ export default function ProfileSettings() {
                         value={clinicName}
                         onChange={(e) => setClinicName(e.target.value)}
                         placeholder="e.g. City General Hospital"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-600/20 focus:border-teal-600 transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                     <div>
@@ -606,7 +606,7 @@ export default function ProfileSettings() {
                         value={yearsInPractice}
                         onChange={(e) => setYearsInPractice(e.target.value)}
                         placeholder="e.g. 10"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-600/20 focus:border-teal-600 transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                   </div>
@@ -618,7 +618,7 @@ export default function ProfileSettings() {
                         value={medicalLicense}
                         onChange={(e) => setMedicalLicense(e.target.value)}
                         placeholder="e.g. MD12345678"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-600/20 focus:border-teal-600 transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                     <div>
@@ -628,7 +628,7 @@ export default function ProfileSettings() {
                         value={languagesSpoken}
                         onChange={(e) => setLanguagesSpoken(e.target.value)}
                         placeholder="e.g. English, Spanish"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-600/20 focus:border-teal-600 transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                   </div>
@@ -640,7 +640,7 @@ export default function ProfileSettings() {
                         value={consultationHours}
                         onChange={(e) => setConsultationHours(e.target.value)}
                         placeholder="e.g. Mon-Fri 9AM-5PM"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-600/20 focus:border-teal-600 transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                     <div>
@@ -650,7 +650,7 @@ export default function ProfileSettings() {
                         value={medicalAssociation}
                         onChange={(e) => setMedicalAssociation(e.target.value)}
                         placeholder="e.g. American Medical Association"
-                        className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-600/20 focus:border-teal-600 transition-all"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all"
                       />
                     </div>
                   </div>
@@ -661,7 +661,7 @@ export default function ProfileSettings() {
                       onChange={(e) => setBio(e.target.value)}
                       rows={4}
                       placeholder="e.g. Pediatrician focusing on child nutrition and care..."
-                      className="w-full px-4 py-3 bg-[#F7F9FC] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-600/20 focus:border-teal-600 transition-all resize-none"
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all resize-none"
                     />
                   </div>
                 </div>
@@ -683,9 +683,9 @@ export default function ProfileSettings() {
                   type="submit"
                   disabled={isSaving}
                   className={`px-8 py-3 font-bold text-white rounded-xl shadow-md transition-colors flex items-center gap-2
-                    ${profile.role === 'kid' ? 'bg-[#FF5E00] hover:bg-[#E65500]' : 
-                      profile.role === 'doctor' ? 'bg-teal-600 hover:bg-teal-700' : 
-                      'bg-brand-red hover:bg-[#E0205C]'}
+                    ${profile.role === 'kid' ? 'bg-brand-primary hover:bg-[#E65500]' : 
+                      profile.role === 'doctor' ? 'bg-brand-primary hover:bg-teal-700' : 
+                      'bg-brand-primary hover:bg-[#E0205C]'}
                     ${isSaving ? 'opacity-70 cursor-not-allowed' : ''}
                   `}
                 >

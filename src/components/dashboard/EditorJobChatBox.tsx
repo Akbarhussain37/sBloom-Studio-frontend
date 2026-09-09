@@ -179,7 +179,7 @@ export default function EditorJobChatBox({ jobId, currentUserId, chatType = 'pub
     
     return parts.map((part, i) => {
       if (part.match(mentionRegex)) {
-        return <span key={i} className="bg-brand-red/10 text-brand-red px-1 py-0.5 rounded font-medium">{part}</span>;
+        return <span key={i} className="bg-brand-primary/10 text-brand-primary px-1 py-0.5 rounded font-medium">{part}</span>;
       }
       return <span key={i}>{part}</span>;
     });
@@ -224,7 +224,7 @@ export default function EditorJobChatBox({ jobId, currentUserId, chatType = 'pub
                 <div 
                   className={`max-w-[70%] rounded-2xl px-4 py-2 relative flex items-start gap-2 ${
                     isMe 
-                      ? 'bg-brand-red text-white rounded-br-none' 
+                      ? 'bg-brand-primary text-white rounded-br-none' 
                       : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-sm'
                   } ${isDeleting === msg.id ? 'opacity-50' : ''}`}
                 >
@@ -279,12 +279,12 @@ export default function EditorJobChatBox({ jobId, currentUserId, chatType = 'pub
             value={newMessage}
             onChange={handleInputChange}
             placeholder="Type a message... (Use @ to tag a job)"
-            className="flex-1 rounded-full border border-gray-300 px-4 py-2 text-sm focus:border-brand-red focus:outline-none focus:ring-1 focus:ring-brand-red"
+            className="flex-1 rounded-full border border-gray-300 px-4 py-2 text-sm focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary"
           />
           <button
             type="submit"
             disabled={!newMessage.trim()}
-            className="rounded-full bg-brand-red p-2 text-white hover:bg-red-700 disabled:opacity-50 transition-colors"
+            className="rounded-full bg-brand-primary p-2 text-white hover:bg-red-700 disabled:opacity-50 transition-colors"
           >
             <Send className="w-5 h-5" />
           </button>

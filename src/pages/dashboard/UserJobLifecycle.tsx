@@ -68,7 +68,7 @@ export default function UserJobLifecycle() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <LoadingSpinner className="w-8 h-8 border-brand-red border-t-transparent" />
+        <LoadingSpinner className="w-8 h-8 border-brand-primary border-t-transparent" />
       </div>
     );
   }
@@ -98,12 +98,12 @@ export default function UserJobLifecycle() {
                   onClick={() => setSelectedJobId(job.id)}
                   className={`w-full text-left p-3 rounded-xl transition-colors border ${
                     selectedJobId === job.id
-                      ? 'bg-red-50 border-brand-red shadow-sm'
+                      ? 'bg-red-50 border-brand-primary shadow-sm'
                       : 'bg-white border-transparent hover:bg-slate-50 hover:border-slate-200'
                   }`}
                 >
                   <div className="flex items-center gap-2 mb-1">
-                    <FiFileText className={selectedJobId === job.id ? 'text-brand-red' : 'text-slate-400'} />
+                    <FiFileText className={selectedJobId === job.id ? 'text-brand-primary' : 'text-slate-400'} />
                     <span className="font-semibold text-sm text-slate-900 truncate">
                       {job.media_assets_studio?.file_name || 'Untitled Job'}
                     </span>
@@ -112,7 +112,7 @@ export default function UserJobLifecycle() {
                     {job.status === 'COMPLETED' ? (
                        <FiCheck className="text-green-500" /> 
                     ) : (
-                       <FiClock className="text-brand-red" />
+                       <FiClock className="text-brand-primary" />
                     )}
                     <span className={job.status === 'COMPLETED' ? 'text-green-700' : 'text-slate-700'}>
                       {job.status}

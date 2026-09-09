@@ -61,7 +61,7 @@ export default function RecentUploadsList({ recentUploads, role, loading = false
 
   if (!recentUploads || recentUploads.length === 0) {
     return (
-      <div className="p-8 text-center bg-[#F7F9FC] rounded-[2rem] border border-dashed border-slate-300">
+      <div className="p-8 text-center bg-white rounded-[2rem] border border-dashed border-slate-300">
         <p className="text-slate-500 text-sm">No uploads yet</p>
       </div>
     );
@@ -282,7 +282,7 @@ export default function RecentUploadsList({ recentUploads, role, loading = false
 
             {/* File info */}
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-slate-900 truncate group-hover:text-brand-red transition-colors">{asset.file_name}</p>
+              <p className="text-sm font-bold text-slate-900 truncate group-hover:text-brand-primary transition-colors">{asset.file_name}</p>
               <p className="text-xs text-slate-500 font-medium mt-0.5">
                 {(asset.file_size / (1024 * 1024)).toFixed(2)} MB •{' '}
                 <span className={
@@ -300,7 +300,7 @@ export default function RecentUploadsList({ recentUploads, role, loading = false
             {/* Action buttons */}
             <div className="flex items-center gap-2 flex-shrink-0">
               {['COMPLETED', 'READY_FOR_REVIEW'].includes(asset.status) && (
-                <div className="px-3 py-1.5 bg-brand-red/10 text-brand-red text-xs font-bold rounded-lg hidden sm:block">
+                <div className="px-3 py-1.5 bg-brand-primary/10 text-brand-primary text-xs font-bold rounded-lg hidden sm:block">
                   View Final Video
                 </div>
               )}
